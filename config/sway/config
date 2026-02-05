@@ -1,0 +1,298 @@
+# ═══════════════════════════════════════════════════════════════
+# Core Variables
+# ═══════════════════════════════════════════════════════════════
+
+# Modifier key (Logo key - use Mod1 for Alt)
+set $mod Mod4
+
+# Vim-style direction keys
+set $left h
+set $down j
+set $up k
+set $right l
+
+# ═══════════════════════════════════════════════════════════════
+# Application Variables
+# ═══════════════════════════════════════════════════════════════
+
+set $term kitty
+set $file-manager nemo
+set $web-browser google-chrome-stable
+
+# ═══════════════════════════════════════════════════════════════
+# Theme Configuration - Dracula Colors
+# ═══════════════════════════════════════════════════════════════
+
+set $bg0     #282a36
+set $bg1     #44475a
+set $fg      #f8f8f2
+set $green   #50fa7b
+set $blue    #6272a4
+set $yellow  #f1fa8c
+set $gray    #6272a4
+set $red     #ff5555
+set $magenta #ff79c6
+set $cyan    #8be9fd
+set $white   #f8f8f2
+set $orange  #ffb86c
+set $purple  #bd93f9
+
+# ═══════════════════════════════════════════════════════════════
+# Application Launcher (bemenu)
+# ═══════════════════════════════════════════════════════════════
+
+set $menu 'bemenu-run \
+  --fn "Iosevka Nerd Font Mono 10" \
+  --tb "$bg0" --tf "$purple" \
+  --fb "$bg0" --ff "$fg" \
+  --nb "$bg0" --nf "$fg" \
+  --hb "$bg1" --hf "$green" \
+  --cb "$purple" --cf "$bg0" \
+  --sb "$bg1" --sf "$magenta" \
+  --ab "$bg0" --af "$blue" \
+  --fbb "$bg0" --fbf "$cyan" \
+  --scb "$bg0" --scf "$blue" \
+  --bdr "$purple" \
+  -c -B 2 -W 0.5 -H 28 --hp 10 --prompt "Run:"'
+
+# ═══════════════════════════════════════════════════════════════
+# Lock Screen (swaylock)
+# ═══════════════════════════════════════════════════════════════
+
+set $lock 'swaylock \
+    --screenshots \
+    --effect-blur 7x5 \
+    --color "$bg0" \
+    --inside-color "$bg1" \
+    --inside-clear-color "$blue" \
+    --inside-ver-color "$purple" \
+    --inside-wrong-color "$red" \
+    --ring-color "$blue" \
+    --ring-clear-color "$cyan" \
+    --ring-ver-color "$purple" \
+    --ring-wrong-color "$red" \
+    --key-hl-color "$green" \
+    --bs-hl-color "$magenta" \
+    --separator-color "$bg0" \
+    --text-color "$fg" \
+    --text-clear-color "$fg" \
+    --text-ver-color "$fg" \
+    --text-wrong-color "$fg" \
+    --indicator-radius 100 \
+    --indicator-thickness 10 \
+    --font "Iosevka Nerd Font Mono"'
+
+# ═══════════════════════════════════════════════════════════════
+# Autostart Script
+# ═══════════════════════════════════════════════════════════════
+
+exec ~/.config/autostartup.sh
+
+# ═══════════════════════════════════════════════════════════════
+# Output Configuration
+# ═══════════════════════════════════════════════════════════════
+
+output HDMI-A-1 resolution 1920x1200 position 0,0
+output DP-1 resolution 1920x1080 position 1920,0
+# ═══════════════════════════════════════════════════════════════
+# Font Configuration
+# ═══════════════════════════════════════════════════════════════
+
+font pango:Iosevka Nerd Font Mono 11
+
+# ═══════════════════════════════════════════════════════════════
+# Window Rules
+# ═══════════════════════════════════════════════════════════════
+
+for_window [app_id="yad"] floating enable
+for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, move position center, resize set 600 400
+
+
+# ═══════════════════════════════════════════════════════════════
+# Key Bindings
+# ═══════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────
+# Application Launchers
+# ───────────────────────────────────────────────────────────────
+
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+b exec $web-browser
+bindsym $mod+y exec $file-manager
+
+# ───────────────────────────────────────────────────────────────
+# Utilities
+# ───────────────────────────────────────────────────────────────
+
+bindsym $mod+v exec cliphist list | rofi -dmenu -p "Clipboard" -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy
+bindsym $mod+s exec rofi -show emoji -modi emoji -matching regex -sorting-method levenshtein
+bindsym $mod+c exec ~/.local/bin/random-wallpaper.sh
+bindsym $mod+g exec ~/.config/sway/scripts/prompt-record.sh
+
+# ───────────────────────────────────────────────────────────────
+# Window Management
+# ───────────────────────────────────────────────────────────────
+
+bindsym $mod+w kill
+bindsym $mod+a exec sticky enable
+bindsym $mod+t floating toggle
+bindsym $mod+f fullscreen
+bindsym $mod+u exec ~/.config/sway/scripts/tiling.sh
+
+# Floating modifier (drag/resize windows)
+floating_modifier $mod normal
+bindsym $mod+button1 resize
+
+# ───────────────────────────────────────────────────────────────
+# System Controls
+# ───────────────────────────────────────────────────────────────
+
+bindsym $mod+shift+t exec $lock
+bindsym $mod+shift+a exec pkill -SIGUSR2 waybar
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+bindsym ctrl+alt+delete exec nwg-bar
+#
+# Moving around:
+#
+# Move your focus around
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+# Or use $mod+[up|down|left|right]
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move the focused window with the same, but add Shift
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+# Ditto, with arrow keys
+bindsym $mod+Shift+Left move left
+
+
+# Focus Navigation
+# ───────────────────────────────────────────────────────────────
+# Workspace Management
+# ───────────────────────────────────────────────────────────────
+
+# Switch to workspace (with Sov integration)
+bindsym --no-repeat $mod+1 workspace number 1; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+2 workspace number 2; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+3 workspace number 3; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+4 workspace number 4; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+5 workspace number 5; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+6 workspace number 6; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+7 workspace number 7; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+8 workspace number 8; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+9 workspace number 9; exec "echo 1 > /tmp/sovpipe"
+bindsym --no-repeat $mod+0 workspace number 10; exec "echo 1 > /tmp/sovpipe"
+
+# Hide Sov overlay on release
+bindsym --release $mod+1 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+2 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+3 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+4 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+5 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+6 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+7 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+8 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+9 exec "echo 0 > /tmp/sovpipe"
+bindsym --release $mod+0 exec "echo 0 > /tmp/sovpipe"
+
+# Move container to workspace
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+
+# Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+#
+# ───────────────────────────────────────────────────────────────
+# Layout Controls
+# ───────────────────────────────────────────────────────────────
+
+bindsym $mod+shift+s layout stacking
+bindsym $mod+p splith
+bindsym $mod+o splitv
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+# ───────────────────────────────────────────────────────────────
+# Scratchpad
+# ───────────────────────────────────────────────────────────────
+
+bindsym $mod+Shift+minus move scratchpad
+
+# ───────────────────────────────────────────────────────────────
+# Resize Mode
+# ───────────────────────────────────────────────────────────────
+
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+#bar {
+#   position top
+
+#    # When the status_command prints a new line to stdout, swaybar updates.
+#    # The default just shows the current date and time.
+# Media Keys (Audio & Brightness)
+# ───────────────────────────────────────────────────────────────
+
+bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
+bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+
+bindsym Print exec flameshot gui
+
+# ═══════════════════════════════════════════════════════════════
+# Appearance & Borders
+# ═══════════════════════════════════════════════════════════════
+
+# Window borders
+client.focused $purple $bg1 $fg $cyan $purple
+client.unfocused $bg0 $bg1 $gray $bg0 $bg1
+client.urgent $red $bg1 $fg $red $red
+
+# Gaps and borders
+gaps inner 4
+gaps outer 4
+default_border pixel 2
+titlebar_padding 8 2
+titlebar_border_thickness 2
+
+# ═══════════════════════════════════════════════════════════════
+# Include System Configuration
+# ═══════════════════════════════════════════════════════════════
+
+include @sysconfdir@/sway/config.d/*

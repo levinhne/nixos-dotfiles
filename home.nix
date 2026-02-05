@@ -1,0 +1,167 @@
+{ config, pkgs, ... }:
+
+let
+  dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
+  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  
+  # Các config folders cần symlink từ dotfiles
+  configs = {
+	"waybar" = "waybar";
+  };
+in
+
+{
+  home.username = "levinhne";
+  home.homeDirectory = "/home/levinhne";
+  home.stateVersion = "25.11";
+
+  # CLI tools
+  home.packages = with pkgs; [
+    ripgrep fd fzf bat eza
+    vlc
+    # Dev:
+    nodejs python3
+  ];
+
+  # Git
+  programs.git = {
+    enable = true;
+    userName = "levinhne";
+    userEmail = "levinhne@example.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = false;
+    };
+  };
+
+  # Bash
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    shellAliases = {
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      ll = "ls -la";
+      update = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne";
+      clean = "sudo nix-collect-garbage -d";
+      gs = "git status"; ga = "git add"; gc = "git commit"; gp = "git push";
+    };
+    bashrcExtra = ''
+      PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+      if command -v neofetch &> /dev/null; then neofetch; fi
+    '';
+  };
+
+  # Sway cấu hình qua Home Manager
+  wayland.windowManager.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    xwayland = true;
+    config = {
+      modifier = "Mod4"; # Super
+      terminal = "kitty";
+      bars = [{
+        command = "waybar";
+      }];
+      input = {
+        "*" = {
+          xkb_layout = "us";
+          repeat_delay = "200";
+          repeat_rate = "35";
+        };
+      };
+      output = {
+        "*" = {
+          scale = "1.0";
+        };
+      };
+      keybindings = {
+        "Mod4+Return" = "exec kitty";
+        "Mod4+D"      = "exec wofi --show drun";
+        "Mod4+Shift+Q"= "kill";
+        "Mod4+Shift+E"= "exec swaymsg exit";
+        "Mod4+Left"   = "focus left";
+        "Mod4+Down"   = "focus down";
+        "Mod4+Up"     = "focus up";
+        "Mod4+Right"  = "focus right";
+        "Mod4+H"      = "split h";
+        "Mod4+V"      = "split v";
+        "Mod4+F"      = "fullscreen";
+        "Mod4+Space"  = "floating toggle";
+        "Mod4+Shift+Space" = "focus mode_toggle";
+        "Mod4+1"      = "workspace 1";
+        "Mod4+2"      = "workspace 2";
+        "Mod4+3"      = "workspace 3";
+        "Mod4+Shift+1"= "move container to workspace 1";
+        "Mod4+Shift+2"= "move container to workspace 2";
+        "Mod4+Shift+3"= "move container to workspace 3";
+        "Mod4+P"      = "exec grim -g \"$(slurp)\" ~/Pictures/screenshot_$(date +%F_%T).png";
+      };
+      startup = [
+        { command = "mako"; always = true; }
+        { command = "wl-paste --type text --watch cliphist store"; always = true; }
+      ];
+    };
+  };
+
+  # Waybar
+  programs.waybar = {
+    enable = true;
+    style = "~/.config/waybar/style.css";
+    settings = {
+      mainBar = {
+        layer = "top";
+        position = "top";
+        modules-left = [ "sway/workspaces" "sway/mode" ];
+        modules-center = [ "clock" ];
+        modules-right = [ "network" "pulseaudio" "battery" "tray" ];
+        clock = { format = "{:%Y-%m-%d %H:%M}"; };
+      };
+    };
+  };
+
+  # Wofi (launcher)
+  programs.wofi = {
+    enable = true;
+    settings = {
+      show = "drun";
+      allow_images = true;
+      prompt = "Run:";
+    };
+    style = ''
+      window { border-radius: 8px; }
+    '';
+  };
+
+  # Mako (notifications)
+  services.mako = {
+    enable = true;
+    defaultTimeout = 5000;
+    backgroundColor = "#333333";
+    textColor = "#ffffff";
+    borderColor = "#88c0d0";
+  };
+
+  # Swayidle + swaylock (lock screen)
+  services.swayidle = {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = "swaylock -f -c 000000"; }
+    ];
+    timeouts = [
+      { timeout = 600; command = "swaylock -f -c 000000"; } # 10 phút
+    ];
+  };
+
+  programs.swaylock = {
+    enable = true;
+    settings = {
+      color = "000000";
+      ignore-empty-password = true;
+      indicator-radius = 120;
+    };
+  };
+
+  # Home Manager
+  programs.home-manager.enable = true;
+}
