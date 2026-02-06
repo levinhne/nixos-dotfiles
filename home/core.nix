@@ -23,4 +23,15 @@ in
     configs;
 
   programs.home-manager.enable = true;
+
+  home.sessionVariables = {
+    # Environment variables
+    EDITOR = "nvim";
+    BROWSER = "google-chrome-stable";
+    
+    # Fcitx5
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+  };
 }
