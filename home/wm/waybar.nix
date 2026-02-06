@@ -34,7 +34,7 @@
         ];
 
         "custom/arch" = {
-          format = "󰣇";
+          format = "󱄅";
           tooltip = false;
         };
 
