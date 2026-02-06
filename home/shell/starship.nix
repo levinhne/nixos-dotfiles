@@ -1,8 +1,4 @@
-{ pkgs, ... }:
-
-let
-  theme = import ../theme.nix;
-in
+{ pkgs, theme, ... }:
 
 {
   programs.starship = {

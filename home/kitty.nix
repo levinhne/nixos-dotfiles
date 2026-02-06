@@ -1,14 +1,10 @@
-{ config, pkgs, term_font, ... }:
-
-let
-  theme = import ./theme.nix;
-in
+{ config, pkgs, fonts, theme, ... }:
 
 {
   programs.kitty = {
     enable = true;
     font = {
-      name = term_font;
+      name = fonts.terminal;
       size = 10.3;
     };
     settings = {

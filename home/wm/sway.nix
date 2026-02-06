@@ -1,17 +1,16 @@
-{ pkgs, lib, term_font, ... }:
+{ pkgs, lib, fonts, theme, ... }:
 
 let
   # 1. Các biến cấu hình chung
   modifier = "Mod4";
   terminal = "kitty";
 
-  # 2. Import bảng màu từ theme.nix
-  theme = import ../theme.nix;
+  # 2. Bảng màu từ theme
   c = theme.colors;
 
   # 3. Cấu hình bemenu (Đã thêm backend wayland để sửa lỗi không chạy)
   menu = "bemenu-run " +
-    "--fn '${term_font} 10' " +
+    "--fn '${fonts.ui} 10.3' " +
     "--tb '${c.base00}' --tf '${c.base0D}' " +
     "--fb '${c.base00}' --ff '${c.base05}' " +
     "--nb '${c.base00}' --nf '${c.base05}' " +
@@ -42,7 +41,7 @@ in
       menu = menu;
 
       fonts = {
-        names = [ term_font ];
+        names = [ fonts.ui ];
         size = 11.0;
       };
 
@@ -91,7 +90,7 @@ in
           "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
 
           # System Controls
-          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${c.base00}' --indicator-radius 100 --font '${term_font}'";
+          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}'";
           "${modifier}+Shift+a" = "exec pkill -SIGUSR2 waybar";
           "${modifier}+Shift+c" = "reload";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";
@@ -136,6 +135,7 @@ in
       bars = [{ command = "waybar"; }];
 
       startup = [
+        { command = "autotiling -l 2"; always = true; }
         { command = "wpaperd -d"; always = true; }
         { command = "mako"; always = true; }
         { command = "fcitx5 -d"; }
