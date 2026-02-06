@@ -72,7 +72,7 @@ in
         "${mod}+u" = "exec ~/.config/sway/scripts/tiling.sh";
 
         # System Controls
-        "${mod}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${dracula.bg0}' --indicator-radius 100 --font 'Iosevka Nerd Font Mono'";
+        "${mod}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${dracula.bg0}' --indicator-radius 100 --font '${term_font}'";
         "${mod}+Shift+a" = "exec pkill -SIGUSR2 waybar";
         "${mod}+Shift+c" = "reload";
         "${mod}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";

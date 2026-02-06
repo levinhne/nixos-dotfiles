@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  term_font = "Iosevka Nerd Font Mono";
+  term_font = "Fira Code";
 in
 {
   _module.args = { inherit term_font; };

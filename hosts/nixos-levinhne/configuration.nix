@@ -1,19 +1,20 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ../../system/boot.nix
+    ../../system/fonts.nix
+    ../../system/core.nix
+  ];
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+
 
   # Network
   networking.hostName = "nixos-levinhne";
   networking.networkmanager.enable = true;
 
-  # Locale
-  time.timeZone = "Asia/Ho_Chi_Minh";
-  i18n.defaultLocale = "en_US.UTF-8";
+
 
   # SSH
   services.openssh = {
@@ -90,7 +91,7 @@
     shell = pkgs.bash;
   };
 
-  nixpkgs.config.allowUnfree = true;
+
 
   # System packages
   environment.systemPackages = with pkgs; [
@@ -111,27 +112,9 @@
     pkgs.google-chrome
   ];
 
-  # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.fira-code
-    nerd-fonts.iosevka
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-color-emoji
-    font-awesome
-  ];
 
-  # Nix settings
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    auto-optimise-store = true;
-  };
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
+
 
   # KHÔNG ĐỔI sau khi cài!
   system.stateVersion = "25.11";
