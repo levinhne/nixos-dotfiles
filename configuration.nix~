@@ -30,8 +30,8 @@
   # Wayland/Sway
   programs.sway = {
     enable = true;
-    wrapperFeatures.gtk = true; # GTK env vars
-    xwayland.enable = true; # Chạy app X11 qua XWayland
+    wrapperFeatures.gtk = true;    # GTK env vars
+    xwayland.enable = true;        # Chạy app X11 qua XWayland
     extraPackages = with pkgs; [
       swaybg
       swaylock
@@ -90,25 +90,13 @@
     shell = pkgs.bash;
   };
 
-  nixpkgs.config.allowUnfree = true;
-
   # System packages
   environment.systemPackages = with pkgs; [
-    vim
-    nano
-    git
-    wget
-    curl
-    htop
-    btop
-    neofetch
+    vim nano git wget curl htop btop neofetch
     firefox
     kitty
     ranger
-    unzip
-    zip
-    p7zip
-    pkgs.google-chrome
+    unzip zip p7zip
   ];
 
   # Fonts
