@@ -8,6 +8,8 @@ let
   configs = {
     "nvim" = "nvim";
     "qutebrowser" = "qutebrowser";
+    "fcitx" = "fcitx";
+    "fcitx5" = "fcitx5";
   };
 in
 {
@@ -28,7 +30,7 @@ in
     # Environment variables
     EDITOR = "nvim";
     BROWSER = "google-chrome-stable";
-    
+
     # Fcitx5
     GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";

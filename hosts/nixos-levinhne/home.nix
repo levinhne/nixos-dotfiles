@@ -1,16 +1,19 @@
 { config, pkgs, ... }:
 
 let
-  term_font = "Fira Code";
+  term_font = "FiraCode Nerd Font Ret";
 in
 {
   _module.args = { inherit term_font; };
 
   imports = [
     ../../home/core.nix
+    ../../home/gtk.nix
     ../../home/pkgs.nix
     ../../home/shell/bash.nix
     ../../home/shell/git.nix
+    ../../home/shell/fish.nix
+    ../../home/shell/starship.nix
     ../../home/wm/sway.nix
     ../../home/wm/waybar.nix
     ../../home/wm/mako.nix

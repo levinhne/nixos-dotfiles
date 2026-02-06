@@ -9,15 +9,20 @@
     bat
     eza
     tree
-    code
     foot
-    swww
     neovim
+    qutebrowser
+    google-chrome
+    wpaperd
+    bemenu
 
     # Dev:
+    opencode
+    vscode
     nodejs_24
     python3
     nwg-displays
+    # nix
     nixpkgs-fmt
   ];
 }

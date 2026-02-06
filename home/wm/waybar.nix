@@ -41,7 +41,7 @@
 
         "custom/wallpaper" = {
           format = "󰸉";
-          exec = "wpaperctl next && echo '󰸉'"; 
+          exec = "wpaperctl next && echo '󰸉'";
           interval = 300; # 5 minutes
           on-click = "wpaperctl next";
           tooltip = false;

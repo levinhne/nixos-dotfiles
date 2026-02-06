@@ -7,7 +7,7 @@
     settings = {
       main = {
         term = "foot";
-        font = "${term_font}:size=12, monospace:size=14";
+        font = "${term_font}:size=10.3, monospace:size=9";
         pad = "25x25";
         dpi-aware = "no";
       };

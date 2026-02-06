@@ -60,7 +60,6 @@
     };
   };
 
-  # Âm thanh với PipeWire
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -77,7 +76,6 @@
     extraPortals = with pkgs; [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
   };
 
-  # Đồ họa (tăng tương thích Wayland/wlroots)
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -109,13 +107,7 @@
     unzip
     zip
     p7zip
-    pkgs.google-chrome
   ];
 
-
-
-
-
-  # KHÔNG ĐỔI sau khi cài!
   system.stateVersion = "25.11";
 }

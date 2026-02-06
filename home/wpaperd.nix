@@ -1,16 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  programs.wpaperd = {
+  services.wpaperd = {
     enable = true;
     settings = {
       DP-1 = {
-        path = "${config.home.homeDirectory}/.wallpapers";
-        mode = "fit";
+        path = ../.wallpapers;
+        mode = "tile";
       };
       HDMI-A-1 = {
-        path = "${config.home.homeDirectory}/.wallpapers";
-        mode = "fit";
+        path = ../.wallpapers;
+        mode = "stretch";
+        duration = "1m";
       };
     };
   };

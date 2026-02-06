@@ -1,125 +1,135 @@
 { pkgs, lib, term_font, ... }:
 
 let
-  # Định nghĩa bộ màu Dracula
-  dracula = {
-    bg0 = "#282a36";
-    bg1 = "#44475a";
-    fg = "#f8f8f2";
-    green = "#50fa7b";
-    blue = "#6272a4";
-    yellow = "#f1fa8c";
-    gray = "#6272a4";
-    red = "#ff5555";
-    magenta = "#ff79c6";
-    cyan = "#8be9fd";
-    purple = "#bd93f9";
-    orange = "#ffb86c";
-  };
+  # 1. Các biến cấu hình chung
+  modifier = "Mod4";
+  terminal = "kitty";
+
+  # 2. Import bảng màu từ theme.nix
+  theme = import ../theme.nix;
+  c = theme.colors;
+
+  # 3. Cấu hình bemenu (Đã thêm backend wayland để sửa lỗi không chạy)
+  menu = "bemenu-run " +
+    "--fn '${term_font} 10' " +
+    "--tb '${c.base00}' --tf '${c.base0D}' " +
+    "--fb '${c.base00}' --ff '${c.base05}' " +
+    "--nb '${c.base00}' --nf '${c.base05}' " +
+    "--hb '${c.base01}' --hf '${c.base0B}' " +
+    "--cb '${c.base0D}' --cf '${c.base00}' " +
+    "--sb '${c.base01}' --sf '${c.base0E}' " +
+    "--ab '${c.base00}' --af '${c.base0C}' " +
+    "--fbb '${c.base00}' --fbf '${c.base0C}' " +
+    "--scb '${c.base00}' --scf '${c.base0C}' " +
+    "--bdr '${c.base0D}' " +
+    "-c -B 2 -W 0.5 -H 28 --hp 10 --prompt 'Run:'";
+
+  # 4. Danh sách Workspace (1-9 và 0)
+  wsKeys = map (n: toString n) [ 1 2 3 4 5 6 7 8 9 0 ];
 in
 {
+  # Đảm bảo bemenu được cài đặt
+  home.packages = with pkgs; [ bemenu ];
+
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
     xwayland = true;
 
-    config = rec {
-      modifier = "Mod4";
-      terminal = "foot";
+    config = {
+      modifier = modifier;
+      terminal = terminal;
+      menu = menu;
 
-      # Font
       fonts = {
         names = [ term_font ];
         size = 11.0;
       };
 
-      # Output
       output = {
-        "HDMI-A-1" = { res = "1920x1200"; pos = "0 0"; };
-        "DP-1" = { res = "1920x1080"; pos = "1920 0"; };
+        "HDMI-A-1" = {
+          res = "1920x1200";
+          pos = "0 0";
+        };
       };
 
-      # Gaps & Borders
       gaps = {
         inner = 4;
         outer = 4;
       };
 
-      # Window Rules
       window.commands = [
-        { command = "floating enable"; criteria = { app_id = "yad"; }; }
-        { command = "floating enable, move position center, resize set 600 400"; criteria = { app_id = "org.pulseaudio.pavucontrol"; }; }
+        {
+          command = "floating enable";
+          criteria = { app_id = "yad"; };
+        }
+        {
+          command = "floating enable, move position center, resize set 600 400";
+          criteria = { app_id = "org.pulseaudio.pavucontrol"; };
+        }
       ];
 
-      # Keybindings (Tích hợp phím tắt cũ vào bộ mới)
-      keybindings = let mod = modifier; in lib.mkOptionDefault {
-        # Launchers
-        "${mod}+Return" = "exec ${terminal}";
-        "${mod}+b" = "exec google-chrome-stable";
-        "${mod}+y" = "exec nemo";
+      keybindings = lib.mkOptionDefault (
+        {
+          # Launchers
+          "${modifier}+Return" = "exec ${terminal}";
+          "${modifier}+d" = "exec ${menu}";
+          "${modifier}+b" = "exec google-chrome-stable";
+          "${modifier}+y" = "exec nemo";
 
-        # Utilities
-        "${mod}+v" = "exec cliphist list | rofi -dmenu -p 'Clipboard' -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy";
-        "${mod}+s" = "exec rofi -show emoji -modi emoji -matching regex -sorting-method levenshtein";
-        "${mod}+c" = "exec ~/.local/bin/random-wallpaper.sh";
-        "${mod}+g" = "exec ~/.config/sway/scripts/prompt-record.sh";
+          # Utilities
+          "${modifier}+v" = "exec cliphist list | rofi -dmenu -p 'Clipboard' -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy";
+          "${modifier}+s" = "exec rofi -show emoji -modi emoji -matching regex -sorting-method levenshtein";
+          "${modifier}+c" = "exec ~/.local/bin/random-wallpaper.sh";
+          "${modifier}+g" = "exec ~/.config/sway/scripts/prompt-record.sh";
 
-        # Window Management
-        "${mod}+w" = "kill";
-        "${mod}+a" = "exec sticky enable";
-        "${mod}+t" = "floating toggle";
-        "${mod}+f" = "fullscreen";
-        "${mod}+u" = "exec ~/.config/sway/scripts/tiling.sh";
+          # Window Management
+          "${modifier}+w" = "kill";
+          "${modifier}+a" = "exec sticky enable";
+          "${modifier}+t" = "floating toggle";
+          "${modifier}+f" = "fullscreen";
+          "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
 
-        # System Controls
-        "${mod}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${dracula.bg0}' --indicator-radius 100 --font '${term_font}'";
-        "${mod}+Shift+a" = "exec pkill -SIGUSR2 waybar";
-        "${mod}+Shift+c" = "reload";
-        "${mod}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";
-        "ctrl+alt+delete" = "exec nwg-bar";
+          # System Controls
+          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${c.base00}' --indicator-radius 100 --font '${term_font}'";
+          "${modifier}+Shift+a" = "exec pkill -SIGUSR2 waybar";
+          "${modifier}+Shift+c" = "reload";
+          "${modifier}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";
+          "ctrl+alt+delete" = "exec nwg-bar";
 
-        # Media Keys
-        "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
-        "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
-        "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-        "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-        "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
-        "Print" = "exec flameshot gui";
+          # Media Keys
+          "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+          "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
+          "Print" = "exec flameshot gui";
+        } //
+        # Tự động tạo bindings cho Workspaces
+        (builtins.listToAttrs (map (i: {
+          name = "${modifier}+${i}";
+          value = "workspace number ${i}; exec echo 1 > /tmp/sovpipe";
+        }) wsKeys)) //
+        (builtins.listToAttrs (map (i: {
+          name = "${modifier}+Shift+${i}";
+          value = "move container to workspace number ${i}";
+        }) wsKeys))
+      );
 
-        # Workspaces với Sov integration
-        "${mod}+1" = "workspace number 1; exec echo 1 > /tmp/sovpipe";
-        "${mod}+2" = "workspace number 2; exec echo 1 > /tmp/sovpipe";
-        "${mod}+3" = "workspace number 3; exec echo 1 > /tmp/sovpipe";
-        "${mod}+4" = "workspace number 4; exec echo 1 > /tmp/sovpipe";
-        "${mod}+5" = "workspace number 5; exec echo 1 > /tmp/sovpipe";
-        "${mod}+6" = "workspace number 6; exec echo 1 > /tmp/sovpipe";
-        "${mod}+7" = "workspace number 7; exec echo 1 > /tmp/sovpipe";
-        "${mod}+8" = "workspace number 8; exec echo 1 > /tmp/sovpipe";
-        "${mod}+9" = "workspace number 9; exec echo 1 > /tmp/sovpipe";
-        "${mod}+0" = "workspace number 10; exec echo 1 > /tmp/sovpipe";
-
-        # Move container
-        "${mod}+Shift+1" = "move container to workspace number 1";
-        "${mod}+Shift+2" = "move container to workspace number 2";
-        "${mod}+Shift+3" = "move container to workspace number 3";
-        # ... Vinh có thể bổ sung thêm từ 4-0 tương tự
-      };
-
-      # Dracula Theme Colors
       colors = {
         focused = {
-          border = dracula.purple;
-          background = dracula.bg1;
-          text = dracula.fg;
-          indicator = dracula.cyan;
-          childBorder = dracula.purple;
+          border = c.base0D;
+          background = c.base01;
+          text = c.base05;
+          indicator = c.base0C;
+          childBorder = c.base0D;
         };
         unfocused = {
-          border = dracula.bg0;
-          background = dracula.bg1;
-          text = dracula.gray;
-          indicator = dracula.bg0;
-          childBorder = dracula.bg1;
+          border = c.base00;
+          background = c.base01;
+          text = c.base03;
+          indicator = c.base00;
+          childBorder = c.base01;
         };
       };
 
@@ -128,34 +138,31 @@ in
       startup = [
         { command = "wpaperd -d"; always = true; }
         { command = "mako"; always = true; }
+        { command = "fcitx5 -d"; }
         { command = "wl-paste --type text --watch cliphist store"; always = true; }
       ];
     };
 
-    # Thêm các phím --release cho Sov 
     extraConfig = ''
       default_border pixel 2
-      bindsym --release Mod4+1 exec "echo 0 > /tmp/sovpipe" 
-      bindsym --release Mod4+2 exec "echo 0 > /tmp/sovpipe" 
-      # ... tương tự cho các phím còn lại 
+      ${lib.concatMapStringsSep "\n" (i: "bindsym --release ${modifier}+${i} exec \"echo 0 > /tmp/sovpipe\"") wsKeys}
     '';
   };
 
-  # Swayidle + swaylock (lock screen)
   services.swayidle = {
     enable = true;
     events = [
-      { event = "before-sleep"; command = "swaylock -f -c 000000"; }
+      { event = "before-sleep"; command = "swaylock -f -c ${c.base00}"; }
     ];
     timeouts = [
-      { timeout = 600; command = "swaylock -f -c 000000"; } # 10 phút
+      { timeout = 600; command = "swaylock -f -c ${c.base00}"; }
     ];
   };
 
   programs.swaylock = {
     enable = true;
     settings = {
-      color = "000000";
+      color = "${c.base00}";
       ignore-empty-password = true;
       indicator-radius = 120;
     };
