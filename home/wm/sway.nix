@@ -126,7 +126,7 @@ in
       bars = [{ command = "waybar"; }];
 
       startup = [
-        { command = "swww-daemon"; always = true; }
+        { command = "wpaperd -d"; always = true; }
         { command = "mako"; always = true; }
         { command = "wl-paste --type text --watch cliphist store"; always = true; }
       ];

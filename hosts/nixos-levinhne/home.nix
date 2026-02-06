@@ -16,5 +16,6 @@ in
     ../../home/wm/mako.nix
     ../../home/kitty.nix
     ../../home/foot.nix
+    ../../home/wpaperd.nix
   ];
 }

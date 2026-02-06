@@ -22,6 +22,7 @@
         modules-center = [ ];
 
         modules-right = [
+          "custom/wallpaper"
           "sway/mode"
           "custom/updates"
           "pulseaudio"
@@ -35,6 +36,14 @@
 
         "custom/arch" = {
           format = "󱄅";
+          tooltip = false;
+        };
+
+        "custom/wallpaper" = {
+          format = "󰸉";
+          exec = "wpaperctl next && echo '󰸉'"; 
+          interval = 300; # 5 minutes
+          on-click = "wpaperctl next";
           tooltip = false;
         };
 
