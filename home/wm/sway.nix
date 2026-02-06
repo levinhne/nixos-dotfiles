@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, term_font, ... }:
 
 let
   # Định nghĩa bộ màu Dracula
@@ -29,7 +29,7 @@ in
 
       # Font
       fonts = {
-        names = [ "Iosevka Nerd Font Mono" ];
+        names = [ term_font ];
         size = 11.0;
       };
 
