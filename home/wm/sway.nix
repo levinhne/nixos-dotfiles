@@ -53,8 +53,8 @@ in
       };
 
       gaps = {
-        inner = 4;
-        outer = 4;
+        inner = 2;
+        outer = 2;
       };
 
       window.commands = [

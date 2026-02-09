@@ -6,11 +6,11 @@ let
 
   # Các config folders cần symlink từ dotfiles
   configs = {
-    "nvim" = "nvim";
     "opencode" = "opencode";
     "qutebrowser" = "qutebrowser";
     "fcitx" = "fcitx";
     "fcitx5" = "fcitx5";
+    "nvim" = "nvim";
   };
 in
 {

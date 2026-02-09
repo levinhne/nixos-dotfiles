@@ -15,6 +15,7 @@
     google-chrome
     wpaperd
     bemenu
+    openssl
 
     # Dev:
     opencode

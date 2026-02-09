@@ -1,0 +1,126 @@
+{ config, lib, pkgs, ... }:
+
+let
+  certPath = ./certs/FPTSmartCloud.pem;
+in
+
+{
+  imports = [
+    ./hardware-configuration.nix
+    ../../system/boot.nix
+    ../../system/fonts.nix
+    ../../system/core.nix
+    ../../system/bluetooth.nix
+  ];
+
+  networking.proxy.default = "http://10.36.255.25:8080";
+  networking.proxy.noProxy = "127.0.0.1,localhost,10.0.0.0/8,192.168.0.0/16";
+
+  # Network
+  networking.hostName = "nixos-levinhne";
+  networking.networkmanager.enable = true;
+
+
+  # SSH
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = true;
+    };
+  };
+
+  # KHÔNG bật X11
+  services.xserver.enable = false;
+
+  # Wayland/Sway
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true; # GTK env vars
+    xwayland.enable = true; # Chạy app X11 qua XWayland
+    extraPackages = with pkgs; [
+      swaybg
+      swaylock
+      swayidle
+      autotiling
+      waybar
+      wl-clipboard
+      cliphist
+      grim
+      slurp
+      mako
+      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gtk
+    ];
+  };
+
+  # Display manager: greetd + tuigreet (Wayland-native)
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd sway";
+        user = "greeter";
+      };
+    };
+  };
+
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
+
+  # Portal cho Wayland (screenshare, mở file, v.v.)
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+  };
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  # User
+  users.users.levinhne = {
+    isNormalUser = true;
+    description = "Le Vinh Ne";
+    extraGroups = [ "wheel" "networkmanager" "audio" "video" ];
+    shell = pkgs.bash;
+  };
+
+
+
+  # System packages
+  environment.systemPackages = with pkgs; [
+    vim
+    nano
+    git
+    wget
+    curl
+    htop
+    btop
+    neofetch
+    firefox
+    kitty
+    ranger
+    unzip
+    zip
+    p7zip
+  ];
+
+  security.pki.certificateFiles = if (builtins.pathExists certPath) 
+    then [ certPath ] 
+    else [ ];
+
+  environment.variables = {
+    SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+  };
+
+  system.stateVersion = "25.11";
+}
