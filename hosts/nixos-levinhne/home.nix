@@ -2,9 +2,14 @@
 
 let
   term_font = "FiraCode Nerd Font Ret";
+  theme = import ../../home/theme.nix;
+  fonts = {
+    ui = "FiraCode Nerd Font";
+    terminal = "FiraCode Nerd Font";
+  };
 in
 {
-  _module.args = { inherit term_font; };
+  _module.args = { inherit term_font theme fonts; };
 
   imports = [
     ../../home/core.nix

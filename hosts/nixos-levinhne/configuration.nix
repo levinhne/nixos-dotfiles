@@ -6,6 +6,7 @@
     ../../system/boot.nix
     ../../system/fonts.nix
     ../../system/core.nix
+    ../../system/bluetooth.nix
   ];
 
 
@@ -37,8 +38,8 @@
       swaybg
       swaylock
       swayidle
+      autotiling
       waybar
-      wofi
       wl-clipboard
       cliphist
       grim

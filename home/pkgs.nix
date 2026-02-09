@@ -19,6 +19,7 @@
     # Dev:
     opencode
     vscode
+    lazygit
     nodejs_24
     python3
     nwg-displays

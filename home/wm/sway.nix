@@ -24,7 +24,7 @@ let
     "-c -B 2 -W 0.5 -H 28 --hp 10 --prompt 'Run:'";
 
   # 4. Danh sách Workspace (1-9 và 0)
-  wsKeys = map (n: toString n) [ 1 2 3 4 5 6 7 8 9 0 ];
+  wsKeys = map (n: toString n) [ 1 2 3 4 5 6 ];
 in
 {
   # Đảm bảo bemenu được cài đặt
@@ -78,8 +78,8 @@ in
 
           # Utilities
           "${modifier}+v" = "exec cliphist list | rofi -dmenu -p 'Clipboard' -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy";
-          "${modifier}+s" = "exec rofi -show emoji -modi emoji -matching regex -sorting-method levenshtein";
-          "${modifier}+c" = "exec ~/.local/bin/random-wallpaper.sh";
+          # "${modifier}+s" = "exec rofi -show emoji -modi emoji -matching regex -sorting-method levenshtein";
+          # "${modifier}+c" = "exec ~/.local/bin/random-wallpaper.sh";
           "${modifier}+g" = "exec ~/.config/sway/scripts/prompt-record.sh";
 
           # Window Management
@@ -87,7 +87,7 @@ in
           "${modifier}+a" = "exec sticky enable";
           "${modifier}+t" = "floating toggle";
           "${modifier}+f" = "fullscreen";
-          "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
+          # "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
 
           # System Controls
           "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}'";
@@ -105,14 +105,18 @@ in
           "Print" = "exec flameshot gui";
         } //
         # Tự động tạo bindings cho Workspaces
-        (builtins.listToAttrs (map (i: {
-          name = "${modifier}+${i}";
-          value = "workspace number ${i}; exec echo 1 > /tmp/sovpipe";
-        }) wsKeys)) //
-        (builtins.listToAttrs (map (i: {
-          name = "${modifier}+Shift+${i}";
-          value = "move container to workspace number ${i}";
-        }) wsKeys))
+        (builtins.listToAttrs (map
+          (i: {
+            name = "${modifier}+${i}";
+            value = "workspace number ${i}; exec echo 1 > /tmp/sovpipe";
+          })
+          wsKeys)) //
+        (builtins.listToAttrs (map
+          (i: {
+            name = "${modifier}+Shift+${i}";
+            value = "move container to workspace number ${i}";
+          })
+          wsKeys))
       );
 
       colors = {
@@ -140,6 +144,7 @@ in
         { command = "mako"; always = true; }
         { command = "fcitx5 -d"; }
         { command = "wl-paste --type text --watch cliphist store"; always = true; }
+        { command = "blueman-applet"; }
       ];
     };
 
@@ -149,16 +154,6 @@ in
     '';
   };
 
-  services.swayidle = {
-    enable = true;
-    events = [
-      { event = "before-sleep"; command = "swaylock -f -c ${c.base00}"; }
-    ];
-    timeouts = [
-      { timeout = 600; command = "swaylock -f -c ${c.base00}"; }
-    ];
-  };
-
   programs.swaylock = {
     enable = true;
     settings = {
@@ -166,5 +161,24 @@ in
       ignore-empty-password = true;
       indicator-radius = 120;
     };
+  };
+
+  services.swayidle = {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c ${c.base00}"; }
+    ];
+    timeouts = [
+      {
+        timeout = 300;
+        # Viết tất cả tham số trên 1 dòng để tránh lỗi format systemd unit
+        command = "${pkgs.swaylock}/bin/swaylock -f --color ${c.base00} --inside-color ${c.base01} --inside-clear-color ${c.base0C} --inside-ver-color ${c.base0D} --inside-wrong-color ${c.base08} --ring-color ${c.base0D} --ring-clear-color ${c.base0C} --ring-ver-color ${c.base0D} --ring-wrong-color ${c.base08} --key-hl-color ${c.base0B} --bs-hl-color ${c.base08} --separator-color ${c.base01} --text-color ${c.base05} --text-clear-color ${c.base01} --text-ver-color ${c.base01} --text-wrong-color ${c.base01} --indicator-radius 100 --indicator-thickness 10 --font '${fonts.ui}'";
+      }
+      {
+        timeout = 600;
+        command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
+      }
+    ];
   };
 }
