@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  certPath = ./certs/FPTSmartCloud.pem;
+  certPath = ./certs/office.pem;
 in
 
 {
