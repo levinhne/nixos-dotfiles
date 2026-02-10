@@ -22,7 +22,6 @@
         modules-center = [ ];
 
         modules-right = [
-          "custom/wallpaper"
           "sway/mode"
           "custom/updates"
           "pulseaudio"

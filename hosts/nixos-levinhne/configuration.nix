@@ -108,6 +108,7 @@
     unzip
     zip
     p7zip
+    pulseaudio
   ];
 
   system.stateVersion = "25.11";

@@ -23,7 +23,9 @@
     lazygit
     nodejs_24
     python3
-    nwg-displays
+    direnv
+    k9s
+
     # nix
     nixpkgs-fmt
   ];

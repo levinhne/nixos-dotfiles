@@ -30,9 +30,9 @@
 
       # Tận dụng màu nổi nhất trong theme để làm Selection
       # base0E thường là màu Tím (giống Dracula) hoặc dùng base08 (Đỏ) nếu Vinh muốn rực hơn
-      selection_background = theme.colors.base0E; 
+      selection_background = theme.colors.base0E;
       # Dùng base00 (màu nền) làm màu chữ khi select để tạo độ tương phản cao
-      selection_foreground = theme.colors.base00; 
+      selection_foreground = theme.colors.base00;
 
       # --- BẢNG MÀU ANSI ---
       color0 = theme.colors.base00;

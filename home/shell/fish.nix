@@ -3,8 +3,9 @@
 {
   programs.fish = {
     enable = true;
-    interactiveShellInit = ''
+     interactiveShellInit = ''
       set -g fish_greeting ""
+      direnv hook fish | source
     '';
     plugins = [
       { name = "bass"; src = pkgs.fishPlugins.bass.src; }

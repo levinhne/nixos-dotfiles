@@ -49,6 +49,7 @@ in
       grim
       slurp
       mako
+      nwg-displays
       xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
     ];
@@ -59,10 +60,14 @@ in
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd sway";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --theme 'border=magenta;text=cyan;prompt=green;time=yellow' --cmd sway";
         user = "greeter";
       };
     };
+  };
+
+  systemd.services.greetd.serviceConfig = {
+    StateDirectory = "greetd";
   };
 
   services.pulseaudio.enable = false;
@@ -112,10 +117,13 @@ in
     unzip
     zip
     p7zip
+    pulseaudio
+    gnumake
   ];
 
-  security.pki.certificateFiles = if (builtins.pathExists certPath) 
-    then [ certPath ] 
+  security.pki.certificateFiles =
+    if (builtins.pathExists certPath)
+    then [ certPath ]
     else [ ];
 
   environment.variables = {

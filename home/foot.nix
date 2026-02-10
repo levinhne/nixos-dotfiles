@@ -12,7 +12,7 @@ in
       main = {
         term = "foot";
         font = "${fonts.terminal}:size=10.3, monospace:size=9";
-        line-height = "14"; 
+        line-height = "14";
         pad = "10x10";
         dpi-aware = "no";
       };

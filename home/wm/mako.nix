@@ -10,7 +10,7 @@
       text-color = "#ffffff";
       border-color = "#88c0d0";
 
-      font = "monospace 9";
+      font = "monospace 8";
     };
   };
 }
