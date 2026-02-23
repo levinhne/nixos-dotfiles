@@ -1,15 +1,14 @@
 { config, pkgs, ... }:
 
 let
-  term_font = "FiraCode Nerd Font Ret";
   theme = import ../../home/theme.nix;
   fonts = {
     ui = "FiraCode Nerd Font";
-    terminal = "FiraCode Nerd Font";
+    terminal = "FiraCode Nerd Font Med";
   };
 in
 {
-  _module.args = { inherit term_font theme fonts; };
+  _module.args = { inherit theme fonts; };
 
   imports = [
     ../../home/core.nix

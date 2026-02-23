@@ -106,6 +106,7 @@ font pango:Iosevka Nerd Font Mono 11
 
 for_window [app_id="yad"] floating enable
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, move position center, resize set 600 400
+for_window [app_id="^(kitty|foot)$"] exec fcitx5-remote -c
 
 
 # ═══════════════════════════════════════════════════════════════

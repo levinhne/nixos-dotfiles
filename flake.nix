@@ -8,13 +8,18 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, ... }: {
+  outputs = { self, nixpkgs, disko, home-manager, agenix, ... }: {
     nixosConfigurations.nixos-levinhne = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         disko.nixosModules.disko
+        agenix.nixosModules.default
         ./hosts/nixos-levinhne/disko.nix
         ./hosts/nixos-levinhne/configuration.nix
         home-manager.nixosModules.home-manager
@@ -28,22 +33,6 @@
         }
       ];
     };
-    nixosConfigurations.nixos-office-levinhne = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        disko.nixosModules.disko
-        ./hosts/nixos-office-levinhne/disko.nix
-        ./hosts/nixos-office-levinhne/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.levinhne = import ./hosts/nixos-office-levinhne/home.nix;
-            backupFileExtension = "backup";
-          };
-        }
-      ];
-    };
+    packages.x86_64-linux.agenix = agenix.packages.x86_64-linux.default;
   };
 }

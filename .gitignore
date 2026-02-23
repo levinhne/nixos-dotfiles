@@ -1,0 +1,10 @@
+# Agenix backup files
+*.age.bak
+
+# Result symlinks
+result
+result-*
+
+# Hardware configs (may contain sensitive info)
+# Uncomment if needed:
+# hosts/*/hardware-configuration.nix

@@ -27,14 +27,36 @@ let
   wsKeys = map (n: toString n) [ 1 2 3 4 5 6 ];
 in
 {
-  # Đảm bảo bemenu được cài đặt
-  home.packages = with pkgs; [ bemenu ];
+  # Sway-related packages
+  home.packages = with pkgs; [
+    # Launcher
+    bemenu
+    
+    # Sway utilities
+    swaybg           # Wallpaper
+    swaylock-effects # Screen locker with effects (blur, fade, etc.)
+    swayidle         # Idle management
+    autotiling       # Auto tiling
+    
+    # Wayland utilities
+    waybar           # Status bar
+    wl-clipboard     # Clipboard manager
+    cliphist         # Clipboard history
+    grim             # Screenshot tool
+    slurp            # Region selector
+    mako             # Notification daemon
+    libnotify        # notify-send command
+    nwg-displays     # Display configuration
+    
+    # Portals (already enabled in system, but needed for runtime)
+    xdg-desktop-portal-wlr
+    xdg-desktop-portal-gtk
+  ];
 
   wayland.windowManager.sway = {
     enable = true;
-    wrapperFeatures.gtk = true;
-    xwayland = true;
-
+    # wrapperFeatures and xwayland are handled by system/sway.nix
+    
     config = {
       modifier = modifier;
       terminal = terminal;
@@ -66,9 +88,13 @@ in
           command = "floating enable, move position center, resize set 600 400";
           criteria = { app_id = "org.pulseaudio.pavucontrol"; };
         }
+        {
+          command = "exec fcitx5-remote -c";
+          criteria = { app_id = "^(kitty|foot)$"; };
+        }
       ];
 
-      keybindings = lib.mkOptionDefault (
+      keybindings = lib.mkForce (
         {
           # Launchers
           "${modifier}+Return" = "exec ${terminal}";
@@ -78,7 +104,8 @@ in
 
           # Utilities
           "${modifier}+v" = "exec cliphist list | rofi -dmenu -p 'Clipboard' -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy";
-          # "${modifier}+s" = "exec rofi -show emoji -modi emoji -matching regex -sorting-method levenshtein";
+          "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
+          "${modifier}+Shift+s" = "exec grim - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Full screen captured'";
           # "${modifier}+c" = "exec ~/.local/bin/random-wallpaper.sh";
           "${modifier}+g" = "exec ~/.config/sway/scripts/prompt-record.sh";
 
@@ -89,8 +116,47 @@ in
           "${modifier}+f" = "fullscreen";
           # "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
 
+          # Focus
+          "${modifier}+Left" = "focus left";
+          "${modifier}+Down" = "focus down";
+          "${modifier}+Up" = "focus up";
+          "${modifier}+Right" = "focus right";
+          "${modifier}+h" = "focus left";
+          "${modifier}+j" = "focus down";
+          "${modifier}+k" = "focus up";
+          "${modifier}+l" = "focus right";
+
+          # Move
+          "${modifier}+Shift+Left" = "move left";
+          "${modifier}+Shift+Down" = "move down";
+          "${modifier}+Shift+Up" = "move up";
+          "${modifier}+Shift+Right" = "move right";
+          "${modifier}+Shift+h" = "move left";
+          "${modifier}+Shift+j" = "move down";
+          "${modifier}+Shift+k" = "move up";
+          "${modifier}+Shift+l" = "move right";
+
+          # Split
+          "${modifier}+semicolon" = "splith";
+          "${modifier}+Shift+v" = "splitv";
+
+          # Layout
+          "${modifier}+e" = "layout toggle split";
+          "${modifier}+Shift+r" = "layout stacking";
+          "${modifier}+x" = "layout tabbed";
+
+          # Focus parent/child
+          "${modifier}+p" = "focus parent";
+
+          # Scratchpad
+          "${modifier}+Shift+minus" = "move scratchpad";
+          "${modifier}+minus" = "scratchpad show";
+
+          # Resize mode
+          "${modifier}+r" = "mode resize";
+
           # System Controls
-          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}'";
+          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}'";
           "${modifier}+Shift+a" = "exec pkill -SIGUSR2 waybar";
           "${modifier}+Shift+c" = "reload";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";
@@ -102,7 +168,6 @@ in
           "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
           "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
-          "Print" = "exec flameshot gui";
         } //
         # Tự động tạo bindings cho Workspaces
         (builtins.listToAttrs (map
@@ -156,23 +221,28 @@ in
 
   programs.swaylock = {
     enable = true;
+    package = pkgs.swaylock-effects;
     settings = {
       color = "${c.base00}";
       ignore-empty-password = true;
       indicator-radius = 120;
+      # Swaylock-effects specific options
+      effect-blur = "7x5";
+      effect-vignette = "0.5:0.5";
+      fade-in = 0.2;
     };
   };
 
   services.swayidle = {
     enable = true;
     events = [
-      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c ${c.base00}"; }
+      { event = "before-sleep"; command = "${pkgs.swaylock-effects}/bin/swaylock -f -c ${c.base00} --effect-blur 7x5 --fade-in 0.2"; }
     ];
     timeouts = [
       {
         timeout = 300;
         # Viết tất cả tham số trên 1 dòng để tránh lỗi format systemd unit
-        command = "${pkgs.swaylock}/bin/swaylock -f --color ${c.base00} --inside-color ${c.base01} --inside-clear-color ${c.base0C} --inside-ver-color ${c.base0D} --inside-wrong-color ${c.base08} --ring-color ${c.base0D} --ring-clear-color ${c.base0C} --ring-ver-color ${c.base0D} --ring-wrong-color ${c.base08} --key-hl-color ${c.base0B} --bs-hl-color ${c.base08} --separator-color ${c.base01} --text-color ${c.base05} --text-clear-color ${c.base01} --text-ver-color ${c.base01} --text-wrong-color ${c.base01} --indicator-radius 100 --indicator-thickness 10 --font '${fonts.ui}'";
+        command = "${pkgs.swaylock-effects}/bin/swaylock -f --color ${c.base00} --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --inside-color ${c.base01} --inside-clear-color ${c.base0C} --inside-ver-color ${c.base0D} --inside-wrong-color ${c.base08} --ring-color ${c.base0D} --ring-clear-color ${c.base0C} --ring-ver-color ${c.base0D} --ring-wrong-color ${c.base08} --key-hl-color ${c.base0B} --bs-hl-color ${c.base08} --separator-color ${c.base01} --text-color ${c.base05} --text-clear-color ${c.base01} --text-ver-color ${c.base01} --text-wrong-color ${c.base01} --indicator-radius 100 --indicator-thickness 10 --font '${fonts.ui}'";
       }
       {
         timeout = 600;
