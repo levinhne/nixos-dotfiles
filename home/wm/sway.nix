@@ -1,6 +1,10 @@
 { pkgs, lib, fonts, theme, ... }:
 
 let
+  kanshi = import ./kanshi.nix { inherit pkgs; };
+in
+
+let
   # 1. Các biến cấu hình chung
   modifier = "Mod4";
   terminal = "kitty";
@@ -27,6 +31,8 @@ let
   wsKeys = map (n: toString n) [ 1 2 3 4 5 6 ];
 in
 {
+  # Import kanshi configuration
+  imports = [ kanshi ];
   # Sway-related packages
   home.packages = with pkgs; [
     # Launcher
@@ -46,7 +52,6 @@ in
     slurp            # Region selector
     mako             # Notification daemon
     libnotify        # notify-send command
-    nwg-displays     # Display configuration
     
     # Portals (already enabled in system, but needed for runtime)
     xdg-desktop-portal-wlr

@@ -12,14 +12,16 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nur.url = "github:nix-community/NUR";
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, agenix, ... }: {
+  outputs = { self, nixpkgs, disko, home-manager, agenix, nur, ... }: {
     nixosConfigurations.nixos-levinhne = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         disko.nixosModules.disko
         agenix.nixosModules.default
+        nur.modules.nixos.default
         ./hosts/nixos-levinhne/disko.nix
         ./hosts/nixos-levinhne/configuration.nix
         home-manager.nixosModules.home-manager

@@ -1,5 +1,9 @@
 { pkgs, ... }:
 
+let
+  # Custom packages
+  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix {};
+in
 {
   # CLI tools
   home.packages = with pkgs; [
@@ -28,5 +32,8 @@
 
     # nix
     nixpkgs-fmt
+    
+    # Custom packages
+    retrosmart-cursors
   ];
 }

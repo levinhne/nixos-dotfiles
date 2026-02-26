@@ -33,6 +33,10 @@
       # Password management
       gopass
       age
+      # GPG/PGP tools
+      paperkey
+      # Network tools
+      cloudflared
     ] ++ config.mySystem.extraPackages;
   };
 }

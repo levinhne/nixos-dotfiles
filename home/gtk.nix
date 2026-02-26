@@ -9,11 +9,10 @@
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-    # cursorTheme = {
-    #   name = "retrosmart-xcursor-black-color";
-    #   size = 24;
-    #   # Lưu ý: Nếu cursor này không có trong nixpkgs, bạn cần thêm package thủ công
-    # };
+    cursorTheme = {
+      name = "retrosmart-xcursor-black";
+      size = 24;
+    };
     font = {
       name = "Noto Sans";
       size = 9;

@@ -19,6 +19,7 @@ in
     ../../home/shell/fish.nix
     ../../home/shell/starship.nix
     ../../home/wm/sway.nix
+    ../../home/wm/niri.nix
     ../../home/wm/waybar.nix
     ../../home/wm/mako.nix
     ../../home/kitty.nix

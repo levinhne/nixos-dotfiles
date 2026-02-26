@@ -10,12 +10,14 @@
     ../../system/ssh.nix
     ../../system/audio.nix
     ../../system/sway.nix
+    ../../system/niri.nix
     ../../system/display-manager.nix
     ../../system/graphics.nix
     ../../system/packages.nix
     ../../system/user.nix
     ../../system/secrets.nix
     ../../system/office.nix
+    ../../system/crush.nix
   ];
 
   # Network
