@@ -13,6 +13,8 @@ let
 in
 {
   "my-secret.age".publicKeys = allKeys;
+  "crush-openai.age".publicKeys = allKeys;
+  "crush-fpt.age".publicKeys = allKeys;
   
   # Example: GitHub token
   # "github-token.age".publicKeys = allKeys;

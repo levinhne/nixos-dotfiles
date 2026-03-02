@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
 let
   # Custom packages
@@ -12,6 +12,7 @@ in
     fzf
     bat
     eza
+    jq
     tree
     foot
     neovim
@@ -19,12 +20,13 @@ in
     google-chrome
     wpaperd
     bemenu
-    openssl
 
     # Dev:
     opencode
     vscode
     lazygit
+    pkgs-unstable.crush
+    pkgs-unstable.antigravity
     nodejs_24
     python3
     direnv

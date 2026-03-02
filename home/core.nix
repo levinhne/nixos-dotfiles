@@ -9,7 +9,6 @@ let
 
   # Các config folders cần symlink từ dotfiles
   configs = {
-    "opencode" = "opencode";
     "qutebrowser" = "qutebrowser";
     "fcitx" = "fcitx";
     "fcitx5" = "fcitx5";

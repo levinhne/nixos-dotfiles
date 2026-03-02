@@ -16,6 +16,7 @@
       git
       wget
       curl
+      openssl
       # System monitoring
       htop
       btop

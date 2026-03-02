@@ -32,6 +32,22 @@ age.secrets.my-secret = {
   group = "users";                      # Group
 };
 
+age.secrets.crush-openai = {
+  file = ../secrets/crush-openai.age;
+  path = "/run/agenix/crush-openai";
+  mode = "600";
+  owner = "levinhne";
+  group = "users";
+};
+
+age.secrets.crush-fpt = {
+  file = ../secrets/crush-fpt.age;
+  path = "/run/agenix/crush-fpt";
+  mode = "600";
+  owner = "levinhne";
+  group = "users";
+};
+
   # Install agenix CLI for managing secrets
   environment.systemPackages = with pkgs; [
     # agenix CLI will be available from flake

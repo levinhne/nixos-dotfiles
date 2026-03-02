@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 
 let
   theme = import ../../home/theme.nix;
@@ -12,6 +12,7 @@ in
 
   imports = [
     ../../home/core.nix
+    ../../home/crush.nix
     ../../home/gtk.nix
     ../../home/pkgs.nix
     ../../home/shell/bash.nix

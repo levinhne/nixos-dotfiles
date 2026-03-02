@@ -17,7 +17,7 @@
     ../../system/user.nix
     ../../system/secrets.nix
     ../../system/office.nix
-    ../../system/crush.nix
+    ../../system/cloudflared.nix
   ];
 
   # Network

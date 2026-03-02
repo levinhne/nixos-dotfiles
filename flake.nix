@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     disko.url = "github:nix-community/disko";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -12,16 +13,14 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur.url = "github:nix-community/NUR";
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, agenix, nur, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, disko, home-manager, agenix, ... }: {
     nixosConfigurations.nixos-levinhne = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         disko.nixosModules.disko
         agenix.nixosModules.default
-        nur.modules.nixos.default
         ./hosts/nixos-levinhne/disko.nix
         ./hosts/nixos-levinhne/configuration.nix
         home-manager.nixosModules.home-manager
@@ -31,6 +30,12 @@
             useUserPackages = true;
             users.levinhne = import ./hosts/nixos-levinhne/home.nix;
             backupFileExtension = "backup";
+            extraSpecialArgs = {
+              pkgs-unstable = import nixpkgs-unstable {
+                system = "x86_64-linux";
+                config.allowUnfree = true;
+              };
+            };
           };
         }
       ];
