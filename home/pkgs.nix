@@ -1,5 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
+let
+  # Custom packages
+  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix {};
+in
 {
   # CLI tools
   home.packages = with pkgs; [
@@ -8,6 +12,7 @@
     fzf
     bat
     eza
+    jq
     tree
     foot
     neovim
@@ -15,12 +20,13 @@
     google-chrome
     wpaperd
     bemenu
-    openssl
 
     # Dev:
     opencode
     vscode
     lazygit
+    pkgs-unstable.crush
+    pkgs-unstable.antigravity
     nodejs_24
     python3
     direnv
@@ -28,5 +34,8 @@
 
     # nix
     nixpkgs-fmt
+    
+    # Custom packages
+    retrosmart-cursors
   ];
 }

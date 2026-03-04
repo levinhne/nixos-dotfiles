@@ -13,25 +13,27 @@
         spacing = "1";
         margin = "0";
 
-        modules-left = [
-          "custom/arch"
-          "sway/workspaces"
-          "sway/window"
-        ];
+      modules-left = [
+        "custom/arch"
+        "sway/workspaces"
+        "niri/workspaces"
+        "sway/window"
+        "niri/window"
+      ];
 
         modules-center = [ ];
 
-        modules-right = [
-          "sway/mode"
-          "custom/updates"
-          "pulseaudio"
-          "network"
-          "cpu"
-          "memory"
-          "disk"
-          "custom/uptime"
-          "clock"
-        ];
+      modules-right = [
+        "sway/mode"
+        "custom/updates"
+        "pulseaudio"
+        "network"
+        "cpu"
+        "memory"
+        "disk"
+        "custom/uptime"
+        "clock"
+      ];
 
         "custom/arch" = {
           format = "󱄅";
@@ -46,33 +48,43 @@
           tooltip = false;
         };
 
-        "sway/workspaces" = {
-          disable-scroll = true;
-          all-outputs = true;
-          format = "{name}";
-          format-icons = {
-            "1" = "●";
-            "2" = "●";
-            "3" = "●";
-            "4" = "●";
-            "5" = "●";
-            "6" = "●";
-          };
-          persistent-workspaces = {
-            "1" = [ ];
-            "2" = [ ];
-            "3" = [ ];
-            "4" = [ ];
-            "5" = [ ];
-            "6" = [ ];
-          };
+      "sway/workspaces" = {
+        disable-scroll = true;
+        all-outputs = true;
+        format = "{name}";
+        format-icons = {
+          "1" = "●";
+          "2" = "●";
+          "3" = "●";
+          "4" = "●";
+          "5" = "●";
+          "6" = "●";
         };
+        persistent-workspaces = {
+          "1" = [ ];
+          "2" = [ ];
+          "3" = [ ];
+          "4" = [ ];
+          "5" = [ ];
+          "6" = [ ];
+        };
+      };
 
-        "sway/window" = {
-          format = "{title}";
-          max-length = 50;
-          tooltip = true;
-        };
+      "niri/workspaces" = {
+        format = "{index}";
+        all-outputs = true;
+      };
+
+      "sway/window" = {
+        format = "{title}";
+        max-length = 50;
+        tooltip = true;
+      };
+
+      "niri/window" = {
+        format = "{title}";
+        max-length = 50;
+      };
 
         "sway/mode" = {
           format = "<span style=\"italic\">{}</span>";

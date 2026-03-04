@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ../nixos-levinhne/hardware-configuration.nix
     ../../system/boot.nix
     ../../system/fonts.nix
     ../../system/core.nix
@@ -21,7 +21,7 @@
   ];
 
   # Network
-  networking.hostName = "nixos-levinhne";
+  networking.hostName = "nixos-office-levinhne";
   networking.networkmanager.enable = true;
 
   system.stateVersion = "25.11";
