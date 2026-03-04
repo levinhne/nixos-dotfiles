@@ -4,7 +4,7 @@
   options = {
     mySystem.extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [];
+      default = [ ];
       description = "Extra packages to install";
     };
   };
@@ -39,7 +39,7 @@
       # Network tools
       inetutils
     ])
-    ++ [ pkgs-unstable.cloudflared ]
+    ++ [ pkgs.cloudflared ]
     ++ config.mySystem.extraPackages;
   };
 }

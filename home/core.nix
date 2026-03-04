@@ -5,7 +5,7 @@ let
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
 
   # Custom packages
-  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix {};
+  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix { };
 
   # Các config folders cần symlink từ dotfiles
   configs = {
@@ -47,6 +47,6 @@ in
     GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";
     XMODIFIERS = "@im=fcitx";
-    GLFW_IM_MODULE = "fcitx";  # For apps using GLFW
+    GLFW_IM_MODULE = "fcitx"; # For apps using GLFW
   };
 }

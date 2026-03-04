@@ -214,7 +214,7 @@ in
 {
   # Import kanshi configuration
   imports = [ kanshi ];
-  
+
   # Tạo file config cho Niri
   xdg.configFile."niri/config.kdl".text = niriConfig;
 }

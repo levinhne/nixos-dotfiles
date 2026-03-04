@@ -3,7 +3,7 @@
 {
   programs.fish = {
     enable = true;
-     interactiveShellInit = ''
+    interactiveShellInit = ''
       set -g fish_greeting ""
       if test -f /run/agenix/crush-openai
         set -gx OPENAI_API_KEY (cat /run/agenix/crush-openai)

@@ -37,22 +37,22 @@ in
   home.packages = with pkgs; [
     # Launcher
     bemenu
-    
+
     # Sway utilities
-    swaybg           # Wallpaper
+    swaybg # Wallpaper
     swaylock-effects # Screen locker with effects (blur, fade, etc.)
-    swayidle         # Idle management
-    autotiling       # Auto tiling
-    
+    swayidle # Idle management
+    autotiling # Auto tiling
+
     # Wayland utilities
-    waybar           # Status bar
-    wl-clipboard     # Clipboard manager
-    cliphist         # Clipboard history
-    grim             # Screenshot tool
-    slurp            # Region selector
-    mako             # Notification daemon
-    libnotify        # notify-send command
-    
+    waybar # Status bar
+    wl-clipboard # Clipboard manager
+    cliphist # Clipboard history
+    grim # Screenshot tool
+    slurp # Region selector
+    mako # Notification daemon
+    libnotify # notify-send command
+
     # Portals (already enabled in system, but needed for runtime)
     xdg-desktop-portal-wlr
     xdg-desktop-portal-gtk
@@ -61,7 +61,7 @@ in
   wayland.windowManager.sway = {
     enable = true;
     # wrapperFeatures and xwayland are handled by system/sway.nix
-    
+
     config = {
       modifier = modifier;
       terminal = terminal;

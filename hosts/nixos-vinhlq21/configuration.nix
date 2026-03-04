@@ -21,7 +21,7 @@
   ];
 
   # Network
-  networking.hostName = "nixos-office-levinhne";
+  networking.hostName = "nixos-vinhlq21";
   networking.networkmanager.enable = true;
 
   system.stateVersion = "25.11";

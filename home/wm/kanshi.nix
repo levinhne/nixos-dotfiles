@@ -4,7 +4,7 @@
   # Kanshi - automatic display configuration
   services.kanshi = {
     enable = true;
-    
+
     settings = [
       # Profile 1: Công ty - Dual monitor (HDMI-A-1 + DP-1)
       # Cả 2 màn hình đều 1920x1080@75Hz
@@ -27,7 +27,7 @@
           ];
         };
       }
-      
+
       # Profile 2: Nhà - Single monitor HDMI only
       {
         profile = {

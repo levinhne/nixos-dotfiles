@@ -2,7 +2,7 @@
 
 let
   # Tạo thư mục chứa cả Sway và Niri sessions
-  waylandSessions = pkgs.runCommand "wayland-sessions" {} ''
+  waylandSessions = pkgs.runCommand "wayland-sessions" { } ''
     mkdir -p $out/share/wayland-sessions
     ln -s ${pkgs.sway}/share/wayland-sessions/sway.desktop $out/share/wayland-sessions/
     ln -s ${pkgs.niri}/share/wayland-sessions/niri.desktop $out/share/wayland-sessions/

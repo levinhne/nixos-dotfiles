@@ -2,7 +2,7 @@
 
 let
   # Custom packages
-  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix {};
+  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix { };
 in
 {
   # CLI tools
@@ -34,7 +34,7 @@ in
 
     # nix
     nixpkgs-fmt
-    
+
     # Custom packages
     retrosmart-cursors
   ];
