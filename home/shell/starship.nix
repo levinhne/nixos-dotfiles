@@ -16,8 +16,7 @@
         error_symbol = "[➜](bold ${theme.colors.base08})";
       }; # Hiển thị biểu tượng NixOS
       nix_shell = {
-        symbol = "❄️ ";
-        format = "via [$symbol$state]($style) ";
+        disabled = true;
       };
     };
   };

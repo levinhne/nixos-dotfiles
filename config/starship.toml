@@ -1,4 +1,5 @@
 palette = "dracula"
+format = "$directory$git_branch$git_status$cmd_duration$line_break$character"
 
 [character]
 error_symbol = "[λ](bold red)"
@@ -6,22 +7,45 @@ success_symbol = "[λ](bold green)"
 
 [cmd_duration]
 style = "bold yellow"
+min_time = 750
+format = "[⏱ $duration]($style) "
 
 [directory]
 style = "bold green"
+format = "[$path]($style) "
+truncation_length = 3
+truncate_to_repo = true
+read_only = ""
+read_only_style = "bold red"
 
 [git_branch]
 style = "bold pink"
+symbol = " "
+format = "[$symbol$branch]($style) "
 
 [git_status]
 style = "bold red"
+format = "[$all_status$ahead_behind]($style) "
+disabled = false
+
+[package]
+disabled = true
+
+[python]
+format = "via [${symbol}${version}]($style) "
+symbol = "🐍 "
+style = "bold cyan"
+pyenv_version_name = false
+disabled = false
+
+[nix_shell]
+disabled = true
 
 [hostname]
-style = "bold purple"
+disabled = true
 
 [username]
-format = "[$user]($style) on "
-style_user = "bold cyan"
+disabled = true
 
 [palettes.dracula]
 background= "#282a36"
@@ -35,4 +59,3 @@ pink= "#ff79c6"
 purple= "#bd93f9"
 red= "#ff5555"
 yellow= "#f1fa8c"
-
