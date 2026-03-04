@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, pkgs-unstable, ... }:
 
 {
   options = {
@@ -9,7 +9,7 @@
     };
   };
   config = {
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = (with pkgs; [
       # Core utilities
       vim
       nano
@@ -37,8 +37,10 @@
       # GPG/PGP tools
       paperkey
       # Network tools
-      cloudflared
-    ] ++ config.mySystem.extraPackages;
+      inetutils
+    ])
+    ++ [ pkgs-unstable.cloudflared ]
+    ++ config.mySystem.extraPackages;
   };
 }
 

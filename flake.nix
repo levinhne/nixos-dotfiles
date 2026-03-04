@@ -16,8 +16,14 @@
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, disko, home-manager, agenix, ... }: {
-    nixosConfigurations.nixos-levinhne = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixos-levinhne = let
+      pkgsUnstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
+    in nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = { pkgs-unstable = pkgsUnstable; };
       modules = [
         disko.nixosModules.disko
         agenix.nixosModules.default
@@ -30,12 +36,32 @@
             useUserPackages = true;
             users.levinhne = import ./hosts/nixos-levinhne/home.nix;
             backupFileExtension = "backup";
-            extraSpecialArgs = {
-              pkgs-unstable = import nixpkgs-unstable {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-              };
-            };
+            extraSpecialArgs = { pkgs-unstable = pkgsUnstable; };
+          };
+        }
+      ];
+    };
+    nixosConfigurations.nixos-office-levinhne = let
+      pkgsUnstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
+    in nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { pkgs-unstable = pkgsUnstable; };
+      modules = [
+        disko.nixosModules.disko
+        agenix.nixosModules.default
+        ./hosts/nixos-levinhne/disko.nix
+        ./hosts/nixos-office-levinhne/configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.levinhne = import ./hosts/nixos-office-levinhne/home.nix;
+            backupFileExtension = "backup";
+            extraSpecialArgs = { pkgs-unstable = pkgsUnstable; };
           };
         }
       ];
