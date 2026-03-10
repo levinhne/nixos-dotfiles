@@ -17,6 +17,7 @@
     ../../system/user.nix
     ../../system/secrets.nix
     ../../system/office.nix
+    ../../home/fcitx5.nix
     ./cloudflared.nix
   ];
 
