@@ -18,6 +18,7 @@
     ../../system/secrets.nix
     ../../system/office.nix
     ../../system/fcitx5.nix
+    ../../system/blocky.nix
     ./cloudflared.nix
   ];
 
