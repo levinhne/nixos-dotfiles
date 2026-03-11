@@ -35,11 +35,6 @@ in
     # nix
     nixpkgs-fmt
 
-    # Input Method - Fcitx5
-    fcitx5
-    fcitx5-gtk
-    qt6Packages.fcitx5-configtool
-
     # Custom packages
     retrosmart-cursors
   ];
