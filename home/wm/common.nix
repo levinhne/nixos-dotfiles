@@ -36,9 +36,8 @@ in
   # Common startup programs (for Niri KDL format)
   startupProgramsKdl = ''
     spawn-at-startup "waybar"
-    spawn-at-startup "wpaperd" "-d"
     spawn-at-startup "mako"
-    spawn-at-startup "fcitx5" "-d"
+    spawn-at-startup "fcitx5" "-r"
     spawn-at-startup "sh" "-c" "wl-paste --type text --watch cliphist store"
     spawn-at-startup "blueman-applet"
   '';
