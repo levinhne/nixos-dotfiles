@@ -2,30 +2,19 @@
 
 let
   kanshi = import ./kanshi.nix { inherit pkgs; };
+  common = import ./common.nix { inherit pkgs fonts theme; };
 in
 
 let
   # 1. Các biến cấu hình chung
   modifier = "Mod4";
-  terminal = "kitty";
+  terminal = common.terminal;
 
   # 2. Bảng màu từ theme
   c = theme.colors;
 
-  # 3. Cấu hình bemenu (Đã thêm backend wayland để sửa lỗi không chạy)
-  menu = "bemenu-run " +
-    "--fn '${fonts.ui} 10.3' " +
-    "--tb '${c.base00}' --tf '${c.base0D}' " +
-    "--fb '${c.base00}' --ff '${c.base05}' " +
-    "--nb '${c.base00}' --nf '${c.base05}' " +
-    "--hb '${c.base01}' --hf '${c.base0B}' " +
-    "--cb '${c.base0D}' --cf '${c.base00}' " +
-    "--sb '${c.base01}' --sf '${c.base0E}' " +
-    "--ab '${c.base00}' --af '${c.base0C}' " +
-    "--fbb '${c.base00}' --fbf '${c.base0C}' " +
-    "--scb '${c.base00}' --scf '${c.base0C}' " +
-    "--bdr '${c.base0D}' " +
-    "-c -B 2 -W 0.5 -H 28 --hp 10 --prompt 'Run:'";
+  # 3. Sử dụng bemenu từ common config
+  menu = common.menu;
 
   # 4. Danh sách Workspace (1-9 và 0)
   wsKeys = map (n: toString n) [ 1 2 3 4 5 6 ];
@@ -210,12 +199,7 @@ in
 
       startup = [
         { command = "autotiling -l 2"; always = true; }
-        { command = "wpaperd -d"; always = true; }
-        { command = "mako"; always = true; }
-        { command = "fcitx5 -d"; }
-        { command = "wl-paste --type text --watch cliphist store"; always = true; }
-        { command = "blueman-applet"; }
-      ];
+      ] ++ common.startupPrograms;
     };
 
     extraConfig = ''

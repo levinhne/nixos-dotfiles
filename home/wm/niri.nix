@@ -2,40 +2,21 @@
 
 let
   kanshi = import ./kanshi.nix { inherit pkgs; };
+  common = import ./common.nix { inherit pkgs fonts theme; };
 in
 
 let
   # Các biến cấu hình chung
-  terminal = "kitty";
+  terminal = common.terminal;
 
   # Bảng màu từ theme
   c = theme.colors;
 
-  # Cấu hình bemenu (sử dụng lại từ sway)
-  menu = "bemenu-run " +
-    "--fn '${fonts.ui} 10.3' " +
-    "--tb '${c.base00}' --tf '${c.base0D}' " +
-    "--fb '${c.base00}' --ff '${c.base05}' " +
-    "--nb '${c.base00}' --nf '${c.base05}' " +
-    "--hb '${c.base01}' --hf '${c.base0B}' " +
-    "--cb '${c.base0D}' --cf '${c.base00}' " +
-    "--sb '${c.base01}' --sf '${c.base0E}' " +
-    "--ab '${c.base00}' --af '${c.base0C}' " +
-    "--fbb '${c.base00}' --fbf '${c.base0C}' " +
-    "--scb '${c.base00}' --scf '${c.base0C}' " +
-    "--bdr '${c.base0D}' " +
-    "-c -B 2 -W 0.5 -H 28 --hp 10 --prompt 'Run:'";
+  # Sử dụng bemenu từ common config
+  menu = common.menu;
 
   # Niri config file in KDL format
   niriConfig = ''
-    // Environment variables for Input Method
-    environment {
-        GTK_IM_MODULE "fcitx"
-        QT_IM_MODULE "fcitx"
-        XMODIFIERS "@im=fcitx"
-        GLFW_IM_MODULE "fcitx"
-    }
-
     // Input configuration
     input {
         keyboard {
@@ -180,12 +161,7 @@ let
     }
 
     // Startup programs
-    spawn-at-startup "waybar"
-    spawn-at-startup "wpaperd" "-d"
-    spawn-at-startup "mako"
-    spawn-at-startup "fcitx5" "-d"
-    spawn-at-startup "sh" "-c" "wl-paste --type text --watch cliphist store"
-    spawn-at-startup "blueman-applet"
+    ${common.startupProgramsKdl}
 
     // Animations
     animations {

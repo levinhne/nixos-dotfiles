@@ -1,16 +1,14 @@
 { pkgs, ... }:
 
+let
+  shellCommon = import ./common.nix { };
+in
 {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
       set -g fish_greeting ""
-      if test -f /run/agenix/crush-openai
-        set -gx OPENAI_API_KEY (cat /run/agenix/crush-openai)
-      end
-      if test -f /run/agenix/crush-fpt
-        set -gx FPT_API_KEY (cat /run/agenix/crush-fpt)
-      end
+      ${shellCommon.fishSecrets}
       direnv hook fish | source
     '';
     plugins = [

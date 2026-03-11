@@ -13,7 +13,6 @@ in
   services.displayManager.ly = {
     enable = true;
     settings = {
-      animation = "doom";
       # Wayland sessions (cả Sway và Niri)
       waylandsessions = "${waylandSessions}/share/wayland-sessions";
     };

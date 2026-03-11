@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../nixos-levinhne/hardware-configuration.nix
+    ./hardware-configuration.nix
     ../../system/boot.nix
     ../../system/fonts.nix
     ../../system/core.nix
@@ -17,6 +17,7 @@
     ../../system/user.nix
     ../../system/secrets.nix
     ../../system/office.nix
+    ../../system/fcitx5.nix
     ./cloudflared.nix
   ];
 
