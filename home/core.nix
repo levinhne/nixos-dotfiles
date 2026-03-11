@@ -44,7 +44,7 @@ in
   home.sessionVariables = {
     # Environment variables
     EDITOR = "nvim";
-    BROWSER = "google-chrome-stable";
+    BROWSER = "breave";
 
     # Fcitx5 - Input Method
     GTK_IM_MODULE = "fcitx";

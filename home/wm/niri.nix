@@ -80,7 +80,7 @@ let
         // Launchers
         Mod+Return { spawn "${terminal}"; }
         Mod+D { spawn "sh" "-c" "${menu}"; }
-        Mod+B { spawn "google-chrome-stable"; }
+        Mod+B { spawn "brave"; }
         Mod+Y { spawn "nemo"; }
 
         // Window Management

@@ -21,6 +21,7 @@ in
     ../shell/git.nix
     ../shell/fish.nix
     ../shell/starship.nix
+    ../shell/tmux.nix
     ../wm/sway.nix
     ../wm/niri.nix
     ../wm/waybar.nix

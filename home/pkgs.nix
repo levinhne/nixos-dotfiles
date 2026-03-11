@@ -17,7 +17,7 @@ in
     foot
     neovim
     qutebrowser
-    google-chrome
+    brave
     wpaperd
     bemenu
 

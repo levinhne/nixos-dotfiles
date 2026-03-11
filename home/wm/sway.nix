@@ -93,7 +93,7 @@ in
           # Launchers
           "${modifier}+Return" = "exec ${terminal}";
           "${modifier}+d" = "exec ${menu}";
-          "${modifier}+b" = "exec google-chrome-stable";
+          "${modifier}+b" = "exec brave";
           "${modifier}+y" = "exec nemo";
 
           # Utilities
