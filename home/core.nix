@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, osConfig ? null, ... }:
 
 let
+  # Get username from system config if available, otherwise use default
+  userName = if osConfig != null then osConfig.mySystem.userName else "levinhne";
+  
   dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
 
@@ -16,8 +19,8 @@ let
   };
 in
 {
-  home.username = "levinhne";
-  home.homeDirectory = "/home/levinhne";
+  home.username = userName;
+  home.homeDirectory = "/home/${userName}";
   home.stateVersion = "25.11";
 
   xdg.configFile = builtins.mapAttrs

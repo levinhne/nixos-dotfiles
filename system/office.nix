@@ -16,6 +16,8 @@ in
       noProxy = defaultNoProxy;
     };
 
+    # Office CA certificate
+    # TODO: Move to agenix secrets and use proper certificate management
     security.pki.certificateFiles = [
       /etc/ssl/certs/office-ca.pem
     ];
