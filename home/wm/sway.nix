@@ -61,13 +61,6 @@ in
         size = 11.0;
       };
 
-      output = {
-        "HDMI-A-1" = {
-          res = "1920x1200";
-          pos = "0 0";
-        };
-      };
-
       gaps = {
         inner = 2;
         outer = 2;
@@ -150,7 +143,7 @@ in
           "${modifier}+r" = "mode resize";
 
           # System Controls
-          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}'";
+          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}' --indicator-image /home/levinhne/.wallpapers/xoai.jpeg";
           "${modifier}+Shift+a" = "exec pkill -SIGUSR2 waybar";
           "${modifier}+Shift+c" = "reload";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";
@@ -203,7 +196,7 @@ in
     };
 
     extraConfig = ''
-      default_border pixel 2
+      default_border pixel 1
       ${lib.concatMapStringsSep "\n" (i: "bindsym --release ${modifier}+${i} exec \"echo 0 > /tmp/sovpipe\"") wsKeys}
     '';
   };

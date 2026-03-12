@@ -9,7 +9,7 @@ local g = {}
 
 local opts = {
   relativenumber = true,
-  mouse = "v",
+  mouse = "a",
   swapfile = false,
 }
 

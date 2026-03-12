@@ -4,6 +4,7 @@
 {
   programs.tmux = {
     enable = true;
+    shell = "${pkgs.fish}/bin/fish";
     terminal = "tmux-256color";
     mouse = true;
     prefix = "C-a";
@@ -17,7 +18,6 @@
         plugin = dracula;
         extraConfig = ''
           set -g @dracula-show-battery false
-          set -g @dracula-show-powerline true
           set -g @dracula-refresh-rate 10
         '';
       }
@@ -26,6 +26,8 @@
     extraConfig = ''
       set -ga terminal-overrides ",*:RGB"
       set -g set-clipboard on
+      set -g pane-border-status top
+      set -g pane-border-format "  #{pane_index} #{pane_current_command}  "
 
       # Vim like pane selection
       bind h select-pane -L

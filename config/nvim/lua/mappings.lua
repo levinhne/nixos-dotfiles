@@ -9,8 +9,6 @@ map("i", "jk", "<ESC>")
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
-vim.opt.mouse = ""
-
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
 -- map({ "n", "i", "v" }, "<leader>gg", "<cmd>LazyGit<cr>", { desc = "lazygit" })

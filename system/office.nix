@@ -21,5 +21,7 @@ in
     security.pki.certificateFiles = [
       /etc/ssl/certs/office-ca.pem
     ];
+
+    nix.settings.ssl-cert-file = "/etc/ssl/certs/ca-certificates.crt";
   };
 }

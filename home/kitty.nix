@@ -11,9 +11,9 @@
       # --- TRẢI NGHIỆM NGƯỜI DÙNG ---
       shell = "fish";
       text_composition_strategy = "legacy";
-      cursor_trail = 1;
+      # cursor_trail = 1;
       confirm_os_window_close = 0;
-      window_padding_width = 15;
+      window_padding_width = 5;
 
       # --- LINE HEIGHT ---
       # Sử dụng 1.2 hoặc 2px tùy Vinh, ở đây mình dùng cell_height để nới rộng
