@@ -7,6 +7,8 @@ let
   defaultHttpProxy = "http://10.36.255.25:8080";
   defaultNoProxy = "127.0.0.1,localhost,10.0.0.0/8,192.168.0.0/16";
 
+  certFile = "/etc/ssl/certs/ca-certificates.crt";
+
 in
 {
   config = lib.mkIf isOfficeHost {
@@ -23,5 +25,10 @@ in
     ];
 
     nix.settings.ssl-cert-file = "/etc/ssl/certs/ca-certificates.crt";
+
+    environment.variables = {
+      SSL_CERT_FILE = certFile;
+      NIX_SSL_CERT_FILE = certFile;
+    };
   };
 }

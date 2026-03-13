@@ -20,7 +20,7 @@
             }
             {
               criteria = "DP-1";
-              mode = "1920x1080@75Hz";
+              mode = "1920x1080@100Hz";
               position = "1920,0";
               scale = 1.0;
             }
