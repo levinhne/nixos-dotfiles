@@ -6,5 +6,5 @@
 
 config_version: 2
 settings:
-  content.notifications.enabled:
-    https://vnexpress.net: true
+  content.javascript.clipboard:
+    https://gemini.google.com: access-paste

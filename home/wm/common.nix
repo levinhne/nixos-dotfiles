@@ -44,7 +44,7 @@ in
 
   # Common keybindings applications
   apps = {
-    browser = "brave";
+    browser = "google-chorme-stable";
     fileManager = "nemo";
     screenshot = "grimblast copy area";
     screenshotFull = "grimblast copy output";

@@ -20,6 +20,7 @@ in
     ../shell/bash.nix
     ../shell/git.nix
     ../shell/fish.nix
+    ../shell/helix.nix
     ../shell/starship.nix
     ../shell/tmux.nix
     ../wm/sway.nix

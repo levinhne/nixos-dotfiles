@@ -31,12 +31,6 @@ let
         }
     }
 
-    // Output configuration
-    output "HDMI-A-1" {
-        mode "1920x1200@60.000"
-        position x=0 y=0
-    }
-
     // Layout configuration
     layout {
         gaps 4

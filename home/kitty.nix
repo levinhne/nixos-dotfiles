@@ -13,15 +13,11 @@
       text_composition_strategy = "legacy";
       # cursor_trail = 1;
       confirm_os_window_close = 0;
-      window_padding_width = 5;
+      window_padding_width = 8;
 
       # --- LINE HEIGHT ---
       # Sử dụng 1.2 hoặc 2px tùy Vinh, ở đây mình dùng cell_height để nới rộng
       modify_font = "cell_height 2px";
-
-      # --- TAB BAR ---
-      tab_bar_style = "powerline";
-      tab_powerline_style = "round";
 
       # --- COLORS (SỬ DỤNG BIẾN THEME CỦA VINH) ---
       background = theme.colors.base00;

@@ -22,11 +22,12 @@ in
     bemenu
 
     # Dev:
-    opencode
     vscode
     lazygit
     pkgs-unstable.crush
     pkgs-unstable.antigravity
+    pkgs-unstable.codex
+    pkgs-unstable.opencode
     nodejs_24
     python3
     direnv

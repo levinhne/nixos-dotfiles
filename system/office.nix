@@ -24,11 +24,5 @@ in
       /etc/ssl/certs/office-ca.pem
     ];
 
-    nix.settings.ssl-cert-file = "/etc/ssl/certs/ca-certificates.crt";
-
-    environment.variables = {
-      SSL_CERT_FILE = certFile;
-      NIX_SSL_CERT_FILE = certFile;
-    };
   };
 }
