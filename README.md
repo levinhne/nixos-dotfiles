@@ -19,63 +19,40 @@ A modular and well-organized NixOS configuration with home-manager, supporting m
 nixos-dotfiles/
 ├── flake.nix                 # Main entry point with host configurations
 ├── flake.lock                # Locked dependencies
+├── lib/
+│   ├── default.nix           # Helper functions
+│   └── mkHost.nix            # Shared host entrypoint
 │
 ├── hosts/                    # Host-specific configurations
+│   ├── common/               # Shared host composition
+│   │   ├── base.nix
+│   │   └── desktop.nix
 │   ├── nixos-levinhne/      # Personal laptop
-│   │   ├── configuration.nix
+│   │   ├── default.nix
 │   │   ├── hardware-configuration.nix
 │   │   ├── disko.nix
 │   │   └── cloudflared.nix
 │   └── nixos-vinhlq21/      # Work laptop
-│       ├── configuration.nix
+│       ├── default.nix
 │       ├── hardware-configuration.nix
 │       ├── disko.nix
 │       └── cloudflared.nix
 │
-├── system/                   # System-level NixOS modules
-│   ├── core.nix             # Nix settings, locale, timezone
-│   ├── user.nix             # User management with options
-│   ├── boot.nix             # Bootloader configuration
-│   ├── fonts.nix            # System fonts
-│   ├── graphics.nix         # GPU and graphics drivers
-│   ├── audio.nix            # PipeWire audio
-│   ├── bluetooth.nix        # Bluetooth support
-│   ├── ssh.nix              # SSH daemon
-│   ├── sway.nix             # Sway window manager (system)
-│   ├── niri.nix             # Niri window manager (system)
-│   ├── display-manager.nix  # Ly display manager
-│   ├── fcitx5.nix           # Input method (Vietnamese)
-│   ├── packages.nix         # System-wide packages
-│   ├── secrets.nix          # Agenix secrets configuration
-│   └── office.nix           # Office-specific settings (proxy, certs)
+├── modules/
+│   ├── system/              # Core system settings
+│   ├── desktop/             # Desktop-related NixOS modules
+│   ├── services/            # Service modules
+│   └── dev/                 # Development-oriented system modules
 │
 ├── home/                    # Home-manager user modules
+│   ├── default.nix          # Main home-manager entry point
 │   ├── profiles/
 │   │   └── desktop.nix      # Full desktop profile
-│   ├── core.nix             # Basic home configuration
-│   ├── theme.nix            # Dracula color scheme
-│   ├── pkgs.nix             # User packages
-│   ├── gtk.nix              # GTK theming
-│   ├── kitty.nix            # Kitty terminal
-│   ├── foot.nix             # Foot terminal
-│   ├── crush.nix            # AI assistant configuration
-│   ├── wpaperd.nix          # Wallpaper daemon
+│   ├── core/
+│   ├── dev/
 │   ├── shell/
-│   │   ├── common.nix       # Shared shell configuration
-│   │   ├── bash.nix
-│   │   ├── fish.nix
-│   │   ├── git.nix
-│   │   └── starship.nix
+│   ├── terminal/
 │   └── wm/
-│       ├── common.nix       # Shared WM configuration
-│       ├── sway.nix         # Sway configuration
-│       ├── niri.nix         # Niri configuration
-│       ├── waybar.nix       # Status bar
-│       ├── mako.nix         # Notifications
-│       └── kanshi.nix       # Display profiles
-│
-├── lib/
-│   └── default.nix          # Helper functions
 │
 ├── config/                  # Raw configuration files
 │   ├── nvim/               # Neovim (lazy.nvim)
@@ -119,8 +96,9 @@ nixos-dotfiles/
 3. **Configure your host:**
    - Edit `flake.nix` to add your host:
      ```nix
-     nixosConfigurations = {
-       your-hostname = mkHost "your-hostname" "your-username";
+     nixosConfigurations.your-hostname = mkHost {
+       hostname = "your-hostname";
+       username = "your-username";
      };
      ```
    - Create host directory: `hosts/your-hostname/`
@@ -151,7 +129,7 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#<hostname>
    ```
 
 2. Create required files:
-   - `configuration.nix` - System configuration
+   - `default.nix` - Host composition
    - `hardware-configuration.nix` - Hardware-specific settings
    - `disko.nix` - Disk partitioning (optional)
 
@@ -162,7 +140,7 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#<hostname>
 
 ### Customizing the Theme
 
-Edit `home/theme.nix` to change colors. The theme is based on Dracula but can be customized:
+Edit `home/core/theme.nix` to change colors. The theme is based on Dracula but can be customized:
 
 ```nix
 {
@@ -181,7 +159,7 @@ All applications (kitty, foot, sway, niri, mako, starship) will automatically us
 The configuration supports both Sway and Niri. Both are configured by default. To use only one:
 
 1. Comment out unwanted WM in `home/profiles/desktop.nix`
-2. Comment out unwanted WM in `hosts/<hostname>/configuration.nix`
+2. Comment out unwanted system modules in `hosts/common/desktop.nix` if needed
 
 ### Managing Secrets
 
@@ -193,7 +171,7 @@ This configuration uses [agenix](https://github.com/ryantm/agenix) for secret ma
    agenix -e secrets/my-secret.age
    ```
 
-2. **Declare the secret in `system/secrets.nix`:**
+2. **Declare the secret in `modules/system/secrets.nix`:**
    ```nix
    age.secrets.my-secret = {
      file = ../secrets/my-secret.age;
@@ -209,14 +187,14 @@ This configuration uses [agenix](https://github.com/ryantm/agenix) for secret ma
 
 ### Configuring User
 
-The username is configurable via `mySystem.userName` option in `system/user.nix`. Default is "levinhne".
+The username is configurable via `mySystem.userName` option in `modules/system/user.nix`. Default is "levinhne".
 
 To use a different username:
 ```nix
 # In flake.nix
 nixosConfigurations.my-host = mkHost "my-host" "myusername";
 
-# Or in configuration.nix
+# Or in hosts/<hostname>/default.nix
 mySystem.userName = "myusername";
 mySystem.userDescription = "My Full Name";
 ```
@@ -253,7 +231,7 @@ clean
 
 ### Garbage Collection
 
-Automatic garbage collection runs weekly (configured in `system/core.nix`):
+Automatic garbage collection runs weekly (configured in `modules/system/nix.nix`):
 ```nix
 nix.gc = {
   automatic = true;
@@ -319,7 +297,7 @@ sudo nixos-generate-config --show-hardware-config
 
 ## TODO
 
-- [ ] Configure actual git email in `home/shell/git.nix`
+- [ ] Configure actual git email in `home/dev/git.nix`
 - [ ] Move cloudflared credentials to agenix secrets
 - [ ] Add actual hardware config for vinhlq21 work laptop
 - [ ] Adjust disko.nix device paths for vinhlq21

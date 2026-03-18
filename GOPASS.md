@@ -16,7 +16,7 @@ Gopass là password manager dòng lệnh mạnh mẽ, tương tự `pass` nhưng
 
 ### 1. Cài đặt (đã có trong system packages)
 
-Gopass và Age đã được cài đặt qua `system/packages.nix`:
+Gopass và Age đã được cài đặt qua `modules/dev/packages.nix`:
 - `gopass` - Password manager
 - `age` - Encryption tool
 

@@ -15,7 +15,7 @@ in
   # Uncomment and customize as needed
 
   # age.secrets.office-cert = {
-  #   file = ../secrets/office-cert.age;
+  #   file = ../../secrets/office-cert.age;
   #   mode = "600";
   #   owner = config.mySystem.userName;
   #   group = "users";

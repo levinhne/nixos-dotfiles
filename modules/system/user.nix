@@ -13,14 +13,22 @@
       default = "Le Vinh Ne";
       description = "User full name";
     };
+
+    mySystem.gitEmail = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Git email address for the primary user.";
+    };
   };
 
   config = {
+    programs.fish.enable = true;
+
     users.users.${config.mySystem.userName} = {
       isNormalUser = true;
       description = config.mySystem.userDescription;
       extraGroups = [ "wheel" "networkmanager" "audio" "video" ];
-      shell = pkgs.bash;
+      shell = pkgs.fish;
     };
   };
 }

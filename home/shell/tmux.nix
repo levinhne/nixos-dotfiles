@@ -45,9 +45,8 @@
       bind r source-file $HOME/.config/tmux/tmux.conf
 
       # Pane base index
-      set -g pane-base-index 1
-      set-window-option -g pane-base-index 1
-      set-option -g renumber-windows on
+      # set -g pane-base-index 1
+      # set-window-option -g pane-base-index 1
 
       # Vim-like copy/paste
       bind-key -T copy-mode-vi v send-keys -X begin-selection

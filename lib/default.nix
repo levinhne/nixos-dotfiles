@@ -2,12 +2,12 @@
 { lib }:
 
 {
+  mkHost = import ./mkHost.nix;
+
   # Remove # prefix from hex colors
-  # Usage: cleanHex "#282a36" -> "282a36"
   cleanHex = lib.removePrefix "#";
 
   # Generate workspace key bindings for window managers
-  # Usage: mkWorkspaceBinds "Mod4" ["1" "2" "3"]
   mkWorkspaceBinds = modifier: keys:
     builtins.listToAttrs (map
       (key: {

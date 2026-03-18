@@ -11,13 +11,18 @@ in
       ${shellCommon.fishSecrets}
       direnv hook fish | source
     '';
+    functions = {
+      nrs = {
+        description = "Switch the current NixOS host configuration";
+        body = shellCommon.fishRebuildFunction;
+      };
+    };
     plugins = [
       { name = "bass"; src = pkgs.fishPlugins.bass.src; }
       { name = "done"; src = pkgs.fishPlugins.done.src; }
       { name = "z"; src = pkgs.fishPlugins.z.src; }
     ];
     shellAbbrs = {
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne";
       v = "nvim";
     };
   };

@@ -14,6 +14,7 @@
         default = "http_status:404";
         ingress = {
           "nixos-vinhlq21-ssh.levinh.io.vn" = "ssh://localhost:22";
+          "0ximg.sh" = "http://localhost:8090";
         };
       };
     };

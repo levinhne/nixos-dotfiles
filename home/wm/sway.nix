@@ -9,6 +9,7 @@ let
   # 1. Các biến cấu hình chung
   modifier = "Mod4";
   terminal = common.terminal;
+  browser = common.apps.browser;
 
   # 2. Bảng màu từ theme
   c = theme.colors;
@@ -49,7 +50,7 @@ in
 
   wayland.windowManager.sway = {
     enable = true;
-    # wrapperFeatures and xwayland are handled by system/sway.nix
+    # wrapperFeatures and xwayland are handled by the system-level sway module
 
     config = {
       modifier = modifier;
@@ -86,7 +87,7 @@ in
           # Launchers
           "${modifier}+Return" = "exec ${terminal}";
           "${modifier}+d" = "exec ${menu}";
-          "${modifier}+b" = "exec brave";
+          "${modifier}+b" = "exec ${browser}";
           "${modifier}+y" = "exec nemo";
 
           # Utilities
@@ -196,7 +197,7 @@ in
     };
 
     extraConfig = ''
-      default_border pixel 1
+      default_border pixel 2
       ${lib.concatMapStringsSep "\n" (i: "bindsym --release ${modifier}+${i} exec \"echo 0 > /tmp/sovpipe\"") wsKeys}
     '';
   };

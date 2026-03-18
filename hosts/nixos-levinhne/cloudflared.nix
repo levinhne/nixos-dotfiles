@@ -5,7 +5,7 @@
   # TODO: Move credentials to agenix secrets for better security
   # Example:
   #   1. Encrypt: agenix -e secrets/cloudflared-levinhne.age
-  #   2. Declare in system/secrets.nix:
+  #   2. Declare in modules/system/secrets.nix:
   #      age.secrets.cloudflared-levinhne = {
   #        file = ../secrets/cloudflared-levinhne.age;
   #        owner = config.mySystem.userName;

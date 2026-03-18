@@ -1,8 +1,7 @@
 # Hardware configuration for nixos-vinhlq21 (Work laptop)
 # 
-# IMPORTANT: This is a template. After installing NixOS, run:
-#   sudo nixos-generate-config
-# And copy the generated hardware-configuration.nix to this location.
+# IMPORTANT: This is a template. After installing NixOS, run
+# `sudo nixos-generate-config`, then copy the generated hardware module here.
 #
 { config, lib, pkgs, modulesPath, ... }:
 

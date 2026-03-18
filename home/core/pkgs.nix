@@ -1,11 +1,9 @@
 { pkgs, pkgs-unstable, ... }:
 
 let
-  # Custom packages
-  retrosmart-cursors = pkgs.callPackage ../packages/retrosmart-cursors.nix { };
+  retrosmart-cursors = pkgs.callPackage ../../packages/retrosmart-cursors.nix { };
 in
 {
-  # CLI tools
   home.packages = with pkgs; [
     ripgrep
     fd
@@ -20,8 +18,6 @@ in
     google-chrome
     wpaperd
     bemenu
-
-    # Dev:
     vscode
     lazygit
     pkgs-unstable.crush
@@ -32,11 +28,7 @@ in
     python3
     direnv
     k9s
-
-    # nix
     nixpkgs-fmt
-
-    # Custom packages
     retrosmart-cursors
   ];
 }

@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
 
+  # PipeWire owns the audio stack, including compatibility layers used by Bluetooth audio.
   services.pipewire = {
     enable = true;
     alsa.enable = true;

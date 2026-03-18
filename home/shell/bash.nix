@@ -12,7 +12,7 @@ in
       ".." = "cd ..";
       "..." = "cd ../..";
       ll = "ls -la";
-      update = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne";
+      update = "__nixos_rebuild_switch";
       clean = "sudo nix-collect-garbage -d";
       gs = "git status";
       ga = "git add";
@@ -20,6 +20,7 @@ in
       gp = "git push";
     };
     bashrcExtra = ''
+      ${shellCommon.bashRebuildFunction}
     '';
   };
 }

@@ -11,11 +11,4 @@
   environment.systemPackages = with pkgs; [
     blueman # Giao diện GUI cực tốt cho Sway/Wayland
   ];
-
-  # Hỗ trợ âm thanh Bluetooth (A2DP) qua Pipewire
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    pulse.enable = true;
-  };
 }

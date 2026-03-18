@@ -1,23 +1,32 @@
-{ pkgs, lib, theme, fonts, ... }:
+{ lib, pkgs, theme, fonts, ... }:
 
 let
+  inherit (theme) colors;
   helixThemeName = "base16-dracula-sync";
 in
 {
-  home.packages = with pkgs; [
-    gopls
-    golangci-lint-langserver
-    go
-    nixd
-    nixpkgs-fmt
-    pyright
-    black
-    rust-analyzer
-    rustfmt
+  assertions = [
+    {
+      assertion = fonts ? terminal;
+      message = "home/shell/helix.nix expects fonts.terminal from the profile module arguments.";
+    }
   ];
 
   programs.helix = {
     enable = true;
+    defaultEditor = false;
+
+    extraPackages = with pkgs; [
+      go
+      gopls
+      golangci-lint-langserver
+      nixd
+      nixpkgs-fmt
+      pyright
+      black
+      rust-analyzer
+      rustfmt
+    ];
 
     settings = {
       theme = helixThemeName;
@@ -39,33 +48,24 @@ in
           character = "|";
         };
 
-        lsp = {
-          display-messages = true;
-        };
+        lsp.display-messages = true;
       };
     };
 
     languages = {
       language-server = {
-        gopls = {
-          command = lib.getExe pkgs.gopls;
-        };
+        gopls.command = lib.getExe pkgs.gopls;
 
-        golangci-lint-lsp = {
-          command = lib.getExe pkgs.golangci-lint-langserver;
-        };
+        golangci-lint-lsp.command = lib.getExe pkgs.golangci-lint-langserver;
 
-        nixd = {
-          command = lib.getExe pkgs.nixd;
-        };
+        nixd.command = lib.getExe pkgs.nixd;
 
         pyright = {
-          command = lib.getExe pkgs.pyright;
+          command = lib.getExe' pkgs.pyright "pyright-langserver";
+          args = [ "--stdio" ];
         };
 
-        rust-analyzer = {
-          command = lib.getExe pkgs.rust-analyzer;
-        };
+        rust-analyzer.command = lib.getExe pkgs.rust-analyzer;
       };
 
       language = [
@@ -76,17 +76,13 @@ in
             "gopls"
             "golangci-lint-lsp"
           ];
-          formatter = {
-            command = "${pkgs.go}/bin/gofmt";
-          };
+          formatter.command = lib.getExe' pkgs.go "gofmt";
         }
         {
           name = "nix";
           auto-format = true;
           language-servers = [ "nixd" ];
-          formatter = {
-            command = lib.getExe pkgs.nixpkgs-fmt;
-          };
+          formatter.command = lib.getExe pkgs.nixpkgs-fmt;
         }
         {
           name = "python";
@@ -94,7 +90,7 @@ in
           language-servers = [ "pyright" ];
           formatter = {
             command = lib.getExe pkgs.black;
-            args = [ "-" ];
+            args = [ "-q" "-" ];
           };
         }
         {
@@ -112,80 +108,42 @@ in
     themes.${helixThemeName} = {
       inherits = "dracula";
 
-      "ui.background" = {
-        bg = theme.colors.base00;
-      };
-
-      "ui.text" = {
-        fg = theme.colors.base05;
-      };
-
+      "ui.background" = { bg = colors.base00; };
+      "ui.text" = { fg = colors.base05; };
       "ui.cursor" = {
-        fg = theme.colors.base00;
-        bg = theme.colors.base0D;
+        fg = colors.base00;
+        bg = colors.base0D;
       };
-
       "ui.cursor.insert" = {
-        fg = theme.colors.base00;
-        bg = theme.colors.base0B;
+        fg = colors.base00;
+        bg = colors.base0B;
       };
-
       "ui.cursor.select" = {
-        fg = theme.colors.base00;
-        bg = theme.colors.base0E;
+        fg = colors.base00;
+        bg = colors.base0E;
       };
-
-      "ui.selection" = {
-        bg = theme.colors.base01;
-      };
-
-      "ui.cursorline.primary" = {
-        bg = theme.colors.base01;
-      };
-
-      "ui.linenr" = {
-        fg = theme.colors.base03;
-      };
-
-      "ui.linenr.selected" = {
-        fg = theme.colors.base0A;
-      };
-
+      "ui.selection" = { bg = colors.base01; };
+      "ui.cursorline.primary" = { bg = colors.base01; };
+      "ui.linenr" = { fg = colors.base03; };
+      "ui.linenr.selected" = { fg = colors.base0A; };
       "ui.statusline" = {
-        fg = theme.colors.base05;
-        bg = theme.colors.base01;
+        fg = colors.base05;
+        bg = colors.base01;
       };
-
       "ui.statusline.insert" = {
-        fg = theme.colors.base00;
-        bg = theme.colors.base0B;
+        fg = colors.base00;
+        bg = colors.base0B;
       };
-
       "ui.statusline.normal" = {
-        fg = theme.colors.base00;
-        bg = theme.colors.base0D;
+        fg = colors.base00;
+        bg = colors.base0D;
       };
-
       "ui.statusline.select" = {
-        fg = theme.colors.base00;
-        bg = theme.colors.base0E;
+        fg = colors.base00;
+        bg = colors.base0E;
       };
-
-      "ui.virtual.indent-guide" = {
-        fg = theme.colors.base01;
-      };
-
-      "ui.virtual.indent-guide.active" = {
-        fg = theme.colors.base03;
-      };
+      "ui.virtual.indent-guide" = { fg = colors.base01; };
+      "ui.virtual.indent-guide.active" = { fg = colors.base03; };
     };
   };
-
-  # Helix inherits the terminal font from Foot/Kitty, keeping editor typography aligned.
-  assertions = [
-    {
-      assertion = fonts ? terminal;
-      message = "home/shell/helix.nix expects fonts.terminal from the profile module arguments.";
-    }
-  ];
 }

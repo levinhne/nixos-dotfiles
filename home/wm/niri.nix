@@ -8,6 +8,7 @@ in
 let
   # Các biến cấu hình chung
   terminal = common.terminal;
+  browser = common.apps.browser;
 
   # Bảng màu từ theme
   c = theme.colors;
@@ -74,7 +75,7 @@ let
         // Launchers
         Mod+Return { spawn "${terminal}"; }
         Mod+D { spawn "sh" "-c" "${menu}"; }
-        Mod+B { spawn "brave"; }
+        Mod+B { spawn "${browser}"; }
         Mod+Y { spawn "nemo"; }
 
         // Window Management

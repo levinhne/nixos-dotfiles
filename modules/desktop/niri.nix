@@ -11,7 +11,7 @@
   services.gnome.gcr-ssh-agent.enable = false;
 
   # XDG Portal for Wayland
-  # Portal config đã được thiết lập trong system/sway.nix, không cần duplicate
+  # Portal config đã được thiết lập trong the system-level sway module
   # Nếu muốn thêm GNOME portal cho Niri, cần disable gcr-ssh-agent như trên
   xdg.portal.extraPortals = with pkgs; [
     xdg-desktop-portal-gnome # Niri works well with GNOME portal
