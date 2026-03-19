@@ -24,6 +24,7 @@ in
     ../shell/tmux.nix
     ../terminal/foot.nix
     ../terminal/kitty.nix
+    ../wm/kanshi.nix
     ../wm/sway.nix
     ../wm/niri.nix
     ../wm/waybar.nix

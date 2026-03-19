@@ -28,6 +28,7 @@ in
     python3
     direnv
     k9s
+    podman-tui
     nixpkgs-fmt
     retrosmart-cursors
   ];

@@ -1,7 +1,6 @@
 { pkgs, lib, fonts, theme, ... }:
 
 let
-  kanshi = import ./kanshi.nix { inherit pkgs; };
   common = import ./common.nix { inherit pkgs fonts theme; };
 in
 
@@ -9,6 +8,7 @@ let
   # Các biến cấu hình chung
   terminal = common.terminal;
   browser = common.apps.browser;
+  clipboard = common.apps.clipboard;
 
   # Bảng màu từ theme
   c = theme.colors;
@@ -86,7 +86,7 @@ let
         Mod+Shift+T { spawn "swaylock" "--screenshots" "--effect-blur" "7x5" "--effect-vignette" "0.5:0.5" "--fade-in" "0.2" "--color" "${c.base00}" "--indicator-radius" "100" "--font" "${fonts.ui}"; }
 
         // Clipboard
-        Mod+V { spawn "sh" "-c" "cliphist list | bemenu -p 'Clipboard' | cliphist decode | wl-copy"; }
+        Mod+V { spawn "sh" "-c" "${clipboard}"; }
 
         // Screenshots
         Mod+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'"; }
@@ -183,9 +183,6 @@ let
   '';
 in
 {
-  # Import kanshi configuration
-  imports = [ kanshi ];
-
   # Tạo file config cho Niri
   xdg.configFile."niri/config.kdl".text = niriConfig;
 }

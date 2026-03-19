@@ -12,6 +12,7 @@
     ../../modules/system/secrets.nix
     ../../modules/services/ssh.nix
     ../../modules/services/office.nix
+    ../../modules/dev/docker.nix
     ../../modules/dev/packages.nix
   ];
 }

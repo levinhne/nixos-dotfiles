@@ -1,7 +1,6 @@
 { pkgs, lib, fonts, theme, ... }:
 
 let
-  kanshi = import ./kanshi.nix { inherit pkgs; };
   common = import ./common.nix { inherit pkgs fonts theme; };
 in
 
@@ -10,6 +9,7 @@ let
   modifier = "Mod4";
   terminal = common.terminal;
   browser = common.apps.browser;
+  clipboard = common.apps.clipboard;
 
   # 2. Bảng màu từ theme
   c = theme.colors;
@@ -21,8 +21,6 @@ let
   wsKeys = map (n: toString n) [ 1 2 3 4 5 6 ];
 in
 {
-  # Import kanshi configuration
-  imports = [ kanshi ];
   # Sway-related packages
   home.packages = with pkgs; [
     # Launcher
@@ -91,10 +89,8 @@ in
           "${modifier}+y" = "exec nemo";
 
           # Utilities
-          "${modifier}+v" = "exec cliphist list | rofi -dmenu -p 'Clipboard' -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy";
+          "${modifier}+v" = "exec ${clipboard}";
           "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
-          "${modifier}+Shift+s" = "exec grim - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Full screen captured'";
-          # "${modifier}+c" = "exec ~/.local/bin/random-wallpaper.sh";
           "${modifier}+g" = "exec ~/.config/sway/scripts/prompt-record.sh";
 
           # Window Management
@@ -130,7 +126,7 @@ in
 
           # Layout
           "${modifier}+e" = "layout toggle split";
-          "${modifier}+Shift+r" = "layout stacking";
+          "${modifier}+Shift+s" = "layout stacking";
           "${modifier}+x" = "layout tabbed";
 
           # Focus parent/child
@@ -226,11 +222,6 @@ in
         timeout = 300;
         # Viết tất cả tham số trên 1 dòng để tránh lỗi format systemd unit
         command = "${pkgs.swaylock-effects}/bin/swaylock -f --color ${c.base00} --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --inside-color ${c.base01} --inside-clear-color ${c.base0C} --inside-ver-color ${c.base0D} --inside-wrong-color ${c.base08} --ring-color ${c.base0D} --ring-clear-color ${c.base0C} --ring-ver-color ${c.base0D} --ring-wrong-color ${c.base08} --key-hl-color ${c.base0B} --bs-hl-color ${c.base08} --separator-color ${c.base01} --text-color ${c.base05} --text-clear-color ${c.base01} --text-ver-color ${c.base01} --text-wrong-color ${c.base01} --indicator-radius 100 --indicator-thickness 10 --font '${fonts.ui}'";
-      }
-      {
-        timeout = 600;
-        command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
-        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
       }
     ];
   };

@@ -4,14 +4,8 @@
 
 let
   c = theme.colors;
-in
-{
-  # Common applications
-  terminal = "kitty";
-  
-  # Bemenu launcher configuration with theme colors
-  menu = "bemenu-run " +
-    "--fn '${fonts.ui} 10.3' " +
+  bemenuBaseOptions =
+    "--fn 'Iosevka Nerd Font 10.3' " +
     "--tb '${c.base00}' --tf '${c.base0D}' " +
     "--fb '${c.base00}' --ff '${c.base05}' " +
     "--nb '${c.base00}' --nf '${c.base05}' " +
@@ -22,7 +16,14 @@ in
     "--fbb '${c.base00}' --fbf '${c.base0C}' " +
     "--scb '${c.base00}' --scf '${c.base0C}' " +
     "--bdr '${c.base0D}' " +
-    "-c -B 2 -W 0.5 -H 28 --hp 10 --prompt 'Run:'";
+    "-c -B 2 -W 0.5 -H 28 --hp 10 ";
+in
+{
+  # Common applications
+  terminal = "kitty";
+  
+  # Bemenu launcher configuration with theme colors
+  menu = "bemenu-run " + bemenuBaseOptions + "--prompt 'Run:'";
 
   # Common startup programs (for Sway format)
   startupPrograms = [
@@ -48,6 +49,6 @@ in
     fileManager = "nemo";
     screenshot = "grimblast copy area";
     screenshotFull = "grimblast copy output";
-    clipboard = "cliphist list | bemenu -l 10 | cliphist decode | wl-copy";
+    clipboard = "cliphist list | bemenu " + bemenuBaseOptions + "-l 10 --prompt 'Clipboard' | cliphist decode | wl-copy";
   };
 }
