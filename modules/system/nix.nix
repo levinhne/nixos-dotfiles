@@ -1,6 +1,10 @@
-{ ... }:
+{ inputs, ... }:
 
 {
+  nixpkgs.overlays = [
+    (import ../../overlays/default.nix { inherit inputs; })
+  ];
+
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;

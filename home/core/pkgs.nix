@@ -20,7 +20,7 @@ in
     bemenu
     vscode
     lazygit
-    pkgs-unstable.crush
+    crush
     pkgs-unstable.antigravity
     pkgs-unstable.codex
     pkgs-unstable.opencode
