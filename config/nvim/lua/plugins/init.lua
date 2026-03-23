@@ -66,6 +66,7 @@ return {
 
   -- ai 
   { import = "plugins.ai.copilot"},
+  { import = "plugins.ai.claude-code" },
 
   -- git 
   { import = "plugins.git.lazygit" },

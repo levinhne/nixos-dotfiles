@@ -27,7 +27,24 @@ let
           {
             id = "Qwen3-Coder-480B-A35B-Instruct";
             name = "Qwen3-Coder-480B-A35B-Instruct";
-            default_max_tokens = 4096;
+          }
+          {
+            id = "GLM-4.7";
+            name = "GLM-4.7";
+            default_max_tokens = 8192;
+          }
+        ];
+      };
+      claudefake = {
+        id = "claude fake";
+        name = "Claude Fake";
+        type = "anthropic";
+        base_url = "https://aihubapi.khoapi.dev/";
+        api_key = "$CLAUDE_FAKE_API";
+        models = [
+          {
+            id = "claude-sonnet-4-6";
+            name = "claude-sonnet-4-6";
           }
         ];
       };
