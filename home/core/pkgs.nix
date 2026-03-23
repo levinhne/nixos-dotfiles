@@ -10,6 +10,7 @@ in
     jq
     tree
     foot
+    kitty
     qutebrowser
     google-chrome
     wpaperd

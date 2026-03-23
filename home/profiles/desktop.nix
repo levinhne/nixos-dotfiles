@@ -15,7 +15,7 @@ in
     ../core/default.nix
     ../core/gtk.nix
     ../core/pkgs.nix
-    # ../dev/claude-code.nix
+    ../dev/claude-code.nix
     ../dev/crush.nix
     ../shell/bash.nix
     ../shell/fish.nix

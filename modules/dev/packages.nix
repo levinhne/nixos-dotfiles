@@ -17,27 +17,32 @@
       wget
       curl
       openssl
+
       # System monitoring
       htop
       btop
       neofetch
       # Desktop apps
-      firefox
-      kitty
+
       # File management
       ranger
       unzip
       zip
       p7zip
+
       # Audio
       pulseaudio
+
       # Password management
       gopass
       age
+
       # GPG/PGP tools
       paperkey
+
       # Network tools
       inetutils
+      lsof
     ])
     ++ [ pkgs.cloudflared ]
     ++ config.mySystem.extraPackages;

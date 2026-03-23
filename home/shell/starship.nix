@@ -5,11 +5,12 @@
     enable = true;
     # Tự động kích hoạt cho Bash và Fish
     enableFishIntegration = true;
-    enableBashIntegration = true;
+    enableBashIntegration = false;
 
     # Cấu hình giao diện (tùy chỉnh theo ý bạn)
     settings = {
       add_newline = false;
+      command_timeout = 2000;
       line_break.disabled = true;
       character = {
         success_symbol = "[➜](bold ${theme.colors.base0B})";
