@@ -22,7 +22,7 @@ in
     ../shell/zsh.nix
     ../shell/neovim.nix
     ../shell/helix.nix
-    ../shell/starship.nix
+    # ../shell/starship.nix
     ../shell/tmux.nix
     ../terminal/foot.nix
     ../terminal/kitty.nix

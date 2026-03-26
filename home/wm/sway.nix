@@ -32,6 +32,15 @@ in
     swaylock-effects # Screen locker with effects (blur, fade, etc.)
     swayidle # Idle management
     autotiling # Auto tiling
+    sov # Workspace overview
+    (pkgs.writeShellScriptBin "start-sov" ''
+      pkill -x sov || true
+      rm -f /tmp/sovpipe
+      mkfifo /tmp/sovpipe
+      # Giữ pipe luôn mở để EOF không bao giờ gửi tới sov khi echo kết thúc
+      exec 3<> /tmp/sovpipe
+      cat < /tmp/sovpipe | sov -t 500
+    '')
 
     # Wayland utilities
     waybar # Status bar
@@ -153,6 +162,9 @@ in
           "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
           "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
+
+          # Overview
+          "${modifier}+Tab" = "exec echo 1 > /tmp/sovpipe";
         } //
         # Tự động tạo bindings cho Workspaces
         (builtins.listToAttrs (map
@@ -190,12 +202,14 @@ in
 
       startup = [
         { command = "autotiling -l 2"; always = true; }
+        { command = "start-sov"; always = true; }
       ] ++ common.startupPrograms;
     };
 
     extraConfig = ''
       default_border pixel 2
       ${lib.concatMapStringsSep "\n" (i: "bindsym --release ${modifier}+${i} exec \"echo 0 > /tmp/sovpipe\"") wsKeys}
+      bindsym --release ${modifier}+Tab exec "echo 0 > /tmp/sovpipe"
     '';
   };
 

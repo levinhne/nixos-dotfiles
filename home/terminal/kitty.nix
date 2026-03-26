@@ -10,6 +10,7 @@
     settings = {
       # --- TRẢI NGHIỆM NGƯỜI DÙNG ---
       text_composition_strategy = "legacy";
+      background_opacity = "0.95";
       # cursor_trail = 1;
       confirm_os_window_close = 0;
       window_padding_width = 8;
