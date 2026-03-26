@@ -1,9 +1,9 @@
 { inputs, nixpkgs }:
 
-{
-  hostname,
-  username,
-  system ? "x86_64-linux",
+{ hostname
+, username
+, system ? "x86_64-linux"
+,
 }:
 
 let

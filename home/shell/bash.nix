@@ -8,19 +8,17 @@ in
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    shellAliases = {
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      ll = "ls -la";
-      update = "__nixos_rebuild_switch";
-      clean = "sudo nix-collect-garbage -d";
-      gs = "git status";
-      ga = "git add";
-      gc = "git commit";
-      gp = "git push";
-    };
+    shellAliases = shellCommon.shellAliases;
+    historyControl = [
+      "ignoredups"
+      "erasedups"
+    ];
+    historyFileSize = 100000;
+    historySize = 100000;
     bashrcExtra = ''
-      ${shellCommon.bashRebuildFunction}
+      ${shellCommon.posixSecrets}
+      ${shellCommon.posixRebuildFunction}
+      ${shellCommon.bashInteractiveInit}
     '';
   };
 }

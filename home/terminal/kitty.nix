@@ -9,7 +9,6 @@
     };
     settings = {
       # --- TRẢI NGHIỆM NGƯỜI DÙNG ---
-      shell = "fish";
       text_composition_strategy = "legacy";
       # cursor_trail = 1;
       confirm_os_window_close = 0;

@@ -21,7 +21,7 @@ in
 {
   # Common applications
   terminal = "kitty";
-  
+
   # Bemenu launcher configuration with theme colors
   menu = "bemenu-run " + bemenuBaseOptions + "--prompt 'Run:'";
 

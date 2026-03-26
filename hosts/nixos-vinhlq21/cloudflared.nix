@@ -4,7 +4,7 @@
   # Cloudflare Tunnel configuration for work laptop
   # TODO: Move credentials to agenix secrets for better security
   # See nixos-levinhne/cloudflared.nix for example
-  
+
   services.cloudflared = {
     enable = true;
     package = pkgs.cloudflared;

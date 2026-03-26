@@ -11,7 +11,7 @@
   #        owner = config.mySystem.userName;
   #      };
   #   3. Use: credentialsFile = config.age.secrets.cloudflared-levinhne.path;
-  
+
   services.cloudflared = {
     enable = true;
     package = pkgs.cloudflared;

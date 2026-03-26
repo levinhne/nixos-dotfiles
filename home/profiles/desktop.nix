@@ -19,6 +19,7 @@ in
     ../dev/crush.nix
     ../shell/bash.nix
     ../shell/fish.nix
+    ../shell/zsh.nix
     ../shell/neovim.nix
     ../shell/helix.nix
     ../shell/starship.nix

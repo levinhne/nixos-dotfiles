@@ -1,4 +1,4 @@
-{ pkgs, lib, fonts, theme, ... }:
+{ config, pkgs, lib, fonts, theme, ... }:
 
 let
   common = import ./common.nix { inherit pkgs fonts theme; };
@@ -13,6 +13,7 @@ let
 
   # 2. Bảng màu từ theme
   c = theme.colors;
+  swayConfigPath = "${config.xdg.configHome}/sway/config";
 
   # 3. Sử dụng bemenu từ common config
   menu = common.menu;
@@ -197,6 +198,23 @@ in
       ${lib.concatMapStringsSep "\n" (i: "bindsym --release ${modifier}+${i} exec \"echo 0 > /tmp/sovpipe\"") wsKeys}
     '';
   };
+
+  xdg.configFile."swayfx/config".text = ''
+    include ${swayConfigPath}
+
+    # SwayFX-only visual effects layered on top of the shared Sway config.
+    corner_radius 4
+    default_dim_inactive 0.06
+
+    shadows enable
+    shadow_blur_radius 12
+    shadow_color ${c.base00}88
+
+    blur enable
+    blur_radius 6
+    blur_passes 3
+    blur_xray false
+  '';
 
   programs.swaylock = {
     enable = true;

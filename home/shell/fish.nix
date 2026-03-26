@@ -8,8 +8,9 @@ in
     enable = true;
     interactiveShellInit = ''
       set -g fish_greeting ""
+
       ${shellCommon.fishSecrets}
-      direnv hook fish | source
+      ${shellCommon.fishInteractiveInit}
     '';
     functions = {
       nrs = {
@@ -22,8 +23,6 @@ in
       { name = "done"; src = pkgs.fishPlugins.done.src; }
       { name = "z"; src = pkgs.fishPlugins.z.src; }
     ];
-    shellAbbrs = {
-      v = "nvim";
-    };
+    shellAliases = shellCommon.shellAliases;
   };
 }

@@ -23,6 +23,13 @@
 
   config = {
     programs.fish.enable = true;
+    programs.zsh.enable = true;
+
+    environment.shells = with pkgs; [
+      bashInteractive
+      fish
+      zsh
+    ];
 
     users.users.${config.mySystem.userName} = {
       isNormalUser = true;

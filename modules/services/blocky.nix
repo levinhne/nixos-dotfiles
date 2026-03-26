@@ -80,7 +80,7 @@
 
       # Port configuration
       ports = {
-        dns = 53;    # DNS port
+        dns = 53; # DNS port
         http = 4000; # HTTP API and metrics port
       };
 
@@ -119,10 +119,10 @@
 
   # Configure system to use Blocky as DNS server
   networking.nameservers = [ "127.0.0.1" ];
-  
+
   # Prevent NetworkManager from overwriting DNS settings
   networking.networkmanager.dns = "none";
-  
+
   # Create resolv.conf with Blocky as nameserver
   environment.etc."resolv.conf".text = ''
     nameserver 127.0.0.1
@@ -130,6 +130,6 @@
   '';
 
   # Copy custom blocklist to /etc/nixos/config/blocky/
-  environment.etc."nixos/config/blocky/custom-blocklist.txt".source = 
+  environment.etc."nixos/config/blocky/custom-blocklist.txt".source =
     ../config/blocky/custom-blocklist.txt;
 }
