@@ -11,6 +11,10 @@ let
       env = "FPT_API_KEY";
       path = "/run/agenix/crush-fpt";
     }
+    {
+      env = "ANTHROPIC_AUTH_TOKEN";
+      path = "/run/agenix/anthropic-auth-token";
+    }
   ];
 
   fishSecretLine = secret: ''
@@ -32,6 +36,7 @@ in
     ll = "ls -la";
     v = "nvim";
     update = "__nixos_rebuild_switch";
+    nrs-host = "__nixos_rebuild_host";
     clean = "sudo nix-collect-garbage -d";
     gs = "git status";
     ga = "git add";
@@ -51,11 +56,31 @@ in
     sudo nixos-rebuild switch --flake ~/nixos-dotfiles#$current_host $argv
   '';
 
+  fishRebuildHostFunction = ''
+    if test (count $argv) -eq 0
+      echo "Usage: nrs-host <hostname>"
+      return 1
+    end
+    sudo nixos-rebuild switch --flake ~/nixos-dotfiles#$argv[1] $argv[2..-1]
+  '';
+
   posixRebuildFunction = ''
     __nixos_rebuild_switch() {
       local current_host
       current_host="$(hostnamectl --static 2>/dev/null || hostname)"
       sudo nixos-rebuild switch --flake ~/nixos-dotfiles#"''${current_host}" "$@"
+    }
+  '';
+
+  posixRebuildHostFunction = ''
+    __nixos_rebuild_host() {
+      if [ $# -eq 0 ]; then
+        echo "Usage: nrs-host <hostname>"
+        return 1
+      fi
+      local hostname="$1"
+      shift
+      sudo nixos-rebuild switch --flake ~/nixos-dotfiles#"''${hostname}" "$@"
     }
   '';
 

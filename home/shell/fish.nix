@@ -17,6 +17,10 @@ in
         description = "Switch the current NixOS host configuration";
         body = shellCommon.fishRebuildFunction;
       };
+      nrs-host = {
+        description = "Switch NixOS host configuration by hostname";
+        body = shellCommon.fishRebuildHostFunction;
+      };
     };
     plugins = [
       { name = "bass"; src = pkgs.fishPlugins.bass.src; }

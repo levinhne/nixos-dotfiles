@@ -25,13 +25,13 @@ let
         api_key = "$FPT_API_KEY";
         models = [
           {
-            id = "Qwen3-Coder-480B-A35B-Instruct";
-            name = "Qwen3-Coder-480B-A35B-Instruct";
-          }
-          {
             id = "GLM-4.7";
             name = "GLM-4.7";
             default_max_tokens = 8192;
+            can_reason = false;
+            cost_per_1m_in = 0.1;
+            cost_per_1m_out =  0.1;
+            context_window = 128000;
           }
         ];
       };
@@ -54,9 +54,6 @@ let
       nix = { command = "nil"; enabled = true; };
     };
     options = {
-      context_paths = [ "/etc/nixos/configuration.nix" ];
-      tui = { compact_mode = true; };
-      debug = false;
     };
   };
 in

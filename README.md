@@ -106,6 +106,13 @@ nixos-dotfiles/
 
 4. **Apply the configuration:**
    ```bash
+   # For personal laptop
+   sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne
+
+   # For work laptop
+   sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-vinhlq21
+
+   # Or generic command
    sudo nixos-rebuild switch --flake ~/nixos-dotfiles#your-hostname
    ```
 
@@ -116,7 +123,9 @@ nixos-dotfiles/
 nix flake update
 
 # Rebuild system with updated inputs
-sudo nixos-rebuild switch --flake ~/nixos-dotfiles#<hostname>
+sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne
+# OR
+sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-vinhlq21
 ```
 
 ## Configuration Guide

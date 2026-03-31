@@ -18,6 +18,7 @@ in
     bashrcExtra = ''
       ${shellCommon.posixSecrets}
       ${shellCommon.posixRebuildFunction}
+      ${shellCommon.posixRebuildHostFunction}
       ${shellCommon.bashInteractiveInit}
     '';
   };

@@ -4,8 +4,6 @@ let
   dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
   createSymlink = path: config.lib.file.mkOutOfStoreSymlink path;
 
-  retrosmart-cursors = pkgs.callPackage ../../packages/retrosmart-cursors.nix { };
-
   configs = {
     "qutebrowser" = "qutebrowser";
     "fcitx" = "fcitx";
@@ -26,7 +24,7 @@ in
   programs.home-manager.enable = true;
 
   home.pointerCursor = {
-    package = retrosmart-cursors;
+    package = pkgs.retrosmart-cursors;
     name = "retrosmart-xcursor-black";
     size = 24;
     gtk.enable = true;

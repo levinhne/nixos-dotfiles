@@ -2,16 +2,16 @@
 
 let
   pname = "crush";
-  version = "0.51.2";
+  version = "0.52.0";
 
   releaseAssets = {
     x86_64-linux = {
       url = "https://github.com/charmbracelet/crush/releases/download/v${version}/crush-${version}-1-x86_64.pkg.tar.zst";
-      hash = "sha256-iu8qXhJulI1sgIgU8wv4P9PUqad3PW6muzxZSeXPXQs=";
+      hash = "sha256-KmFEv3JOv/+m+Tip8qztglEUlWsYopyuEO8Qf/n7Sgs=";
     };
     aarch64-linux = {
       url = "https://github.com/charmbracelet/crush/releases/download/v${version}/crush-${version}-1-aarch64.pkg.tar.zst";
-      hash = "sha256-zwDLSfdzpO6dEcVwvuaku+MRnDvVCium5tH7oRCoOAI=";
+      hash = "sha256-fIL9ORvdRG5x6UaXHnT2SH9afzNJ+6ufZAary8PQ548=";
     };
   };
 

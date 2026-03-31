@@ -1,18 +1,14 @@
 { pkgs, pkgs-unstable, ... }:
 
-let
-  retrosmart-cursors = pkgs.callPackage ../../packages/retrosmart-cursors.nix { };
-in
 {
   home.packages = with pkgs; [
     bat
     eza
     jq
     tree
-    foot
-    kitty
     qutebrowser
     google-chrome
+    firefox
     wpaperd
     bemenu
     vscode
@@ -21,7 +17,6 @@ in
     pkgs-unstable.antigravity
     pkgs-unstable.codex
     pkgs-unstable.opencode
-    direnv
     k9s
     podman-tui
     nixpkgs-fmt

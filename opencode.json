@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ncp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NCP",
+      "options": {
+        "baseURL": "https://mkp-api.fptcloud.com/"
+      },
+      "models": {
+        "GLM-4.7": {
+          "name": "GLM-4.7"
+        },
+        "Qwen3-Coder-480B-A35B-Instruct": {
+          "name": "Qwen3"
+        }
+      }
+    }
+  }
+}
+ 
