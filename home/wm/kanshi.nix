@@ -1,6 +1,14 @@
 { pkgs, ... }:
 
 {
+  # Đảm bảo kanshi start sau khi Wayland compositor đã sẵn sàng
+  systemd.user.services.kanshi = {
+    Unit = {
+      After = "graphical-session.target";
+      BindsTo = "graphical-session.target";
+    };
+  };
+
   # Kanshi - automatic display configuration
   services.kanshi = {
     enable = true;

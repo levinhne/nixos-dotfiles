@@ -203,6 +203,8 @@ in
       startup = [
         { command = "autotiling -l 2"; always = true; }
         { command = "start-sov"; always = true; }
+        # Khởi động lại kanshi sau khi WAYLAND_DISPLAY đã được set
+        { command = "systemctl --user restart kanshi.service"; always = false; }
       ] ++ common.startupPrograms;
     };
 
