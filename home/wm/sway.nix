@@ -203,8 +203,8 @@ in
       startup = [
         { command = "autotiling -l 2"; always = true; }
         { command = "start-sov"; always = true; }
-        # Khởi động lại kanshi sau khi WAYLAND_DISPLAY đã được set
-        { command = "systemctl --user restart kanshi.service"; always = false; }
+        # Import Wayland env vars vào systemd user session, sau đó restart kanshi
+        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service'"; always = false; }
       ] ++ common.startupPrograms;
     };
 

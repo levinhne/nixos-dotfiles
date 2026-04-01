@@ -30,6 +30,6 @@ in
 
   # Install agenix CLI for managing secrets
   environment.systemPackages = with pkgs; [
-    inputs.agenix.packages.${pkgs.system}.default
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
