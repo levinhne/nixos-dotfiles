@@ -30,7 +30,7 @@ let
             default_max_tokens = 8192;
             can_reason = false;
             cost_per_1m_in = 0.1;
-            cost_per_1m_out =  0.1;
+            cost_per_1m_out = 0.1;
             context_window = 128000;
           }
         ];
@@ -53,8 +53,7 @@ let
       go = { command = "gopls"; enabled = true; };
       nix = { command = "nil"; enabled = true; };
     };
-    options = {
-    };
+    options = { };
   };
 in
 {
