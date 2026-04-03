@@ -1,10 +1,186 @@
-{ ... }:
+{ config, lib, ... }:
 
+let
+  p = lib.mapAttrs (_: v: "#${v}") config.colorScheme.palette;
+in
 {
   # Waybar
   programs.waybar = {
     enable = true;
-    style = builtins.readFile ../../config/waybar/style.css;
+    style = with p; ''
+      * {
+          border: none;
+          border-radius: 0;
+          font-family: "Iosevka NF SemiBold";
+          font-size: 14px;
+          min-height: 0;
+      }
+
+      window#waybar {
+          background-color: ${base00};
+          color: ${base05};
+      }
+
+      #custom-arch, #mode, #mpd, #custom-weather, #custom-playerctl, #clock, #cpu,
+      #memory, #temperature, #battery, #network, #pulseaudio,
+      #backlight, #disk, #custom-uptime, #custom-updates, #custom-quote,
+      #idle_inhibitor, #tray {
+          padding: 0 10px;
+          margin: 0 2px;
+          border-bottom: 2px solid transparent;
+          background-color: transparent;
+      }
+
+      #custom-arch {
+          color: ${base0D};
+          font-size: 20px;
+          font-weight: bold;
+          padding: 0 8px;
+          margin-right: 10px;
+      }
+
+      #workspaces {
+          margin-right: 10px;
+      }
+
+      #workspaces button {
+          padding: 0 8px;
+          background-color: transparent;
+          color: ${base05};
+          font-size: 16px;
+      }
+
+      #workspaces button:hover {
+          background: ${base01};
+          box-shadow: inherit;
+      }
+
+      #workspaces button.focused {
+          color: ${base0C};
+          font-weight: 900;
+      }
+
+      #workspaces button.urgent {
+          background-color: ${base08};
+          color: ${base00};
+      }
+
+      #mode {
+          color: ${base09};
+          border-bottom-color: ${base09};
+      }
+
+      #clock {
+          color: ${base0D};
+          border-bottom-color: ${base0D};
+      }
+
+      #cpu {
+          color: ${base0B};
+          border-bottom-color: ${base0B};
+      }
+
+      #memory {
+          color: ${base0E};
+          border-bottom-color: ${base0E};
+      }
+
+      #temperature {
+          color: ${base0A};
+          border-bottom-color: ${base0A};
+      }
+
+      #temperature.critical {
+          color: ${base08};
+          border-bottom-color: ${base08};
+      }
+
+      #battery {
+          color: ${base0C};
+          border-bottom-color: ${base0C};
+      }
+
+      #battery.charging, #battery.plugged {
+          color: ${base0B};
+          border-bottom-color: ${base0B};
+      }
+
+      #battery.warning:not(.charging) {
+          color: ${base0A};
+          border-bottom-color: ${base0A};
+      }
+
+      #battery.critical:not(.charging) {
+          color: ${base08};
+          border-bottom-color: ${base08};
+      }
+
+      #network {
+          color: ${base0D};
+          border-bottom-color: ${base0D};
+      }
+
+      #network.disconnected {
+          color: ${base08};
+          border-bottom-color: ${base08};
+      }
+
+      #pulseaudio {
+          color: ${base09};
+          border-bottom-color: ${base09};
+      }
+
+      #pulseaudio.muted {
+          color: ${base08};
+          border-bottom-color: ${base08};
+      }
+
+      #backlight {
+          color: ${base0A};
+          border-bottom-color: ${base0A};
+      }
+
+      #disk {
+          color: ${base0C};
+          border-bottom-color: ${base0C};
+      }
+
+      #custom-uptime {
+          color: ${base0B};
+          border-bottom-color: ${base0B};
+      }
+
+      #custom-updates {
+          color: ${base09};
+          border-bottom-color: ${base09};
+      }
+
+      #idle_inhibitor {
+          color: ${base05};
+          border-bottom-color: transparent;
+      }
+
+      #idle_inhibitor.activated {
+          color: ${base08};
+          border-bottom-color: ${base08};
+      }
+
+      #tray {
+          background-color: transparent;
+          padding: 0 10px;
+          margin: 0 2px;
+      }
+
+      #tray > .passive {
+          -gtk-icon-effect: dim;
+      }
+
+      #tray > .needs-attention {
+          -gtk-icon-effect: highlight;
+          color: ${base08};
+          border-bottom-color: ${base08};
+      }
+    '';
     settings = {
       mainBar = {
         layer = "top";

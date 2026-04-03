@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (inputs) agenix disko home-manager nixpkgs-unstable;
+  inherit (inputs) agenix disko home-manager nix-colors nixpkgs-unstable;
 
   pkgsUnstable = import nixpkgs-unstable {
     inherit system;
@@ -35,7 +35,7 @@ nixpkgs.lib.nixosSystem {
         users.${username} = import ./../home/default.nix;
         backupFileExtension = "backup";
         extraSpecialArgs = {
-          inherit hostname inputs username;
+          inherit hostname inputs nix-colors username;
           pkgs-unstable = pkgsUnstable;
         };
       };

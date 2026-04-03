@@ -1,5 +1,8 @@
-{ config, pkgs, fonts, theme, ... }:
+{ config, pkgs, fonts, ... }:
 
+let
+  p = config.colorScheme.palette;
+in
 {
   programs.kitty = {
     enable = true;
@@ -10,35 +13,31 @@
     settings = {
       # --- TRẢI NGHIỆM NGƯỜI DÙNG ---
       text_composition_strategy = "legacy";
-      background_opacity = "0.95";
+      background_opacity = "0.98";
       # cursor_trail = 1;
       confirm_os_window_close = 0;
       window_padding_width = 8;
 
       # --- LINE HEIGHT ---
-      # Sử dụng 1.2 hoặc 2px tùy Vinh, ở đây mình dùng cell_height để nới rộng
       modify_font = "cell_height 2px";
 
-      # --- COLORS (SỬ DỤNG BIẾN THEME CỦA VINH) ---
-      background = theme.colors.base00;
-      foreground = theme.colors.base05;
-      cursor = theme.colors.base0D;
+      # --- COLORS ---
+      background = "#${p.base00}";
+      foreground = "#${p.base05}";
+      cursor = "#${p.base0D}";
 
-      # Tận dụng màu nổi nhất trong theme để làm Selection
-      # base0E thường là màu Tím (giống Dracula) hoặc dùng base08 (Đỏ) nếu Vinh muốn rực hơn
-      selection_background = theme.colors.base0E;
-      # Dùng base00 (màu nền) làm màu chữ khi select để tạo độ tương phản cao
-      selection_foreground = theme.colors.base00;
+      selection_background = "#${p.base0E}";
+      selection_foreground = "#${p.base00}";
 
       # --- BẢNG MÀU ANSI ---
-      color0 = theme.colors.base00;
-      color1 = theme.colors.base08;
-      color2 = theme.colors.base0B;
-      color3 = theme.colors.base0A;
-      color4 = theme.colors.base0D;
-      color5 = theme.colors.base0E;
-      color6 = theme.colors.base0C;
-      color7 = theme.colors.base05;
+      color0 = "#${p.base00}";
+      color1 = "#${p.base08}";
+      color2 = "#${p.base0B}";
+      color3 = "#${p.base0A}";
+      color4 = "#${p.base0D}";
+      color5 = "#${p.base0E}";
+      color6 = "#${p.base0C}";
+      color7 = "#${p.base05}";
     };
   };
 }

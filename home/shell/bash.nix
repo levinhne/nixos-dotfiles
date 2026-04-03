@@ -8,7 +8,7 @@ in
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    shellAliases = shellCommon.shellAliases;
+    shellAliases = shellCommon.shellAliases // shellCommon.posixShellAliases;
     historyControl = [
       "ignoredups"
       "erasedups"

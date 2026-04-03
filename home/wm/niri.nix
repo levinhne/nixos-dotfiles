@@ -1,7 +1,8 @@
-{ pkgs, lib, fonts, theme, ... }:
+{ pkgs, lib, fonts, config, ... }:
 
 let
-  common = import ./common.nix { inherit pkgs fonts theme; };
+  p = config.colorScheme.palette;
+  common = import ./common.nix { inherit pkgs fonts; palette = p; };
 in
 
 let
@@ -10,8 +11,8 @@ let
   browser = common.apps.browser;
   clipboard = common.apps.clipboard;
 
-  # Bảng màu từ theme
-  c = theme.colors;
+  # Bảng màu từ colorScheme
+  c = builtins.mapAttrs (_: v: "#${v}") p;
 
   # Sử dụng bemenu từ common config
   menu = common.menu;

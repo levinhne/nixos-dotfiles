@@ -21,6 +21,13 @@ in
     group = "users";
   };
 
+  age.secrets.fpt-ai-auth-token = {
+    file = ../../secrets/fpt-ai-auth-token.age;
+    mode = "600";
+    owner = userName;
+    group = "users";
+  };
+
   # age.secrets.office-cert = {
   #   file = ../../secrets/office-cert.age;
   #   mode = "600";

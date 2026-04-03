@@ -10,7 +10,7 @@ A modular and well-organized NixOS configuration with home-manager, supporting m
 - **Multiple window managers** - Support for both Sway and Niri with shared configuration
 - **Secret management** - Agenix for secure handling of sensitive data
 - **Declarative disk partitioning** - Disko for automated disk setup
-- **Theme system** - Centralized color scheme (Dracula) used across all applications
+- **Theme system** - Centralized color scheme (Dracula) via nix-colors, propagated to all applications
 - **Modular design** - Clean separation between system and home configurations
 
 ## Project Structure
@@ -47,18 +47,16 @@ nixos-dotfiles/
 ├── home/                    # Home-manager user modules
 │   ├── default.nix          # Main home-manager entry point
 │   ├── profiles/
-│   │   └── desktop.nix      # Full desktop profile
-│   ├── core/
-│   ├── dev/
-│   ├── shell/
-│   ├── terminal/
-│   └── wm/
+│   │   └── desktop.nix      # Full desktop profile; sets colorScheme = dracula
+│   ├── core/                # Base packages, GTK, xdg
+│   ├── dev/                 # git, direnv, claude-code, crush
+│   ├── shell/               # fish, bash, zsh, neovim, helix, tmux, zellij
+│   ├── terminal/            # kitty, foot
+│   └── wm/                  # sway, niri, waybar, mako, kanshi, wpaperd
 │
 ├── config/                  # Raw configuration files
 │   ├── nvim/               # Neovim (lazy.nvim)
-│   ├── fish/
 │   ├── kitty/
-│   ├── sway/
 │   ├── waybar/
 │   └── ...
 │
@@ -144,24 +142,21 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-vinhlq21
 
 3. Add to `flake.nix`:
    ```nix
-   nixosConfigurations.new-hostname = mkHost "new-hostname" "username";
+   nixosConfigurations.new-hostname = mkHost {
+     hostname = "new-hostname";
+     username = "username";
+   };
    ```
 
 ### Customizing the Theme
 
-Edit `home/core/theme.nix` to change colors. The theme is based on Dracula but can be customized:
+The color scheme is set in `home/profiles/desktop.nix`:
 
 ```nix
-{
-  colors = {
-    base00 = "#282a36";  # Background
-    base05 = "#f8f8f2";  # Foreground
-    # ... more colors
-  };
-}
+colorScheme = nix-colors.colorSchemes.dracula;
 ```
 
-All applications (kitty, foot, sway, niri, mako, starship) will automatically use the new theme.
+To switch themes, replace `dracula` with any scheme from [nix-colors](https://github.com/misterio77/nix-colors). All applications (kitty, foot, sway, niri, mako, waybar, starship) automatically consume the `colorScheme` attribute via the home-manager module system.
 
 ### Switching Window Managers
 
@@ -188,11 +183,14 @@ This configuration uses [agenix](https://github.com/ryantm/agenix) for secret ma
    };
    ```
 
-3. **Use the secret:**
+3. **Export as environment variable** (optional) — add an entry to `secretFiles` in `home/shell/common.nix`:
    ```nix
-   # The decrypted secret is available at:
-   config.age.secrets.my-secret.path
+   secretFiles = [
+     { env = "MY_SECRET"; path = "/run/agenix/my-secret"; }
+   ];
    ```
+
+   Secrets are decrypted at boot to `/run/agenix/<name>` and exported automatically for all shells (fish, bash, zsh).
 
 ### Configuring User
 
@@ -201,37 +199,31 @@ The username is configurable via `mySystem.userName` option in `modules/system/u
 To use a different username:
 ```nix
 # In flake.nix
-nixosConfigurations.my-host = mkHost "my-host" "myusername";
-
-# Or in hosts/<hostname>/default.nix
-mySystem.userName = "myusername";
-mySystem.userDescription = "My Full Name";
+nixosConfigurations.my-host = mkHost {
+  hostname = "my-host";
+  username = "myusername";
+};
 ```
 
 ## Common Tasks
 
 ### Shell Aliases
 
-**Fish:**
-```bash
-nrs              # Rebuild system
-v                # Open neovim
-```
+All aliases are defined once in `home/shell/common.nix` and shared across fish, bash, and zsh:
 
-**Bash:**
 ```bash
-update           # Rebuild system
+nrs              # Rebuild current host (fish)
+update           # Rebuild current host (bash/zsh)
+nrs-host <host>  # Rebuild a specific host
 clean            # Garbage collect old generations
+v                # Open neovim
 gs/ga/gc/gp      # Git shortcuts
 ```
 
 ### Cleaning Old Generations
 
 ```bash
-# List generations
-sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
-
-# Delete old generations (keep last 3)
+# Delete old generations
 sudo nix-collect-garbage -d
 
 # Or use the alias
@@ -331,4 +323,5 @@ MIT License - Feel free to use and modify as you wish.
 - [home-manager](https://github.com/nix-community/home-manager) - User environment management
 - [agenix](https://github.com/ryantm/agenix) - Secret management
 - [disko](https://github.com/nix-community/disko) - Declarative disk partitioning
+- [nix-colors](https://github.com/misterio77/nix-colors) - Declarative color schemes
 - Dracula theme for the beautiful color scheme

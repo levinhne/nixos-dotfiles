@@ -4,12 +4,8 @@
 let
   secretFiles = [
     {
-      env = "OPENAI_API_KEY";
-      path = "/run/agenix/crush-openai";
-    }
-    {
       env = "FPT_API_KEY";
-      path = "/run/agenix/crush-fpt";
+      path = "/run/agenix/fpt-ai-auth-token";
     }
     {
       env = "ANTHROPIC_AUTH_TOKEN";
@@ -30,18 +26,23 @@ let
   '';
 in
 {
+  # Aliases shared across all shells (fish, bash, zsh)
   shellAliases = {
     ".." = "cd ..";
     "..." = "cd ../..";
     ll = "ls -la";
     v = "nvim";
-    update = "__nixos_rebuild_switch";
-    nrs-host = "__nixos_rebuild_host";
     clean = "sudo nix-collect-garbage -d";
     gs = "git status";
     ga = "git add";
     gc = "git commit";
     gp = "git push";
+  };
+
+  # Extra aliases for posix shells (bash, zsh) — call the shell functions defined via *InteractiveInit
+  posixShellAliases = {
+    update = "__nixos_rebuild_switch";
+    nrs-host = "__nixos_rebuild_host";
   };
 
   fishSecrets = builtins.concatStringsSep "\n" (map fishSecretLine secretFiles);

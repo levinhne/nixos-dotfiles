@@ -1,14 +1,17 @@
-{ theme, ... }:
+{ config, ... }:
 
+let
+  p = config.colorScheme.palette;
+in
 {
   # Mako (notifications)
   services.mako = {
     enable = true;
     settings = {
       default-timeout = 5000;
-      background-color = theme.colors.base00;
-      text-color = theme.colors.base05;
-      border-color = theme.colors.base0D;
+      background-color = "#${p.base00}";
+      text-color = "#${p.base05}";
+      border-color = "#${p.base0D}";
 
       font = "monospace 8";
     };

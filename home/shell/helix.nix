@@ -1,8 +1,9 @@
-{ lib, pkgs, theme, fonts, ... }:
+{ lib, pkgs, config, fonts, ... }:
 
 let
-  inherit (theme) colors;
-  helixThemeName = "base16-dracula-sync";
+  p = config.colorScheme.palette;
+  c = builtins.mapAttrs (_: v: "#${v}") p;
+  helixThemeName = "base16-sync";
 in
 {
   assertions = [
@@ -108,42 +109,42 @@ in
     themes.${helixThemeName} = {
       inherits = "dracula";
 
-      "ui.background" = { bg = colors.base00; };
-      "ui.text" = { fg = colors.base05; };
+      "ui.background" = { bg = c.base00; };
+      "ui.text" = { fg = c.base05; };
       "ui.cursor" = {
-        fg = colors.base00;
-        bg = colors.base0D;
+        fg = c.base00;
+        bg = c.base0D;
       };
       "ui.cursor.insert" = {
-        fg = colors.base00;
-        bg = colors.base0B;
+        fg = c.base00;
+        bg = c.base0B;
       };
       "ui.cursor.select" = {
-        fg = colors.base00;
-        bg = colors.base0E;
+        fg = c.base00;
+        bg = c.base0E;
       };
-      "ui.selection" = { bg = colors.base01; };
-      "ui.cursorline.primary" = { bg = colors.base01; };
-      "ui.linenr" = { fg = colors.base03; };
-      "ui.linenr.selected" = { fg = colors.base0A; };
+      "ui.selection" = { bg = c.base01; };
+      "ui.cursorline.primary" = { bg = c.base01; };
+      "ui.linenr" = { fg = c.base03; };
+      "ui.linenr.selected" = { fg = c.base0A; };
       "ui.statusline" = {
-        fg = colors.base05;
-        bg = colors.base01;
+        fg = c.base05;
+        bg = c.base01;
       };
       "ui.statusline.insert" = {
-        fg = colors.base00;
-        bg = colors.base0B;
+        fg = c.base00;
+        bg = c.base0B;
       };
       "ui.statusline.normal" = {
-        fg = colors.base00;
-        bg = colors.base0D;
+        fg = c.base00;
+        bg = c.base0D;
       };
       "ui.statusline.select" = {
-        fg = colors.base00;
-        bg = colors.base0E;
+        fg = c.base00;
+        bg = c.base0E;
       };
-      "ui.virtual.indent-guide" = { fg = colors.base01; };
-      "ui.virtual.indent-guide.active" = { fg = colors.base03; };
+      "ui.virtual.indent-guide" = { fg = c.base01; };
+      "ui.virtual.indent-guide.active" = { fg = c.base03; };
     };
   };
 }

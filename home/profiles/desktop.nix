@@ -1,17 +1,15 @@
 # Desktop profile - Full desktop environment with window managers
-{ ... }:
+{ nix-colors, ... }:
 
 let
-  theme = import ../core/theme.nix;
   fonts = {
     ui = "FiraCode Nerd Font";
     terminal = "FiraCode Nerd Font Med";
   };
 in
 {
-  _module.args = { inherit theme fonts; };
-
   imports = [
+    nix-colors.homeManagerModules.default
     ../core/default.nix
     ../core/gtk.nix
     ../core/pkgs.nix
@@ -35,4 +33,8 @@ in
     ../dev/git.nix
     ../dev/direnv.nix
   ];
+
+  colorScheme = nix-colors.colorSchemes.dracula;
+
+  _module.args = { inherit fonts; };
 }

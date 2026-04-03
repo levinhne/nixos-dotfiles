@@ -9,7 +9,7 @@ in
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    shellAliases = shellCommon.shellAliases;
+    shellAliases = shellCommon.shellAliases // shellCommon.posixShellAliases;
     history = {
       expireDuplicatesFirst = true;
       ignoreDups = true;
@@ -21,6 +21,7 @@ in
     initContent = ''
       ${shellCommon.posixSecrets}
       ${shellCommon.posixRebuildFunction}
+      ${shellCommon.posixRebuildHostFunction}
       ${shellCommon.zshInteractiveInit}
     '';
   };

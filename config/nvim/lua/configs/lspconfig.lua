@@ -15,6 +15,8 @@ local servers = {
   "cssls",
   "jsonls",
   "tailwindcss",
+
+  "nil_ls",
 }
 
 vim.lsp.enable(servers)

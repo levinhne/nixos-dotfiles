@@ -1,7 +1,8 @@
-{ config, pkgs, lib, fonts, theme, ... }:
+{ config, pkgs, lib, fonts, ... }:
 
 let
-  common = import ./common.nix { inherit pkgs fonts theme; };
+  p = config.colorScheme.palette;
+  common = import ./common.nix { inherit pkgs fonts; palette = p; };
 in
 
 let
@@ -11,8 +12,8 @@ let
   browser = common.apps.browser;
   clipboard = common.apps.clipboard;
 
-  # 2. Bảng màu từ theme
-  c = theme.colors;
+  # 2. Bảng màu từ colorScheme
+  c = builtins.mapAttrs (_: v: "#${v}") p;
   swayConfigPath = "${config.xdg.configHome}/sway/config";
 
   # 3. Sử dụng bemenu từ common config
@@ -20,6 +21,28 @@ let
 
   # 4. Danh sách Workspace (1-9 và 0)
   wsKeys = map (n: toString n) [ 1 2 3 4 5 6 ];
+
+  # 5. Swaylock command
+  swaylock = pkgs.swaylock-effects;
+  lockCmd = "${swaylock}/bin/swaylock -f --screenshots"
+    + " --color ${p.base00}"
+    + " --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2"
+    + " --inside-color ${p.base01}"
+    + " --inside-clear-color ${p.base0C}"
+    + " --inside-ver-color ${p.base0D}"
+    + " --inside-wrong-color ${p.base08}"
+    + " --ring-color ${p.base0D}"
+    + " --ring-clear-color ${p.base0C}"
+    + " --ring-ver-color ${p.base0D}"
+    + " --ring-wrong-color ${p.base08}"
+    + " --key-hl-color ${p.base0B}"
+    + " --bs-hl-color ${p.base08}"
+    + " --separator-color ${p.base01}"
+    + " --text-color ${p.base05}"
+    + " --text-clear-color ${p.base01}"
+    + " --text-ver-color ${p.base01}"
+    + " --text-wrong-color ${p.base01}"
+    + " --indicator-radius 100 --indicator-thickness 10";
 in
 {
   # Sway-related packages
@@ -150,7 +173,7 @@ in
           "${modifier}+r" = "mode resize";
 
           # System Controls
-          "${modifier}+Shift+t" = "exec swaylock --screenshots --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --color '${c.base00}' --indicator-radius 100 --font '${fonts.ui}' --indicator-image /home/levinhne/.wallpapers/xoai.jpeg";
+          "${modifier}+Shift+t" = "exec ${lockCmd}";
           "${modifier}+Shift+a" = "exec pkill -SIGUSR2 waybar";
           "${modifier}+Shift+c" = "reload";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'You pressed the exit shortcut.' -B 'Yes, exit sway' 'swaymsg exit'";
@@ -203,6 +226,7 @@ in
       startup = [
         { command = "autotiling -l 2"; always = true; }
         { command = "start-sov"; always = true; }
+        { command = "swayidle -w timeout 300 '${lockCmd}' before-sleep '${lockCmd}'"; always = true; }
         # Import Wayland env vars vào systemd user session, sau đó restart kanshi
         { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service'"; always = false; }
       ] ++ common.startupPrograms;
@@ -234,29 +258,15 @@ in
 
   programs.swaylock = {
     enable = true;
-    package = pkgs.swaylock-effects;
+    package = swaylock;
     settings = {
-      color = "${c.base00}";
+      color = p.base00;
       ignore-empty-password = true;
       indicator-radius = 120;
-      # Swaylock-effects specific options
       effect-blur = "7x5";
       effect-vignette = "0.5:0.5";
       fade-in = 0.2;
     };
   };
 
-  services.swayidle = {
-    enable = true;
-    events = [
-      { event = "before-sleep"; command = "${pkgs.swaylock-effects}/bin/swaylock -f -c ${c.base00} --effect-blur 7x5 --fade-in 0.2"; }
-    ];
-    timeouts = [
-      {
-        timeout = 300;
-        # Viết tất cả tham số trên 1 dòng để tránh lỗi format systemd unit
-        command = "${pkgs.swaylock-effects}/bin/swaylock -f --color ${c.base00} --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --inside-color ${c.base01} --inside-clear-color ${c.base0C} --inside-ver-color ${c.base0D} --inside-wrong-color ${c.base08} --ring-color ${c.base0D} --ring-clear-color ${c.base0C} --ring-ver-color ${c.base0D} --ring-wrong-color ${c.base08} --key-hl-color ${c.base0B} --bs-hl-color ${c.base08} --separator-color ${c.base01} --text-color ${c.base05} --text-clear-color ${c.base01} --text-ver-color ${c.base01} --text-wrong-color ${c.base01} --indicator-radius 100 --indicator-thickness 10 --font '${fonts.ui}'";
-      }
-    ];
-  };
 }
