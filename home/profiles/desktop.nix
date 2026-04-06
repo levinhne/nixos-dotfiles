@@ -35,6 +35,7 @@ in
     ../wm/wpaperd.nix
     ../dev/git.nix
     ../dev/direnv.nix
+    ../dev/webdiff.nix
   ];
 
   colorScheme = nix-colors.colorSchemes.dracula;
