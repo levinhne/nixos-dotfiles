@@ -49,7 +49,7 @@ nixos-dotfiles/
 │   ├── profiles/
 │   │   └── desktop.nix      # Full desktop profile; sets colorScheme = dracula
 │   ├── core/                # Base packages, GTK, xdg
-│   ├── dev/                 # git, direnv, claude-code, crush
+│   ├── dev/                 # git, direnv, claude-code, crush, gitnexus, opencode, webdiff
 │   ├── shell/               # fish, bash, zsh, neovim, helix, tmux, zellij
 │   ├── terminal/            # kitty, foot
 │   └── wm/                  # sway, niri, waybar, mako, kanshi, wpaperd
@@ -61,7 +61,9 @@ nixos-dotfiles/
 │   └── ...
 │
 ├── packages/
-│   └── retrosmart-cursors.nix
+│   ├── crush.nix
+│   ├── retrosmart-cursors.nix
+│   └── webdiff.nix
 │
 ├── secrets/                 # Encrypted secrets (agenix)
 │   ├── secrets.nix
@@ -70,6 +72,15 @@ nixos-dotfiles/
 └── scripts/
     └── backup-ssh-keys.sh
 ```
+
+## Dev Tools
+
+Development tools under `home/dev/` are split into two sources:
+
+- `llm-agents` input in `flake.nix`: `claude-code`, `gitnexus`, `opencode`
+- local packages in `packages/` via overlay: `crush`, `webdiff`, `retrosmart-cursors`
+
+This keeps upstream AI agent CLIs pinned through `github:numtide/llm-agents.nix` while still allowing repo-local packaging for tools that need custom wrapping or are not sourced from that flake.
 
 ## Quick Start
 

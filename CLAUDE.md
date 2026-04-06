@@ -60,7 +60,7 @@ home/
   shell/                 # fish, bash, zsh, neovim, helix, tmux
   terminal/              # kitty, foot
   wm/                    # sway, niri, waybar, mako, kanshi, wpaperd
-  dev/                   # git, direnv, claude-code, crush
+  dev/                   # git, direnv, claude-code, crush, gitnexus, opencode, webdiff
 ```
 
 `home/shell/common.nix` is the single source of truth for shell aliases and rebuild functions — fish, bash, and zsh all import from it.
