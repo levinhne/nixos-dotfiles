@@ -17,6 +17,7 @@ in
     ../dev/crush.nix
     ../dev/gitnexus.nix
     ../dev/k9s.nix
+    ../dev/opencode.nix
     ../shell/bash.nix
     ../shell/fish.nix
     ../shell/zsh.nix

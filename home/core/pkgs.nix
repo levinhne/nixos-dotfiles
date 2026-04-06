@@ -16,7 +16,6 @@
     crush
     pkgs-unstable.antigravity
     pkgs-unstable.codex
-    pkgs-unstable.opencode
     k9s
     podman-tui
     nixpkgs-fmt
