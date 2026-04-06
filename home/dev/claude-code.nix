@@ -1,13 +1,7 @@
-{ lib, pkgs, pkgs-unstable, ... }:
+{ inputs, pkgs, ... }:
 
 let
-  claudePackage =
-    if pkgs-unstable ? claude-code then
-      pkgs-unstable.claude-code
-    else if pkgs ? claude-code then
-      pkgs.claude-code
-    else
-      null;
+  claudePackage = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code;
 
   claudeSettings = {
     "$schema" = "https://json.schemastore.org/claude-code-settings.json";
@@ -41,7 +35,7 @@ let
   };
 in
 {
-  home.packages = lib.optional (claudePackage != null) claudePackage;
+  home.packages = [ claudePackage ];
 
   home.file.".claude/settings.json".text = builtins.toJSON claudeSettings;
 }

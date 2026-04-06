@@ -15,6 +15,7 @@ in
     ../core/pkgs.nix
     ../dev/claude-code.nix
     ../dev/crush.nix
+    ../dev/gitnexus.nix
     ../dev/k9s.nix
     ../shell/bash.nix
     ../shell/fish.nix

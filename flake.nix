@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+    llm-agents.url = "github:numtide/llm-agents.nix";
     disko.url = "github:nix-community/disko";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
