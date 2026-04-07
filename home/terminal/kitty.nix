@@ -16,7 +16,7 @@ in
       background_opacity = "0.98";
       # cursor_trail = 1;
       confirm_os_window_close = 0;
-      window_padding_width = 8;
+      window_padding_width = 2.5;
 
       # --- LINE HEIGHT ---
       modify_font = "cell_height 2px";
