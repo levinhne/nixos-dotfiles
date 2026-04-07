@@ -17,8 +17,44 @@
       {
         plugin = dracula;
         extraConfig = ''
+          set -g @dracula-plugins "cwd git cpu-usage ram-usage time"
+
+          set -g @dracula-show-left-icon "#h | #S"
+          set -g @dracula-left-icon-padding 1
+          set -g @dracula-show-flags true
+          set -g @dracula-show-empty-plugins false
+
+          set -g @dracula-show-powerline true
+          set -g @dracula-show-edge-icons true
+          set -g @dracula-show-left-sep ""
+          set -g @dracula-show-right-sep ""
+          set -g @dracula-transparent-powerline-bg true
+          set -g @dracula-inverse-divider ""
+
+          set -g @dracula-border-contrast true
           set -g @dracula-show-battery false
           set -g @dracula-refresh-rate 10
+
+          set -g @dracula-cwd-max-dirs "3"
+          set -g @dracula-cwd-max-chars "40"
+          set -g @dracula-cwd-colors "cyan dark_gray"
+
+          set -g @dracula-git-show-repo-name true
+          set -g @dracula-git-disable-status false
+          set -g @dracula-git-show-current-symbol "✓"
+          set -g @dracula-git-show-diff-symbol "!"
+          set -g @dracula-git-no-repo-message ""
+          set -g @dracula-git-colors "green dark_gray"
+
+          set -g @dracula-cpu-usage-label "CPU"
+          set -g @dracula-cpu-usage-colors "pink dark_gray"
+          set -g @dracula-ram-usage-label "RAM"
+          set -g @dracula-ram-usage-colors "orange dark_gray"
+
+          set -g @dracula-military-time true
+          set -g @dracula-show-timezone false
+          set -g @dracula-time-format "%F %R"
+          set -g @dracula-time-colors "yellow dark_gray"
         '';
       }
     ];
