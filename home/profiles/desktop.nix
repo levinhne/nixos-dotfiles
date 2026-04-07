@@ -19,6 +19,7 @@ in
     ../dev/gitnexus.nix
     ../dev/k9s.nix
     ../dev/opencode.nix
+    ../dev/zeroclaw.nix
     ../shell/bash.nix
     ../shell/fish.nix
     ../shell/zsh.nix
