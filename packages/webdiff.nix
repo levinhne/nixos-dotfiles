@@ -1,11 +1,11 @@
-{
-  lib,
-  python3Packages,
-  fetchurl,
-  git,
-  gnugrep,
-  imagemagick,
-  makeWrapper,
+{ lib
+, python3Packages
+, fetchurl
+, git
+, gnugrep
+, imagemagick
+, makeWrapper
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -3,14 +3,6 @@
 
 let
   secretFiles = [
-    {
-      env = "FPT_API_KEY";
-      path = "/run/agenix/fpt-ai-auth-token";
-    }
-    {
-      env = "ANTHROPIC_AUTH_TOKEN";
-      path = "/run/agenix/anthropic-auth-token";
-    }
   ];
 
   fishSecretLine = secret: ''

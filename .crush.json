@@ -1,0 +1,16 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "mcp": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/path/to/mcp-server.js"],
+      "timeout": 120,
+      "disabled": false,
+      "disabled_tools": ["some-tool-name"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}

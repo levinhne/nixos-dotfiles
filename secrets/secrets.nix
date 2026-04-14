@@ -20,9 +20,6 @@ in
 
   # Example: API keys
   # "api-keys.age".publicKeys = allKeys;
-  "anthropic-auth-token.age".publicKeys = allKeys;
-
-  "fpt-ai-auth-token.age".publicKeys = allKeys;
 
   # Host-specific secrets (chỉ cho 1 máy)
 }

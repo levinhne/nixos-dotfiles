@@ -14,19 +14,6 @@ in
   # Example: Declare secrets that will be decrypted at boot
   # Uncomment and customize as needed
 
-  age.secrets.anthropic-auth-token = {
-    file = ../../secrets/anthropic-auth-token.age;
-    mode = "600";
-    owner = userName;
-    group = "users";
-  };
-
-  age.secrets.fpt-ai-auth-token = {
-    file = ../../secrets/fpt-ai-auth-token.age;
-    mode = "600";
-    owner = userName;
-    group = "users";
-  };
 
   # age.secrets.office-cert = {
   #   file = ../../secrets/office-cert.age;

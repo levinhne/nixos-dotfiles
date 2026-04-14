@@ -38,6 +38,7 @@ in
     ../dev/git.nix
     ../dev/direnv.nix
     ../dev/webdiff.nix
+    ../dev/mcporter.nix
   ];
 
   colorScheme = nix-colors.colorSchemes.dracula;
