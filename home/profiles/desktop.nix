@@ -1,5 +1,5 @@
 # Desktop profile - Full desktop environment with window managers
-{ nix-colors, ... }:
+{ inputs, ... }:
 
 let
   fonts = {
@@ -9,7 +9,7 @@ let
 in
 {
   imports = [
-    nix-colors.homeManagerModules.default
+    inputs.stylix.homeModules.stylix
     ../core/default.nix
     ../core/gtk.nix
     ../core/pkgs.nix
@@ -39,9 +39,15 @@ in
     ../dev/direnv.nix
     ../dev/webdiff.nix
     ../dev/mcporter.nix
+    ../dev/repomix.nix
   ];
 
-  colorScheme = nix-colors.colorSchemes.dracula;
+  stylix = {
+    enable = true;
+    autoEnable = false;
+    image = ../../.wallpapers/bg2.jpg;
+    polarity = "dark";
+  };
 
   _module.args = { inherit fonts; };
 }

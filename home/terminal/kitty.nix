@@ -1,7 +1,7 @@
 { config, pkgs, fonts, ... }:
 
 let
-  p = config.colorScheme.palette;
+  p = config.lib.stylix.colors;
 in
 {
   programs.kitty = {

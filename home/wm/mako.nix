@@ -1,7 +1,7 @@
 { config, ... }:
 
 let
-  p = config.colorScheme.palette;
+  p = config.lib.stylix.colors;
 in
 {
   # Mako (notifications)

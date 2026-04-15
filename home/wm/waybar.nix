@@ -1,7 +1,7 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 let
-  p = lib.mapAttrs (_: v: "#${v}") config.colorScheme.palette;
+  p = config.lib.stylix.colors.withHashtag;
 in
 {
   # Waybar

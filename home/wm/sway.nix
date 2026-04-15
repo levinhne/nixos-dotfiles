@@ -1,7 +1,7 @@
 { config, pkgs, lib, fonts, ... }:
 
 let
-  p = config.colorScheme.palette;
+  p = config.lib.stylix.colors;
   common = import ./common.nix { inherit pkgs fonts; palette = p; };
 in
 
