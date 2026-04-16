@@ -55,19 +55,19 @@ Each host `default.nix` imports `common/base.nix` + `common/desktop.nix` + host-
 
 ```
 home/
-  profiles/desktop.nix   # master import list for all home modules; sets colorScheme = dracula
+  profiles/desktop.nix   # master import list for all home modules; configures stylix with dracula theme
   core/                  # base packages, GTK, xdg
   shell/                 # fish, bash, zsh, neovim, helix, tmux
   terminal/              # kitty, foot
   wm/                    # sway, niri, waybar, mako, kanshi, wpaperd
-  dev/                   # git, direnv, claude-code, crush, gitnexus, opencode, webdiff
+  dev/                   # git, tools, claude-code, crush, k9s, opencode
 ```
 
 `home/shell/common.nix` is the single source of truth for shell aliases and rebuild functions — fish, bash, and zsh all import from it.
 
 ### Theme System
 
-`home/profiles/desktop.nix` sets `colorScheme = nix-colors.colorSchemes.dracula`. This `colorScheme` attribute is passed through home-manager's module system and consumed by WM/terminal configs via `{ colorScheme, ... }` args. All colors flow from this single declaration.
+`home/profiles/desktop.nix` configures stylix with Dracula base16 scheme. Colors are accessed via `config.lib.stylix.colors` (raw hex without `#`) and `config.lib.stylix.colors.withHashtag` (`#rrggbb` format) in WM/terminal configs. All colors flow from this single stylix declaration.
 
 Fonts are defined as a local `fonts` attrset in `desktop.nix` and passed via `_module.args`.
 

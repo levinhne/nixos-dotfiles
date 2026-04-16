@@ -2,17 +2,14 @@
 
 let
   p = config.lib.stylix.colors;
-  common = import ./common.nix { inherit pkgs fonts; palette = p; };
+  c = config.lib.stylix.colors.withHashtag;
+  common = import ./common.nix { inherit pkgs fonts; palette = p; paletteWithHash = c; };
 in
 
 let
-  # Các biến cấu hình chung
   terminal = common.terminal;
   browser = common.apps.browser;
   clipboard = common.apps.clipboard;
-
-  # Bảng màu từ colorScheme
-  c = builtins.mapAttrs (_: v: "#${v}") p;
 
   # Sử dụng bemenu từ common config
   menu = common.menu;

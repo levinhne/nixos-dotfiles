@@ -2,18 +2,15 @@
 
 let
   p = config.lib.stylix.colors;
-  common = import ./common.nix { inherit pkgs fonts; palette = p; };
+  c = config.lib.stylix.colors.withHashtag;
+  common = import ./common.nix { inherit pkgs fonts; palette = p; paletteWithHash = c; };
 in
 
 let
-  # 1. Các biến cấu hình chung
   modifier = "Mod4";
   terminal = common.terminal;
   browser = common.apps.browser;
   clipboard = common.apps.clipboard;
-
-  # 2. Bảng màu từ colorScheme
-  c = builtins.mapAttrs (_: v: "#${v}") p;
   swayConfigPath = "${config.xdg.configHome}/sway/config";
 
   # 3. Sử dụng bemenu từ common config

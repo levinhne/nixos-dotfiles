@@ -1,11 +1,11 @@
 # Common configuration for window managers (Sway and Niri)
 # Contains shared settings like bemenu config and startup programs
-{ pkgs, fonts, palette }:
+{ pkgs, fonts, palette, paletteWithHash }:
 
 let
-  c = builtins.mapAttrs (_: v: "#${v}") palette;
+  c = paletteWithHash;
   bemenuBaseOptions =
-    "--fn 'Iosevka Nerd Font 10.3' " +
+    "--fn '${fonts.ui} 10.3' " +
     "--tb '${c.base00}' --tf '${c.base0D}' " +
     "--fb '${c.base00}' --ff '${c.base05}' " +
     "--nb '${c.base00}' --nf '${c.base05}' " +

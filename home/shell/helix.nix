@@ -2,7 +2,7 @@
 
 let
   p = config.lib.stylix.colors;
-  c = builtins.mapAttrs (_: v: "#${v}") p;
+  c = config.lib.stylix.colors.withHashtag;
   helixThemeName = "base16-sync";
 in
 {
