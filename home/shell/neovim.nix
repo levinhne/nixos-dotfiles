@@ -14,7 +14,6 @@
     fzf
     lazygit
     zoxide
-    nodejs_24
     python3
     go
     gotools

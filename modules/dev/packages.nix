@@ -18,6 +18,8 @@
       curl
       openssl
 
+      nodejs_20
+
       # System monitoring
       htop
       btop
