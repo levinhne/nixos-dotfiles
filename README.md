@@ -137,6 +137,18 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne
 sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-vinhlq21
 ```
 
+## GitLab CI Mirror To GitHub
+
+If this repository is hosted on GitLab but you also want to push the default branch to GitHub, use the included `.gitlab-ci.yml`.
+
+Configure these GitLab CI/CD variables in `Settings > CI/CD > Variables`:
+
+- `GITHUB_PAT`: GitHub Personal Access Token with permission to push to the target repository
+- `GITHUB_REPOSITORY`: target repository in `owner/repo` format
+- `GITHUB_TARGET_BRANCH`: optional override for the destination branch on GitHub
+
+The pipeline runs automatically on the default branch and can also be triggered manually from the GitLab UI. It pushes the current HEAD and tags to the configured GitHub repository through the PAT.
+
 ## Configuration Guide
 
 ### Adding a New Host
