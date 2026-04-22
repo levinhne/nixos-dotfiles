@@ -18,7 +18,7 @@
       curl
       openssl
 
-      nodejs_20
+      nodejs_24
 
       # System monitoring
       htop

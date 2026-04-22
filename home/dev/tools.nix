@@ -9,7 +9,6 @@ in
     pkgs.direnv
     pkgs.repomix
     pkgs.webdiff
-    llmPkgs.gitnexus
     llmPkgs.mcporter
   ];
 }
