@@ -20,5 +20,5 @@ mirror_to_github:
     - git config user.name "${GITLAB_USER_NAME:-gitlab-ci}"
     - git config user.email "${GITLAB_USER_EMAIL:-gitlab-ci@example.com}"
     - git remote add github "https://x-access-token:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
-    - git push github "HEAD:${TARGET_BRANCH}"
+    - git push github "HEAD:refs/heads/${TARGET_BRANCH}"
     - git push github --tags
