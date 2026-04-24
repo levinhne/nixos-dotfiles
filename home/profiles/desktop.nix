@@ -14,10 +14,7 @@ in
     ../core/gtk.nix
     ../core/pkgs.nix
     ../dev/tools.nix
-    ../dev/claude-code.nix
-    ../dev/crush.nix
     ../dev/k9s.nix
-    ../dev/opencode.nix
     ../shell/bash.nix
     ../shell/fish.nix
     ../shell/zsh.nix

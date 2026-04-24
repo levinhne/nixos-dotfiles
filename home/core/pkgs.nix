@@ -13,7 +13,6 @@
     bemenu
     vscode
     git-extras
-    crush
     pkgs-unstable.antigravity
     pkgs-unstable.codex
     k9s
