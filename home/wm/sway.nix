@@ -21,7 +21,8 @@ let
 
   # 5. Swaylock command
   swaylock = pkgs.swaylock-effects;
-  lockCmd = "${swaylock}/bin/swaylock -f --screenshots"
+  lockCmd = "${swaylock}/bin/swaylock -f"
+    + " --screenshot" 
     + " --color ${p.base00}"
     + " --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2"
     + " --inside-color ${p.base01}"
@@ -223,9 +224,8 @@ in
       startup = [
         { command = "autotiling -l 2"; always = true; }
         { command = "start-sov"; always = true; }
-        { command = "swayidle -w timeout 300 '${lockCmd}' before-sleep '${lockCmd}'"; always = true; }
         # Import Wayland env vars vào systemd user session, sau đó restart kanshi
-        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service'"; always = false; }
+        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service swayidle.service'"; always = false; }
       ] ++ common.startupPrograms;
     };
 
@@ -252,6 +252,24 @@ in
     blur_passes 3
     blur_xray false
   '';
+
+  services.swayidle = {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = lockCmd; }
+    ];
+    timeouts = [
+      {
+        timeout = 300;
+        command = lockCmd;
+      }
+      {
+        timeout = 600;
+        command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
+      }
+    ];
+  };
 
   programs.swaylock = {
     enable = true;

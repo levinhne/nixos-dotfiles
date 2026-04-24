@@ -10,5 +10,8 @@ in
     pkgs.repomix
     pkgs.webdiff
     llmPkgs.mcporter
+    llmPkgs.claude-code
+    llmPkgs.crush
+    llmPkgs.opencode
   ];
 }
