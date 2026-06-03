@@ -23,7 +23,7 @@ in
   terminal = "kitty";
 
   # Bemenu launcher configuration with theme colors
-  menu = "bemenu-run " + bemenuBaseOptions + "--prompt 'Run:'";
+  menu = "BEMENU_BACKEND=wayland bemenu-run " + bemenuBaseOptions + "--prompt 'Run:'";
 
   # Common startup programs (for Sway format)
   startupPrograms = [
@@ -36,7 +36,7 @@ in
 
   # Common startup programs (for Niri KDL format)
   startupProgramsKdl = ''
-    spawn-at-startup "waybar"
+    spawn-at-startup "sh" "-c" "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP NIRI_SOCKET XDG_SESSION_TYPE; systemctl --user restart wpaperd.service kanshi.service; waybar -c $HOME/.config/waybar/config -s $HOME/.config/waybar/style.css"
     spawn-at-startup "mako"
     spawn-at-startup "fcitx5" "-r"
     spawn-at-startup "sh" "-c" "wl-paste --type text --watch cliphist store"
@@ -49,6 +49,6 @@ in
     fileManager = "nemo";
     screenshot = "grimblast copy area";
     screenshotFull = "grimblast copy output";
-    clipboard = "cliphist list | bemenu " + bemenuBaseOptions + "-l 10 --prompt 'Clipboard' | cliphist decode | wl-copy";
+    clipboard = "cliphist list | BEMENU_BACKEND=wayland bemenu " + bemenuBaseOptions + "-l 10 --prompt 'Clipboard' | cliphist decode | wl-copy";
   };
 }

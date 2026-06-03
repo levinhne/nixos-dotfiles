@@ -219,7 +219,9 @@ in
         };
       };
 
-      bars = [{ command = "waybar"; }];
+      bars = [{
+        command = "waybar -c ${config.home.homeDirectory}/.config/waybar/config-sway.jsonc -s ${config.home.homeDirectory}/.config/waybar/style.css";
+      }];
 
       startup = [
         { command = "autotiling -l 2"; always = true; }

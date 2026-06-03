@@ -35,7 +35,7 @@ let
         gaps 4
         
         focus-ring {
-            width 2
+            width 1
             active-color "${c.base0D}"
             inactive-color "${c.base01}"
         }
@@ -65,6 +65,15 @@ let
     }
 
     prefer-no-csd
+
+    recent-windows {
+        highlight {
+            active-color "${c.base0D}"
+            urgent-color "${c.base08}"
+            padding 12
+            corner-radius 0
+        }
+    }
 
     screenshot-path "~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png"
 
