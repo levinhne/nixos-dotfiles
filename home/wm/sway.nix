@@ -45,9 +45,6 @@ in
 {
   # Sway-related packages
   home.packages = with pkgs; [
-    # Launcher
-    bemenu
-
     # Sway utilities
     swaybg # Wallpaper
     swaylock-effects # Screen locker with effects (blur, fade, etc.)
