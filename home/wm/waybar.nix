@@ -1,7 +1,14 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let
   p = config.lib.stylix.colors.withHashtag;
+  waybarForCurrentWm = pkgs.writeShellScript "waybar-current-wm" ''
+    if [ -n "''${SWAYSOCK:-}" ]; then
+      exec ${pkgs.waybar}/bin/waybar -c "$HOME/.config/waybar/config-sway.jsonc" -s "$HOME/.config/waybar/style.css"
+    fi
+
+    exec ${pkgs.waybar}/bin/waybar -c "$HOME/.config/waybar/config" -s "$HOME/.config/waybar/style.css"
+  '';
 in
 {
   # Waybar
@@ -352,6 +359,20 @@ in
           on-click = "kitty -e gdu /";
         };
       };
+    };
+  };
+
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Waybar";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      ExecStart = "${waybarForCurrentWm}";
+      ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
+      Restart = "on-failure";
     };
   };
 

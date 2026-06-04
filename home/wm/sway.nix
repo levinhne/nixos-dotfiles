@@ -22,7 +22,7 @@ let
   # 5. Swaylock command
   swaylock = pkgs.swaylock-effects;
   lockCmd = "${swaylock}/bin/swaylock -f"
-    + " --screenshot" 
+    + " --screenshot"
     + " --color ${p.base00}"
     + " --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2"
     + " --inside-color ${p.base01}"
@@ -41,6 +41,24 @@ let
     + " --text-ver-color ${p.base01}"
     + " --text-wrong-color ${p.base01}"
     + " --indicator-radius 100 --indicator-thickness 10";
+  powerOffMonitors = pkgs.writeShellScript "wm-power-off-monitors" ''
+    if [ -n "''${NIRI_SOCKET:-}" ]; then
+      ${pkgs.niri}/bin/niri msg action power-off-monitors && exit 0
+    fi
+
+    if [ -n "''${SWAYSOCK:-}" ]; then
+      ${pkgs.sway}/bin/swaymsg 'output * power off' && exit 0
+    fi
+  '';
+  powerOnMonitors = pkgs.writeShellScript "wm-power-on-monitors" ''
+    if [ -n "''${NIRI_SOCKET:-}" ]; then
+      ${pkgs.niri}/bin/niri msg action power-on-monitors && exit 0
+    fi
+
+    if [ -n "''${SWAYSOCK:-}" ]; then
+      ${pkgs.sway}/bin/swaymsg 'output * power on' && exit 0
+    fi
+  '';
 in
 {
   # Sway-related packages
@@ -216,15 +234,13 @@ in
         };
       };
 
-      bars = [{
-        command = "waybar -c ${config.home.homeDirectory}/.config/waybar/config-sway.jsonc -s ${config.home.homeDirectory}/.config/waybar/style.css";
-      }];
+      bars = [ ];
 
       startup = [
         { command = "autotiling -l 2"; always = true; }
         { command = "start-sov"; always = true; }
         # Import Wayland env vars vào systemd user session, sau đó restart kanshi
-        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service swayidle.service'"; always = false; }
+        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service swayidle.service waybar.service'"; always = false; }
       ] ++ common.startupPrograms;
     };
 
@@ -264,8 +280,8 @@ in
       }
       {
         timeout = 600;
-        command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
-        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
+        command = "${powerOffMonitors}";
+        resumeCommand = "${powerOnMonitors}";
       }
     ];
   };
