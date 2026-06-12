@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, imagemagick, xorg }:
+{ lib, stdenvNoCC, fetchFromGitHub, imagemagick, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "retrosmart-x11-cursors";
@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-smsC02aDdOWlNfk+1/lVwH41qDCpPDxePDbrmou8M/4=";
   };
 
-  nativeBuildInputs = [ imagemagick xorg.xcursorgen ];
+  nativeBuildInputs = [ imagemagick xcursorgen ];
 
   buildPhase = ''
     runHook preBuild

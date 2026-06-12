@@ -46,7 +46,7 @@ in
       set current_host (hostname)
     end
 
-    sudo nixos-rebuild switch --flake ~/nixos-dotfiles#$current_host $argv
+    sudo --preserve-env=HOME nixos-rebuild switch --flake ~/nixos-dotfiles#$current_host $argv
   '';
 
   fishRebuildHostFunction = ''
@@ -54,14 +54,14 @@ in
       echo "Usage: nrs-host <hostname>"
       return 1
     end
-    sudo nixos-rebuild switch --flake ~/nixos-dotfiles#$argv[1] $argv[2..-1]
+    sudo --preserve-env=HOME nixos-rebuild switch --flake ~/nixos-dotfiles#$argv[1] $argv[2..-1]
   '';
 
   posixRebuildFunction = ''
     __nixos_rebuild_switch() {
       local current_host
       current_host="$(hostnamectl --static 2>/dev/null || hostname)"
-      sudo nixos-rebuild switch --flake ~/nixos-dotfiles#"''${current_host}" "$@"
+      sudo --preserve-env=HOME nixos-rebuild switch --flake ~/nixos-dotfiles#"''${current_host}" "$@"
     }
   '';
 
@@ -73,7 +73,7 @@ in
       fi
       local hostname="$1"
       shift
-      sudo nixos-rebuild switch --flake ~/nixos-dotfiles#"''${hostname}" "$@"
+      sudo --preserve-env=HOME nixos-rebuild switch --flake ~/nixos-dotfiles#"''${hostname}" "$@"
     }
   '';
 

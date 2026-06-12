@@ -17,6 +17,7 @@
       name = "Noto Sans";
       size = 9;
     };
+    gtk4.theme = null;
     gtk3.extraConfig = {
       gtk-toolbar-style = "GTK_TOOLBAR_BOTH_HORIZ";
       gtk-toolbar-icon-size = "GTK_ICON_SIZE_LARGE_TOOLBAR";

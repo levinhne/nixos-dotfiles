@@ -23,7 +23,7 @@
       # System monitoring
       htop
       btop
-      neofetch
+      fastfetch
       # Desktop apps
 
       # File management

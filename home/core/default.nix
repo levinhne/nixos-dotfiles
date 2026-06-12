@@ -1,25 +1,16 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
-  createSymlink = path: config.lib.file.mkOutOfStoreSymlink path;
-
-  configs = {
-    "qutebrowser" = "qutebrowser";
-    "fcitx" = "fcitx";
-    "fcitx5" = "fcitx5";
-    "nvim" = "nvim";
-  };
 in
 {
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 
-  xdg.configFile = builtins.mapAttrs
-    (name: subpath: {
-      source = createSymlink "${dotfiles}/${subpath}";
-      recursive = true;
-    })
-    configs;
+  home.activation.linkDotfileConfigs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    for name in qutebrowser fcitx fcitx5; do
+      ln -sfn "${dotfiles}/$name" "${config.xdg.configHome}/$name"
+    done
+  '';
 
   programs.home-manager.enable = true;
 

@@ -7,8 +7,6 @@
   # Bật Bluetooth khi khởi động máy
   hardware.bluetooth.powerOnBoot = true;
 
-  # Cài đặt trình quản lý Bluetooth
-  environment.systemPackages = with pkgs; [
-    blueman # Giao diện GUI cực tốt cho Sway/Wayland
-  ];
+  # Trình quản lý Bluetooth GUI (kèm D-Bus service blueman-mechanism)
+  services.blueman.enable = true;
 }
