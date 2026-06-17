@@ -11,19 +11,16 @@ in
     "${userHome}/.ssh/id_ed25519"
   ];
 
-  # Example: Declare secrets that will be decrypted at boot
-  # Uncomment and customize as needed
+  age.secrets.fpt-api-key = {
+    file = ../../secrets/fpt-api-key.age;
+    mode = "440";
+    owner = userName;
+    group = "users";
+  };
 
-
-  # age.secrets.office-cert = {
-  #   file = ../../secrets/office-cert.age;
-  #   mode = "600";
-  #   owner = config.mySystem.userName;
-  #   group = "users";
-  # };
 
   # Install agenix CLI for managing secrets
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = [
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

@@ -21,5 +21,8 @@ in
   # Example: API keys
   # "api-keys.age".publicKeys = allKeys;
 
+  # API keys
+  "fpt-api-key.age".publicKeys = allKeys;
+
   # Host-specific secrets (chỉ cho 1 máy)
 }

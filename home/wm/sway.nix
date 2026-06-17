@@ -137,7 +137,6 @@ in
           # Utilities
           "${modifier}+v" = "exec ${clipboard}";
           "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
-          "${modifier}+g" = "exec ~/.config/sway/scripts/prompt-record.sh";
 
           # Window Management
           "${modifier}+w" = "kill";

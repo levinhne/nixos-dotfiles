@@ -3,6 +3,7 @@
 
 let
   secretFiles = [
+    { path = "/run/agenix/fpt-api-key"; env = "FPT_API_KEY"; }
   ];
 
   fishSecretLine = secret: ''
