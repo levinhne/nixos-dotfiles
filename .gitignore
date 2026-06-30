@@ -9,3 +9,4 @@ result-*
 # Uncomment if needed:
 # hosts/*/hardware-configuration.nix
 .gitnexus
+config/

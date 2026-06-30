@@ -16,8 +16,10 @@
     pkgs-unstable.antigravity
     pkgs-unstable.codex
     k9s
+    kubectl
     podman-tui
     nixpkgs-fmt
     retrosmart-cursors
+    ffmpeg
   ];
 }
