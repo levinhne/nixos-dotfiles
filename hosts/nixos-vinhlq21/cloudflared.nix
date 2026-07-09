@@ -15,6 +15,7 @@
         ingress = {
           "nixos-vinhlq21-ssh.levinh.io.vn" = "ssh://localhost:22";
           "test2.levinh.io.vn" = "http://localhost:8090";
+          "code-nixos-vinhlq21.levinh.io.vn" = "http://localhost:8080";
         };
       };
     };

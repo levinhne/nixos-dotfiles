@@ -63,6 +63,26 @@ in
 {
   # Sway-related packages
   home.packages = with pkgs; [
+    (pkgs.writeShellScriptBin "tmux-pick" ''
+      sessions=$(tmux list-sessions -F "#{session_name}: #{session_windows} windows [#{session_attached} attached]" 2>/dev/null)
+      if [ -z "$sessions" ]; then
+        notify-send "tmux" "No sessions running"
+        exit 0
+      fi
+      picked=$(echo "$sessions" | rofi -dmenu -p " Tmux")
+      [ -z "$picked" ] && exit 0
+      session_name=$(echo "$picked" | cut -d: -f1)
+      if [ -n "$TMUX" ]; then
+        tmux switch-client -t "$session_name"
+      elif [ -n "$KITTY_WINDOW_ID" ]; then
+        tmux attach-session -t "$session_name"
+      elif kitty @ ls >/dev/null 2>&1; then
+        kitty @ launch --type=os-window tmux attach-session -t "$session_name"
+      else
+        kitty -e tmux attach-session -t "$session_name"
+      fi
+    '')
+
     # Sway utilities
     swaybg # Wallpaper
     swaylock-effects # Screen locker with effects (blur, fade, etc.)
@@ -133,13 +153,15 @@ in
           "${modifier}+d" = "exec ${menu}";
           "${modifier}+b" = "exec ${browser}";
           "${modifier}+y" = "exec nemo";
+          "${modifier}+BackSpace" = "exec tmux-pick";
 
           # Utilities
           "${modifier}+v" = "exec ${clipboard}";
           "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
 
           # Window Management
-          "${modifier}+w" = "kill";
+          "${modifier}+w" = "exec rofi -show window";
+          "${modifier}+Shift+w" = "kill";
           "${modifier}+a" = "exec sticky enable";
           "${modifier}+t" = "floating toggle";
           "${modifier}+f" = "fullscreen";

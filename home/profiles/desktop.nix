@@ -14,6 +14,7 @@ in
     ../core/gtk.nix
     ../core/pkgs.nix
     ../dev/tools.nix
+    ../dev/claude-code.nix
     ../dev/k9s.nix
     ../shell/bash.nix
     ../shell/fish.nix
@@ -29,6 +30,7 @@ in
     ../wm/waybar.nix
     ../wm/mako.nix
     ../wm/wpaperd.nix
+    ../wm/rofi.nix
     ../dev/git.nix
   ];
 

@@ -54,7 +54,7 @@ let
         }
         
         default-column-width { proportion 0.5; }
-        
+
         center-focused-column "never"
     }
 
@@ -86,7 +86,8 @@ let
         Mod+Y { spawn "nemo"; }
 
         // Window Management
-        Mod+W { close-window; }
+        Mod+W { spawn "sh" "-c" "rofi -show window"; }
+        Mod+Shift+W { close-window; }
         Mod+F { fullscreen-window; }
         
         // Lock screen
@@ -94,6 +95,7 @@ let
 
         // Clipboard
         Mod+V { spawn "sh" "-c" "${clipboard}"; }
+        Mod+BackSpace { spawn "tmux-pick"; }
 
         // Screenshots
         Mod+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'"; }

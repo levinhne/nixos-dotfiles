@@ -9,6 +9,114 @@ let
 
     exec ${pkgs.waybar}/bin/waybar -c "$HOME/.config/waybar/config" -s "$HOME/.config/waybar/style.css"
   '';
+
+  barBase = {
+    layer = "top";
+    position = "top";
+    height = 30;
+    spacing = 1;
+    margin = "0";
+    modules-center = [ ];
+  };
+
+  commonModules = with p; {
+    "custom/arch" = {
+      format = "󱄅";
+      tooltip = false;
+    };
+
+    "custom/uptime" = {
+      format = "󰔟 {}";
+      exec = "awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if (d>0) printf \"%dd %dh\", d, h; else if (h>0) printf \"%dh %dm\", h, m; else printf \"%dm\", m}' /proc/uptime";
+      interval = 60;
+    };
+
+    clock = {
+      format = "󰥔 {:%a, %b %d - %H:%M}";
+      tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+      calendar = {
+        mode = "month";
+        mode-mon-col = 3;
+        weeks-pos = "right";
+        on-scroll = 1;
+        on-click-right = "mode";
+        format = {
+          months = "<span color='${base05}'><b>{}</b></span>";
+          days = "<span color='${base08}'>{}</span>";
+          weeks = "<span color='${base0B}'><b>W{}</b></span>";
+          weekdays = "<span color='${base0C}'><b>{}</b></span>";
+          today = "<span color='${base0A}'><b><u>{}</u></b></span>";
+        };
+      };
+      actions = {
+        on-click-right = "mode";
+        on-click-forward = "tz_up";
+        on-click-backward = "tz_down";
+        on-scroll-up = "shift_up";
+        on-scroll-down = "shift_down";
+      };
+    };
+
+    cpu = {
+      format = "󰘚 {usage}%";
+      tooltip = true;
+      interval = 1;
+      on-click = "kitty -e htop";
+    };
+
+    memory = {
+      format = "󰍛 {}%";
+      interval = 1;
+      on-click = "kitty -e htop";
+    };
+
+    network = {
+      format-wifi = "󰖩 {essid} ({signalStrength}%)";
+      format-ethernet = "󰈀 {ifname}";
+      format-linked = "󰈀 {ifname} (No IP)";
+      format-disconnected = "󰖪 Disconnected";
+      format-alt = "{ifname}: {ipaddr}/{cidr}";
+      tooltip-format = "{ifname}: {ipaddr}";
+      on-click = "kitty -e nmtui";
+    };
+
+    pulseaudio = {
+      format = "{icon} {volume}%";
+      format-bluetooth = "󰂰 {volume}%";
+      format-bluetooth-muted = "󰂲 {icon}";
+      format-muted = "󰝟";
+      format-icons = {
+        headphone = "󰋋";
+        hands-free = "󰥰";
+        headset = "󰋎";
+        phone = "󰏲";
+        portable = "󰄝";
+        car = "󰄋";
+        default = [ "󰕿" "󰖀" "󰕾" ];
+      };
+      on-click = "pavucontrol";
+      on-click-right = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+      on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +2%";
+      on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -2%";
+    };
+
+    disk = {
+      interval = 30;
+      format = "󰋊 {percentage_used}%";
+      path = "/";
+      on-click = "kitty -e gdu /";
+    };
+  };
+
+  commonModulesRight = [
+    "pulseaudio"
+    "network"
+    "cpu"
+    "memory"
+    "disk"
+    "custom/uptime"
+    "clock"
+  ];
 in
 {
   # Waybar
@@ -28,9 +136,9 @@ in
           color: ${base05};
       }
 
-      #custom-arch, #mode, #mpd, #custom-weather, #custom-playerctl, #clock, #cpu,
+      #custom-arch, #mode, #clock, #cpu,
       #memory, #temperature, #battery, #network, #pulseaudio,
-      #backlight, #disk, #custom-uptime, #custom-updates, #custom-quote,
+      #backlight, #disk, #custom-uptime,
       #idle_inhibitor, #tray {
           padding: 0 10px;
           margin: 0 2px;
@@ -157,11 +265,6 @@ in
           border-bottom-color: ${base0B};
       }
 
-      #custom-updates {
-          color: ${base09};
-          border-bottom-color: ${base09};
-      }
-
       #idle_inhibitor {
           color: ${base05};
           border-bottom-color: transparent;
@@ -189,174 +292,23 @@ in
       }
     '';
     settings = {
-      mainBar = {
-        layer = "top";
-        position = "top";
-        height = 30;
-        spacing = "1";
-        margin = "0";
-
+      mainBar = barBase // commonModules // {
         modules-left = [
           "custom/arch"
           "niri/workspaces"
           "niri/window"
         ];
 
-        modules-center = [ ];
-
-        modules-right = [
-          "pulseaudio"
-          "network"
-          "cpu"
-          "memory"
-          "disk"
-          "custom/uptime"
-          "clock"
-        ];
-
-        "custom/arch" = {
-          format = "󱄅";
-          tooltip = false;
-        };
-
-        "custom/wallpaper" = {
-          format = "󰸉";
-          exec = "wpaperctl next && echo '󰸉'";
-          interval = 300; # 5 minutes
-          on-click = "wpaperctl next";
-          tooltip = false;
-        };
-
-        "sway/workspaces" = {
-          disable-scroll = true;
-          all-outputs = true;
-          format = "{name}";
-          format-icons = {
-            "1" = "●";
-            "2" = "●";
-            "3" = "●";
-            "4" = "●";
-            "5" = "●";
-            "6" = "●";
-          };
-          persistent-workspaces = {
-            "1" = [ ];
-            "2" = [ ];
-            "3" = [ ];
-            "4" = [ ];
-            "5" = [ ];
-            "6" = [ ];
-          };
-        };
+        modules-right = commonModulesRight;
 
         "niri/workspaces" = {
           format = "{index}";
           all-outputs = false;
         };
 
-        "sway/window" = {
-          format = "{title}";
-          max-length = 50;
-          tooltip = true;
-        };
-
         "niri/window" = {
           format = "{title}";
           max-length = 50;
-        };
-
-        "sway/mode" = {
-          format = "<span style=\"italic\">{}</span>";
-        };
-
-        "custom/updates" = {
-          format = "󰚰 {}";
-          exec = "~/.config/waybar/check-updates.sh";
-          interval = 3600;
-          on-click = "kitty -e sudo pacman -Syu"; # Lưu ý: Trên NixOS bạn thường dùng 'nh os switch' hoặc 'nixos-rebuild'
-          signal = 8;
-        };
-
-        "custom/uptime" = {
-          format = "󰔟 {}";
-          exec = "awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if (d>0) printf \"%dd %dh\", d, h; else if (h>0) printf \"%dh %dm\", h, m; else printf \"%dm\", m}' /proc/uptime";
-          interval = 60;
-        };
-
-        "clock" = {
-          format = "󰥔 {:%a, %b %d - %H:%M}";
-          tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-          calendar = {
-            mode = "month";
-            mode-mon-col = 3;
-            weeks-pos = "right";
-            on-scroll = 1;
-            on-click-right = "mode";
-            format = {
-              months = "<span color='#d3c6aa'><b>{}</b></span>";
-              days = "<span color='#e67e80'>{}</span>";
-              weeks = "<span color='#a7c080'><b>W{}</b></span>";
-              weekdays = "<span color='#7fbbb3'><b>{}</b></span>";
-              today = "<span color='#dbbc7f'><b><u>{}</u></b></span>";
-            };
-          };
-          actions = {
-            on-click-right = "mode";
-            on-click-forward = "tz_up";
-            on-click-backward = "tz_down";
-            on-scroll-up = "shift_up";
-            on-scroll-down = "shift_down";
-          };
-        };
-
-        "cpu" = {
-          format = "󰘚 {usage}%";
-          tooltip = true;
-          interval = 1;
-          on-click = "kitty -e htop";
-        };
-
-        "memory" = {
-          format = "󰍛 {}%";
-          interval = 1;
-          on-click = "kitty -e htop";
-        };
-
-        "network" = {
-          format-wifi = "󰖩 {essid} ({signalStrength}%)";
-          format-ethernet = "󰈀 {ifname}";
-          format-linked = "󰈀 {ifname} (No IP)";
-          format-disconnected = "󰖪 Disconnected";
-          format-alt = "{ifname}: {ipaddr}/{cidr}";
-          tooltip-format = "{ifname}: {ipaddr}";
-          on-click = "kitty -e nmtui";
-        };
-
-        "pulseaudio" = {
-          format = "{icon} {volume}%";
-          format-bluetooth = "󰂰 {volume}%";
-          format-bluetooth-muted = "󰂲 {icon}";
-          format-muted = "󰝟";
-          format-icons = {
-            headphone = "󰋋";
-            hands-free = "󰥰";
-            headset = "󰋎";
-            phone = "󰏲";
-            portable = "󰄝";
-            car = "󰄋";
-            default = [ "󰕿" "󰖀" "󰕾" ];
-          };
-          on-click = "pavucontrol";
-          on-click-right = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-          on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +2%";
-          on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -2%";
-        };
-
-        "disk" = {
-          interval = 30;
-          format = "󰋊 {percentage_used}%";
-          path = "/";
-          on-click = "kitty -e gdu /";
         };
       };
     };
@@ -377,49 +329,19 @@ in
   };
 
   xdg.configFile."waybar/config-sway.jsonc".text = builtins.toJSON [
-    {
-      layer = "top";
-      position = "top";
-      height = 30;
-      spacing = "1";
-      margin = "0";
-
+    (barBase // commonModules // {
       modules-left = [
         "custom/arch"
         "sway/workspaces"
         "sway/window"
       ];
 
-      modules-center = [ ];
-
-      modules-right = [
-        "sway/mode"
-        "pulseaudio"
-        "network"
-        "cpu"
-        "memory"
-        "disk"
-        "custom/uptime"
-        "clock"
-      ];
-
-      "custom/arch" = {
-        format = "󱄅";
-        tooltip = false;
-      };
+      modules-right = [ "sway/mode" ] ++ commonModulesRight;
 
       "sway/workspaces" = {
         disable-scroll = true;
         all-outputs = false;
         format = "{name}";
-        format-icons = {
-          "1" = "●";
-          "2" = "●";
-          "3" = "●";
-          "4" = "●";
-          "5" = "●";
-          "6" = "●";
-        };
         persistent-workspaces = {
           "1" = [ ];
           "2" = [ ];
@@ -439,88 +361,6 @@ in
       "sway/mode" = {
         format = "<span style=\"italic\">{}</span>";
       };
-
-      "custom/uptime" = {
-        format = "󰔟 {}";
-        exec = "awk '{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); if (d>0) printf \"%dd %dh\", d, h; else if (h>0) printf \"%dh %dm\", h, m; else printf \"%dm\", m}' /proc/uptime";
-        interval = 60;
-      };
-
-      "clock" = {
-        format = "󰥔 {:%a, %b %d - %H:%M}";
-        tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-        calendar = {
-          mode = "month";
-          mode-mon-col = 3;
-          weeks-pos = "right";
-          on-scroll = 1;
-          on-click-right = "mode";
-          format = {
-            months = "<span color='#d3c6aa'><b>{}</b></span>";
-            days = "<span color='#e67e80'>{}</span>";
-            weeks = "<span color='#a7c080'><b>W{}</b></span>";
-            weekdays = "<span color='#7fbbb3'><b>{}</b></span>";
-            today = "<span color='#dbbc7f'><b><u>{}</u></b></span>";
-          };
-        };
-        actions = {
-          on-click-right = "mode";
-          on-click-forward = "tz_up";
-          on-click-backward = "tz_down";
-          on-scroll-up = "shift_up";
-          on-scroll-down = "shift_down";
-        };
-      };
-
-      "cpu" = {
-        format = "󰘚 {usage}%";
-        tooltip = true;
-        interval = 1;
-        on-click = "kitty -e htop";
-      };
-
-      "memory" = {
-        format = "󰍛 {}%";
-        interval = 1;
-        on-click = "kitty -e htop";
-      };
-
-      "network" = {
-        format-wifi = "󰖩 {essid} ({signalStrength}%)";
-        format-ethernet = "󰈀 {ifname}";
-        format-linked = "󰈀 {ifname} (No IP)";
-        format-disconnected = "󰖪 Disconnected";
-        format-alt = "{ifname}: {ipaddr}/{cidr}";
-        tooltip-format = "{ifname}: {ipaddr}";
-        on-click = "kitty -e nmtui";
-      };
-
-      "pulseaudio" = {
-        format = "{icon} {volume}%";
-        format-bluetooth = "󰂰 {volume}%";
-        format-bluetooth-muted = "󰂲 {icon}";
-        format-muted = "󰝟";
-        format-icons = {
-          headphone = "󰋋";
-          hands-free = "󰥰";
-          headset = "󰋎";
-          phone = "󰏲";
-          portable = "󰄝";
-          car = "󰄋";
-          default = [ "󰕿" "󰖀" "󰕾" ];
-        };
-        on-click = "pavucontrol";
-        on-click-right = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-        on-scroll-up = "pactl set-sink-volume @DEFAULT_SINK@ +2%";
-        on-scroll-down = "pactl set-sink-volume @DEFAULT_SINK@ -2%";
-      };
-
-      "disk" = {
-        interval = 30;
-        format = "󰋊 {percentage_used}%";
-        path = "/";
-        on-click = "kitty -e gdu /";
-      };
-    }
+    })
   ];
 }

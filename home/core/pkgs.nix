@@ -10,8 +10,7 @@
     google-chrome
     firefox
     wpaperd
-    bemenu
-    vscode
+vscode
     git-extras
     pkgs-unstable.antigravity
     pkgs-unstable.codex

@@ -22,6 +22,10 @@ in
     x11.enable = true;
   };
 
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.local/bin"
+  ];
+
   home.sessionVariables = {
     EDITOR = "nvim";
     BROWSER = "google-chrome-stable";

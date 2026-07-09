@@ -14,6 +14,16 @@
     plugins = with pkgs.tmuxPlugins; [
       sensible
       yank
+      vim-tmux-navigator
+      resurrect
+      tmux-fzf
+      {
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore "on"
+          set -g @continuum-save-interval "15"
+        '';
+      }
       {
         plugin = dracula;
         extraConfig = ''
