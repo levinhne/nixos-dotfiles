@@ -27,12 +27,12 @@
       {
         plugin = dracula;
         extraConfig = ''
-          set -g @dracula-plugins "cwd git time"
+          set -g @dracula-plugins "kubernetes-context cpu-usage ram-usage network cwd git time"
 
           set -g @dracula-show-left-icon "#h | #S"
           set -g @dracula-left-icon-padding 1
           set -g @dracula-show-flags true
-          set -g @dracula-show-empty-plugins true
+          set -g @dracula-show-empty-plugins false
 
           set -g @dracula-show-powerline true
           set -g @dracula-show-edge-icons true
@@ -52,6 +52,15 @@
           set -g @dracula-git-show-current-symbol "✓"
           set -g @dracula-git-show-diff-symbol "!"
           set -g @dracula-git-no-repo-message ""
+
+          set -g @dracula-cpu-usage-label "CPU"
+          set -g @dracula-ram-usage-label "RAM"
+          set -g @dracula-ram-usage-percentage-only true
+
+          set -g @dracula-network-vpn-icon "󰖂"
+
+          set -g @dracula-kubernetes-context-label "☸"
+          set -g @dracula-kubernetes-context-namespace true
 
           set -g @dracula-military-time true
           set -g @dracula-show-timezone false

@@ -289,6 +289,16 @@ in
     blur_xray false
   '';
 
+  xdg.configFile."scroll/config".text = ''
+    include ${swayConfigPath}
+
+    # Keep Scroll plain like vanilla Sway: no rounded corners/shadow/dim and no animations.
+    default_decoration border_radius 0 shadow false dim false
+    animations {
+      enabled no
+    }
+  '';
+
   services.swayidle = {
     enable = true;
     events = {
