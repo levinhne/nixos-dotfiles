@@ -86,8 +86,8 @@ let
         Mod+Y { spawn "nemo"; }
 
         // Window Management
-        Mod+W { spawn "sh" "-c" "rofi -show window"; }
-        Mod+Shift+W { close-window; }
+        Mod+Shift+W { spawn "sh" "-c" "rofi -show window"; }
+        Mod+W { close-window; }
         Mod+F { fullscreen-window; }
         
         // Lock screen

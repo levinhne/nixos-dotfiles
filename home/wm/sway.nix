@@ -88,15 +88,7 @@ in
     swaylock-effects # Screen locker with effects (blur, fade, etc.)
     swayidle # Idle management
     autotiling # Auto tiling
-    sov # Workspace overview
-    (pkgs.writeShellScriptBin "start-sov" ''
-      pkill -x sov || true
-      rm -f /tmp/sovpipe
-      mkfifo /tmp/sovpipe
-      # Giữ pipe luôn mở để EOF không bao giờ gửi tới sov khi echo kết thúc
-      exec 3<> /tmp/sovpipe
-      cat < /tmp/sovpipe | sov -t 500
-    '')
+    swayr # Window switcher / tiled scratchpad
 
     # Wayland utilities
     waybar # Status bar
@@ -141,6 +133,10 @@ in
           criteria = { app_id = "org.pulseaudio.pavucontrol"; };
         }
         {
+          command = "floating enable, move position center, resize set 800 600";
+          criteria = { app_id = "blueman-manager"; };
+        }
+        {
           command = "exec fcitx5-remote -c";
           criteria = { app_id = "^(kitty|foot)$"; };
         }
@@ -160,8 +156,8 @@ in
           "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
 
           # Window Management
-          "${modifier}+w" = "exec rofi -show window";
-          "${modifier}+Shift+w" = "kill";
+          "${modifier}+Shift+w" = "exec rofi -show window";
+          "${modifier}+w" = "kill";
           "${modifier}+a" = "exec sticky enable";
           "${modifier}+t" = "floating toggle";
           "${modifier}+f" = "fullscreen";
@@ -220,14 +216,12 @@ in
           "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
           "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
 
-          # Overview
-          "${modifier}+Tab" = "exec echo 1 > /tmp/sovpipe";
         } //
         # Tự động tạo bindings cho Workspaces
         (builtins.listToAttrs (map
           (i: {
             name = "${modifier}+${i}";
-            value = "workspace number ${i}; exec echo 1 > /tmp/sovpipe";
+            value = "workspace number ${i}";
           })
           wsKeys)) //
         (builtins.listToAttrs (map
@@ -259,7 +253,7 @@ in
 
       startup = [
         { command = "autotiling -l 2"; always = true; }
-        { command = "start-sov"; always = true; }
+        { command = "sh -c 'pkill -x swayrd; exec swayrd'"; always = true; }
         # Import Wayland env vars vào systemd user session, sau đó restart kanshi
         { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service swayidle.service waybar.service'"; always = false; }
       ] ++ common.startupPrograms;
@@ -267,8 +261,10 @@ in
 
     extraConfig = ''
       default_border pixel 2
-      ${lib.concatMapStringsSep "\n" (i: "bindsym --release ${modifier}+${i} exec \"echo 0 > /tmp/sovpipe\"") wsKeys}
-      bindsym --release ${modifier}+Tab exec "echo 0 > /tmp/sovpipe"
+
+      # --no-repeat: giữ phím không dội hàng loạt lệnh khi held
+      bindsym --no-repeat ${modifier}+Tab exec swayr next-window all-workspaces
+      bindsym --no-repeat ${modifier}+Shift+Tab exec swayr prev-window all-workspaces
     '';
   };
 
@@ -287,6 +283,12 @@ in
     blur_radius 6
     blur_passes 3
     blur_xray false
+  '';
+
+  xdg.configFile."swayr/config.toml".text = ''
+    [menu]
+    executable = "rofi"
+    args = ["-dmenu", "-p", "swayr"]
   '';
 
   xdg.configFile."scroll/config".text = ''

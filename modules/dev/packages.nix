@@ -45,6 +45,8 @@
       # Network tools
       inetutils
       lsof
+
+      lazy-tmux
     ])
     ++ [ pkgs.cloudflared ]
     ++ config.mySystem.extraPackages;
