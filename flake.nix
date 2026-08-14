@@ -22,10 +22,6 @@
       url = "github:nix-community/stylix/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    scroll-flake = {
-      url = "github:Diax170/scroll-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs@{ nixpkgs, ... }:

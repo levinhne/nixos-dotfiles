@@ -1,4 +1,4 @@
-{ config, pkgs, username, inputs, ... }:
+{ config, pkgs, username, ... }:
 
 let
   hmSwayPackage = config.home-manager.users.${username}.wayland.windowManager.sway.package or pkgs.sway;
@@ -7,7 +7,6 @@ let
     withGtkWrapper = true;
     enableXWayland = true;
   };
-  scrollPackage = inputs.scroll-flake.packages.${pkgs.system}.scroll-stable;
 
   # Tạo thư mục chứa Sway, SwayFX và Niri sessions
   waylandSessions = pkgs.runCommand "wayland-sessions" { } ''
@@ -31,15 +30,6 @@ let
     Exec=${swayfxPackage}/bin/sway -c /home/${username}/.config/swayfx/config
     Type=Application
     DesktopNames=swayfx
-    EOF
-
-        cat > $out/share/wayland-sessions/scroll.desktop <<EOF
-    [Desktop Entry]
-    Name=Scroll
-    Comment=Sway fork with a PaperWM-style scrolling layout
-    Exec=${scrollPackage}/bin/scroll -c /home/${username}/.config/scroll/config
-    Type=Application
-    DesktopNames=scroll
     EOF
 
         ln -s ${pkgs.niri}/share/wayland-sessions/niri.desktop $out/share/wayland-sessions/

@@ -14,6 +14,7 @@ in
     ../core/gtk.nix
     ../core/pkgs.nix
     ../dev/tools.nix
+    ../dev/zed.nix
     ../dev/claude-code.nix
     ../dev/k9s.nix
     ../shell/bash.nix
