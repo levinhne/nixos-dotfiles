@@ -32,6 +32,15 @@ let
     DesktopNames=swayfx
     EOF
 
+        cat > $out/share/wayland-sessions/scroll.desktop <<EOF
+    [Desktop Entry]
+    Name=Scroll
+    Comment=Sway fork with a PaperWM-style scrolling layout
+    Exec=${pkgs.scroll}/bin/scroll -c /home/${username}/.config/scroll/config
+    Type=Application
+    DesktopNames=scroll
+    EOF
+
         ln -s ${pkgs.niri}/share/wayland-sessions/niri.desktop $out/share/wayland-sessions/
   '';
 in

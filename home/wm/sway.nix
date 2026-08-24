@@ -123,6 +123,21 @@ in
         outer = 2;
       };
 
+      # Resize by percentage points instead of the default fixed px step,
+      # so it scales with output size (both tiled and floating windows).
+      modes.resize = {
+        "Left" = "resize shrink width 5 ppt";
+        "Down" = "resize grow height 5 ppt";
+        "Up" = "resize shrink height 5 ppt";
+        "Right" = "resize grow width 5 ppt";
+        "h" = "resize shrink width 5 ppt";
+        "j" = "resize grow height 5 ppt";
+        "k" = "resize shrink height 5 ppt";
+        "l" = "resize grow width 5 ppt";
+        "Escape" = "mode default";
+        "Return" = "mode default";
+      };
+
       window.commands = [
         {
           command = "floating enable";
@@ -135,6 +150,10 @@ in
         {
           command = "floating enable, move position center, resize set 800 600";
           criteria = { app_id = "blueman-manager"; };
+        }
+        {
+          command = "floating enable, resize set 400 300, move position 20px 100ppt, move up 320px";
+          criteria = { app_id = "^(mpv)$"; };
         }
         {
           command = "exec fcitx5-remote -c";
@@ -289,6 +308,20 @@ in
     [menu]
     executable = "rofi"
     args = ["-dmenu", "-p", "swayr"]
+  '';
+
+  xdg.configFile."scroll/config".text = ''
+    include ${swayConfigPath}
+
+    # Keep Scroll plain like vanilla Sway: no rounded corners/shadow/dim and no animations.
+    default_decoration border_radius 0 shadow false dim false
+    animations {
+      enabled no
+    }
+
+    # Pin new windows to the edge instead of centering them when they fit the viewport.
+    center_horizontal_if_fits false
+    center_vertical_if_fits false
   '';
 
   services.swayidle = {

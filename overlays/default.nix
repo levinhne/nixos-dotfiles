@@ -15,4 +15,5 @@ final: prev: {
   retrosmart-cursors = final.callPackage ../packages/retrosmart-cursors.nix { };
   webdiff = final.callPackage ../packages/webdiff.nix { };
   lazy-tmux = final.callPackage ../packages/lazy-tmux.nix { };
+  scroll = final.callPackage ../packages/scroll.nix { };
 }

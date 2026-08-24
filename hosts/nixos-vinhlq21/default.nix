@@ -6,7 +6,6 @@
     ../common/base.nix
     ../common/desktop.nix
     ./cloudflared.nix
-    ../../modules/services/k3s.nix
   ];
 
   networking.hostName = hostname;

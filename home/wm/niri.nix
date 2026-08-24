@@ -164,6 +164,14 @@ let
         default-column-width { fixed 600; }
     }
 
+    window-rule {
+        match app-id="^mpv$"
+        open-floating true
+        default-column-width { fixed 400; }
+        default-window-height { fixed 300; }
+        default-floating-position x=20 y=20 relative-to="bottom-left"
+    }
+
     // Startup programs
     ${common.startupProgramsKdl}
 
