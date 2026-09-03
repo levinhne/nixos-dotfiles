@@ -54,7 +54,9 @@ in
 {
   home.packages = [
     pkgs.aider-chat
+    pkgs.codebase-memory-mcp
     pkgs.direnv
+    pkgs.minikube
     pkgs.repomix
     pkgs.webdiff
     llmPkgs.claude-code
