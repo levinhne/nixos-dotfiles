@@ -15,6 +15,7 @@ in
     ../core/pkgs.nix
     ../dev/tools.nix
     ../dev/claude-code.nix
+    ../dev/engram.nix
     ../dev/k9s.nix
     ../dev/zed.nix
     ../shell/bash.nix
@@ -33,6 +34,7 @@ in
     ../wm/wpaperd.nix
     ../wm/rofi.nix
     ../dev/git.nix
+    ../dev/gitlab-fci-proxy.nix
   ];
 
   stylix = {

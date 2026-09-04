@@ -76,10 +76,16 @@ in
         tmux switch-client -t "$session_name"
       elif [ -n "$KITTY_WINDOW_ID" ]; then
         tmux attach-session -t "$session_name"
-      elif kitty @ ls >/dev/null 2>&1; then
-        kitty @ launch --type=os-window tmux attach-session -t "$session_name"
       else
-        kitty -e tmux attach-session -t "$session_name"
+        sent=0
+        for sock in /tmp/kitty-*; do
+          [ -S "$sock" ] || continue
+          if kitty @ --to "unix:$sock" send-text --match=state:focused "tmux attach-session -t $session_name\n" 2>/dev/null; then
+            sent=1
+            break
+          fi
+        done
+        [ "$sent" -eq 0 ] && kitty -e tmux attach-session -t "$session_name"
       fi
     '')
 
