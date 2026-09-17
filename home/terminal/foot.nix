@@ -15,11 +15,14 @@ in
         pad = "10x10";
         dpi-aware = "no";
         box-drawings-uses-font-glyphs = "no";
-        box-drawing-base-thickness = "0.12";
       };
 
       mouse = {
         hide-when-typing = "yes";
+      };
+
+      tweak = {
+        box-drawing-base-thickness = "0.1";
       };
 
       colors = {

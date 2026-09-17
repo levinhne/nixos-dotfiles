@@ -14,16 +14,7 @@ let
         api_key = "$FPT_API_KEY";
         models = [
           {
-            id = "GLM-5.1";
-            name = "GLM-5.1";
-            default_max_tokens = 8192;
-            can_reason = false;
-            cost_per_1m_in = 0.1;
-            cost_per_1m_out = 0.1;
-            context_window = 128000;
-          }
-          {
-            id = "glm-5.2";
+            id = "GLM-5.2";
             name = "GLM-5.2";
             default_max_tokens = 8192;
             can_reason = false;
@@ -56,7 +47,9 @@ in
     pkgs.aider-chat
     pkgs.codebase-memory-mcp
     pkgs.direnv
+    pkgs.gnumake
     pkgs.minikube
+    pkgs.nom
     pkgs.repomix
     pkgs.webdiff
     llmPkgs.claude-code

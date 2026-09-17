@@ -34,7 +34,6 @@ in
     ../wm/wpaperd.nix
     ../wm/rofi.nix
     ../dev/git.nix
-    ../dev/gitlab-fci-proxy.nix
   ];
 
   stylix = {
