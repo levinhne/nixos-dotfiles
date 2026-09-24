@@ -21,6 +21,10 @@ in
         description = "Switch NixOS host configuration by hostname";
         body = shellCommon.fishRebuildHostFunction;
       };
+      expose = {
+        description = "Expose a local port publicly via a Cloudflare quick tunnel";
+        body = shellCommon.fishExposeFunction;
+      };
     };
     plugins = [
       { name = "bass"; src = pkgs.fishPlugins.bass.src; }

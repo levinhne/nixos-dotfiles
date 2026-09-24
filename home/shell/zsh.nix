@@ -22,6 +22,7 @@ in
       ${shellCommon.posixSecrets}
       ${shellCommon.posixRebuildFunction}
       ${shellCommon.posixRebuildHostFunction}
+      ${shellCommon.posixExposeFunction}
       ${shellCommon.zshInteractiveInit}
     '';
   };

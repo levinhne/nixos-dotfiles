@@ -44,17 +44,13 @@ let
 in
 {
   home.packages = [
-    pkgs.aider-chat
     pkgs.codebase-memory-mcp
     pkgs.direnv
     pkgs.gnumake
-    pkgs.minikube
     pkgs.nom
-    pkgs.repomix
     pkgs.webdiff
     llmPkgs.claude-code
     llmPkgs.crush
-    llmPkgs.opencode
     llmPkgs.antigravity-cli
     llmPkgs.rtk
   ];

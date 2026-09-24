@@ -36,6 +36,7 @@ in
   posixShellAliases = {
     update = "__nixos_rebuild_switch";
     nrs-host = "__nixos_rebuild_host";
+    expose = "__cloudflared_expose";
   };
 
   fishSecrets = builtins.concatStringsSep "\n" (map fishSecretLine secretFiles);
@@ -75,6 +76,30 @@ in
       local hostname="$1"
       shift
       sudo --preserve-env=HOME nixos-rebuild switch --flake ~/nixos-dotfiles#"''${hostname}" "$@"
+    }
+  '';
+
+  fishExposeFunction = ''
+    if test (count $argv) -eq 0
+      echo "Usage: expose <port> [host]"
+      return 1
+    end
+    set -l target_host localhost
+    if test (count $argv) -ge 2
+      set target_host $argv[2]
+    end
+    cloudflared tunnel --url http://$target_host:$argv[1]
+  '';
+
+  posixExposeFunction = ''
+    __cloudflared_expose() {
+      if [ $# -eq 0 ]; then
+        echo "Usage: expose <port> [host]"
+        return 1
+      fi
+      local port="$1"
+      local target_host="''${2:-localhost}"
+      cloudflared tunnel --url "http://''${target_host}:''${port}"
     }
   '';
 
