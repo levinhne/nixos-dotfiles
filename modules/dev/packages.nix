@@ -35,13 +35,6 @@
       # Audio
       pulseaudio
 
-      # Password management
-      gopass
-      age
-
-      # GPG/PGP tools
-      paperkey
-
       # Network tools
       inetutils
       lsof

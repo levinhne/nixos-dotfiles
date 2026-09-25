@@ -34,6 +34,7 @@ in
     ../wm/wpaperd.nix
     ../wm/rofi.nix
     ../dev/git.nix
+    ../dev/gopass.nix
   ];
 
   stylix = {
