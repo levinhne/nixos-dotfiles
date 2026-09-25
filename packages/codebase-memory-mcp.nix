@@ -7,24 +7,24 @@
 }:
 
 let
-  version = "0.10.8";
+  version = "0.11.0";
 
   srcs = {
     x86_64-linux = {
       arch = "linux-amd64";
-      sha256 = "e5cba4cad6ca8254a85f45041fc8a831908d7d5cb64f98fc3f8eb70a58671793";
+      sha256 = "032b33c1833919a2d1de67ff6367fa6ea46aee8689c86ef223c88fae3b6e4536";
     };
     aarch64-linux = {
       arch = "linux-arm64";
-      sha256 = "e2804a20f5a6fc392af361525a232703e351b7d1aacb81b88eef806eec5959fa";
+      sha256 = "c0e46c87cf37e35f1ac0bd9cc7e1d8b0ca4ef40034e1008805d709fa52a4e38a";
     };
     aarch64-darwin = {
       arch = "darwin-arm64";
-      sha256 = "9bd840dfb3ec7eaef4f310382057adaa5b0e904df883104d03ffcf39836afd07";
+      sha256 = "4dee7f38b63740e6751d7a7ed7eb10291c1f2a3ea2415f599dc68370ca0a2d18";
     };
     x86_64-darwin = {
       arch = "darwin-amd64";
-      sha256 = "2b193085410af3801634a522f4b17dcd6699695e015a068393c87817c1d260d4";
+      sha256 = "dbf1c73bfcbde64e7dde4cd1320da7afc02e2c972ee1789ae039521411f5132e";
     };
   };
 
