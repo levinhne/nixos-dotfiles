@@ -96,6 +96,7 @@ let
         // Clipboard
         Mod+V { spawn "sh" "-c" "${clipboard}"; }
         Mod+BackSpace { spawn "tmux-pick"; }
+        Mod+Shift+P { spawn "${common.apps.password}"; }
 
         // Screenshots
         Mod+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'"; }

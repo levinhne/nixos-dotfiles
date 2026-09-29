@@ -33,6 +33,7 @@
     fileManager = "nemo";
     screenshot = "grimblast copy area";
     screenshotFull = "grimblast copy output";
+    password = "gopass-rofi";
     clipboard = "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy";
   };
 }
