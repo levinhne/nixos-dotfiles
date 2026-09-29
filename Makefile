@@ -8,7 +8,7 @@ HOST    ?= $(shell hostname)
 
 .PHONY: help switch boot test build host-switch host-boot host-build \
         check update update-input gc gc-boot repl edit-secrets vm \
-        gopass-init gopass-identity gopass-recipients gopass-remote gopass-sync cloudflared-add
+        gopass-init cloudflared-add
 
 help: ## Hiện danh sách lệnh
 	@grep -E '^[a-zA-Z0-9_-]+:.*##' $(MAKEFILE_LIST) | \
@@ -60,39 +60,28 @@ repl: ## Mở nix repl với flake này đã load sẵn
 	nix repl --expr "builtins.getFlake \"$(FLAKE)\""
 
 # --- Gopass (xem docs/gopass.md) ---
+# Chỉ bootstrap store; lệnh hằng ngày nằm trong Makefile của store: make -C ~/.password-store help
 
-GOPASS_STORE   := ~/.local/share/gopass/stores/root
+GOPASS_STORE   := $(HOME)/.password-store
+GOPASS_REMOTE  ?= ssh://git@codeberg.org/levinhne/password-store.git
 GOPASS_SSH_KEY ?= ~/.ssh/id_ed25519
-# Recipients = user SSH keys trong secrets/keys.nix, đổi sang age1... bằng ssh-to-age.
-GOPASS_KEYS = nix eval --raw --file $(FLAKE)/secrets/keys.nix users \
-	--apply 'u: builtins.concatStringsSep "\n" (builtins.attrValues u)'
 
-# Identity age suy ra từ SSH key (ssh-to-age) -> chỉ cần backup SSH key. Xem docs/gopass.md.
-gopass-init: ## Init store mới, identity từ SSH key: make gopass-init [REMOTE=ssh://git@codeberg.org/...] [GOPASS_SSH_KEY=~/.ssh/id_ed25519]
-	@test ! -e $(GOPASS_STORE) || { echo "Store đã tồn tại: $(GOPASS_STORE)"; exit 1; }
+gopass-init: ## Setup gopass store ~/.password-store (remote có dữ liệu -> clone, trống -> init mới): make gopass-init [GOPASS_SSH_KEY=...]
+	@test ! -e $(GOPASS_STORE)/.age-recipients || { echo "Store đã setup: $(GOPASS_STORE)"; exit 1; }
 	gopass-ssh-identity $(GOPASS_SSH_KEY)
-	gopass init --crypto age --storage gitfs "$$(ssh-to-age -i $(GOPASS_SSH_KEY).pub)"
-	$(MAKE) gopass-recipients
-	@if [ -n "$(REMOTE)" ]; then $(MAKE) gopass-remote REMOTE=$(REMOTE); fi
-
-gopass-identity: ## Thêm identity từ SSH key vào gopass (máy mới / đổi key): make gopass-identity [GOPASS_SSH_KEY=...]
-	gopass-ssh-identity $(GOPASS_SSH_KEY)
-
-gopass-recipients: ## Thêm mọi user key trong secrets/keys.nix làm recipient (re-encrypt store)
-	@keys=$$($(GOPASS_KEYS)) || exit 1; \
-	printf '%s\n' "$$keys" | while read -r k; do \
-		[ -n "$$k" ] || continue; \
-		r=$$(printf '%s\n' "$$k" | ssh-to-age); \
-		grep -qxF "$$r" $(GOPASS_STORE)/.age-recipients && continue; \
-		echo "+ $$r ($${k##* })"; gopass --yes recipients add "$$r" </dev/tty; \
-	done
-
-gopass-remote: ## Set git remote cho store rồi push lần đầu: make gopass-remote REMOTE=ssh://git@codeberg.org/user/repo.git
-	gopass git remote add origin $(REMOTE)
-	gopass git push -u origin main
-
-gopass-sync: ## Sync gopass store với git remote (pull + push)
-	gopass sync
+	@if git ls-remote --exit-code --heads $(GOPASS_REMOTE) >/dev/null 2>&1; then \
+		echo "Remote có dữ liệu -> clone"; \
+		test ! -e $(GOPASS_STORE) || mv $(GOPASS_STORE) $(GOPASS_STORE).bak.$$(date +%s); \
+		gopass clone --crypto age --path $(GOPASS_STORE) $(GOPASS_REMOTE); \
+	else \
+		echo "Remote trống -> init mới"; \
+		gopass init --crypto age --storage gitfs --path $(GOPASS_STORE) "$$(ssh-to-age -i $(GOPASS_SSH_KEY).pub)"; \
+		git -C $(GOPASS_STORE) remote get-url origin >/dev/null 2>&1 || git -C $(GOPASS_STORE) remote add origin $(GOPASS_REMOTE); \
+		cp $(FLAKE)/scripts/gopass-store.mk $(GOPASS_STORE)/Makefile; \
+		git -C $(GOPASS_STORE) add Makefile && git -C $(GOPASS_STORE) commit -m "Add Makefile"; \
+		git -C $(GOPASS_STORE) push -u origin main; \
+	fi
+	gopass config age.agent-enabled true
 
 # --- Cloudflared ---
 

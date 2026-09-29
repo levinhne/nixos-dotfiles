@@ -7,7 +7,7 @@ Password manager cá nhân, backend **age** (không dùng GPG), store là git re
   script `gopass-ssh-identity`.
 - Browser: Chrome + extension [Gopass Bridge](https://chrome.google.com/webstore/detail/gopass-bridge/kkhfnlkhiapbiehimabddjbimfaijdhk);
   native-messaging manifest + wrapper do home-manager sinh ra.
-- Store: `~/.local/share/gopass/stores/root`
+- Store: `~/.password-store` (có `Makefile` riêng: `make -C ~/.password-store help`)
 - Identity: `~/.config/gopass/age/identities` (age, mã hoá bằng passphrase gopass).
 
 ## Identity suy ra từ SSH key
@@ -23,42 +23,34 @@ tất định:
 `gopass-ssh-identity [key]` hỏi passphrase SSH, suy ra identity và **gộp** vào file identities
 (không ghi đè identity cũ), rồi in recipient `age1...`.
 
-Recipients của store = các user key trong `secrets/keys.nix` (dùng chung với agenix). Vì vậy:
+Recipients quản lý trong store (`.age-recipients`), không phụ thuộc `secrets/keys.nix`. Vì vậy:
 
-- **Chỉ cần backup SSH key** (+ passphrase của nó). Mất file identities thì chạy lại `make gopass-identity`.
-- Thêm máy/user = thêm SSH key vào `secrets/keys.nix` rồi `make gopass-recipients`.
+- **Chỉ cần backup SSH key** (+ passphrase của nó). Mất file identities thì chạy lại `make identity`.
+- Thêm máy/user = `make add KEY=...` (nhận `age1...`, `"ssh-ed25519 ..."` hoặc file `.pub`).
 - Đánh đổi: một key dùng cho SSH + agenix + gopass — lộ key là lộ cả ba. Chỉ hỗ trợ ed25519.
 
-## Setup máy đầu tiên
+## Setup (máy đầu tiên hoặc máy mới)
 
 ```bash
-# Repo private trống trên Codeberg, rồi:
-make gopass-init REMOTE=ssh://git@codeberg.org/levinhne/password-store.git
+make gopass-init           # trong ~/nixos-dotfiles
 ```
 
-Prompt lần lượt: passphrase SSH key → đặt passphrase gopass (2 lần) → mở identity khi re-encrypt
-(passphrase gopass). `gopass-init` = `gopass-ssh-identity` + `gopass init <age1 của máy này>`
-+ `gopass-recipients` + `gopass-remote`.
+Identity từ SSH key, rồi: remote có dữ liệu → `gopass clone` vào `~/.password-store`; remote trống →
+`gopass init --path ~/.password-store`, chép `scripts/gopass-store.mk` vào store, commit, push.
+Cuối cùng bật age agent. Máy mới dùng SSH key khác thì trước đó phải `make add KEY=...` ở máy đọc
+được store. Makefile của store được track trong store; `scripts/gopass-store.mk` chỉ là bản gốc để init.
 
-## Thêm máy thứ hai
+## Thêm máy / recipient
 
-SSH key của máy đó phải có trong `secrets/keys.nix` → `users` (và `make gopass-recipients` đã chạy ở
-máy đang đọc được store, rồi `gopass sync`). Trên máy mới:
+Trên máy đang đọc được store:
 
 ```bash
-make gopass-identity
-gopass clone ssh://git@codeberg.org/levinhne/password-store.git
+make -C ~/.password-store add KEY=~/path/to/new.pub   # hoặc KEY=age1... (age thuần)
+make -C ~/.password-store sync
 ```
 
-## Chuyển store đang dùng age key riêng của gopass sang SSH key
-
-```bash
-make gopass-identity                 # thêm identity từ SSH key (giữ identity cũ)
-make gopass-recipients               # thêm recipients từ secrets/keys.nix + re-encrypt
-gopass recipients remove age1...     # (tuỳ chọn) bỏ key age cũ khỏi recipients
-gopass age identities rm             # (tuỳ chọn) bỏ key age cũ khỏi identities
-gopass sync
-```
+Trên máy mới: `make gopass-init` (SSH key). Age thuần: `gopass age identities keygen` rồi
+`gopass clone --crypto age --path ~/.password-store <remote>`.
 
 ## Dùng hằng ngày
 
@@ -71,7 +63,7 @@ gopass show -c website.com/user user  # copy field "user"
 gopass otp -c website.com/user        # copy mã TOTP
 gopass ls / gopass find github
 gopass rm website.com/user
-gopass sync                           # hoặc: make gopass-sync
+gopass sync                           # hoặc: make -C ~/.password-store sync
 ```
 
 ## Backup
@@ -84,7 +76,7 @@ gopass sync                           # hoặc: make gopass-sync
 
 | Lỗi | Nguyên nhân / cách xử lý |
 |-----|--------------------------|
-| `no identity matched any of the recipients` | Chưa có identity → `make gopass-identity`; hoặc key máy này chưa là recipient → `make gopass-recipients` ở máy đọc được store |
+| `no identity matched any of the recipients` | Chưa có identity → `make identity`; hoặc key máy này chưa là recipient → `make add KEY=...` ở máy đọc được store |
 | `incorrect passphrase` | Nhập nhầm passphrase gopass (khác passphrase SSH) |
 | `Không đọc được ... (sai passphrase hoặc không phải ed25519)` | Sai passphrase SSH, hoặc key RSA |
 | Extension không thấy gopass | `nrs`, restart Chrome, kiểm tra `~/.config/google-chrome/NativeMessagingHosts/com.justwatch.gopass.json` |

@@ -1,4 +1,4 @@
-# SSH public keys dùng chung cho agenix (secrets.nix) và gopass (Makefile: gopass-recipients).
+# SSH public keys dùng cho agenix (secrets.nix).
 {
   users = {
     levinhne = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJDpYkROoGtsZVYiPmNTJVrRMColvfcNR8maWyLXYMK levinh.dev@gmail.com";
