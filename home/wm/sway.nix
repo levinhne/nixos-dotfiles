@@ -329,6 +329,12 @@ in
     # Pin new windows to the edge instead of centering them when they fit the viewport.
     center_horizontal_if_fits false
     center_vertical_if_fits false
+
+    # Same width presets as niri, allowing columns wider than the viewport (up to 200%).
+    layout_widths [0.33333333 0.5 0.666666667 1.0 1.5 2.0]
+    mouse_resize_tiling_limit false
+    bindsym Mod4+Shift+r cycle_size h next
+    bindsym Mod4+Ctrl+r cycle_size h prev
   '';
 
   services.swayidle = {

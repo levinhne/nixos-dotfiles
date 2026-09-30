@@ -51,6 +51,8 @@ let
             proportion 0.5
             proportion 0.66667
             proportion 1.0
+            proportion 1.5
+            proportion 2.0
         }
         
         default-column-width { proportion 0.5; }
@@ -141,7 +143,7 @@ let
         // Column width adjustment
         Mod+Minus { set-column-width "-10%"; }
         Mod+Equal { set-column-width "+10%"; }
-        Mod+R { switch-preset-column-width; }  // Cycle: 33% -> 50% -> 66% -> 100% -> 33% ...
+        Mod+R { switch-preset-column-width; }  // Cycle: 33% -> 50% -> 66% -> 100% -> 150% -> 200% -> 33% ...
 
         // Quit
         Mod+Shift+E { quit; }
