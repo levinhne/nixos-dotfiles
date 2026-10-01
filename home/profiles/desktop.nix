@@ -28,6 +28,8 @@ in
     ../terminal/kitty.nix
     ../wm/kanshi.nix
     ../wm/sway.nix
+    ../wm/sway-variants.nix
+    ../wm/scripts.nix
     ../wm/niri.nix
     ../wm/waybar.nix
     ../wm/mako.nix

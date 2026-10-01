@@ -9,4 +9,8 @@ result-*
 # Uncomment if needed:
 # hosts/*/hardware-configuration.nix
 .gitnexus
-config/
+
+# Runtime state written into symlinked config dirs (see home/core/default.nix)
+config/fcitx/dbus/
+config/qutebrowser/bookmarks/
+config/qutebrowser/quickmarks

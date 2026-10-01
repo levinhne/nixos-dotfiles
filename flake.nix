@@ -29,6 +29,8 @@
       mkHost = import ./lib/mkHost.nix { inherit inputs nixpkgs; };
     in
     {
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+
       nixosConfigurations = {
         nixos-levinhne = mkHost {
           hostname = "nixos-levinhne";

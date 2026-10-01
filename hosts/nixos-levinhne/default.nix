@@ -1,4 +1,4 @@
-{ hostname, ... }:
+{ ... }:
 
 {
   imports = [
@@ -7,8 +7,6 @@
     ../common/desktop.nix
     ./cloudflared.nix
   ];
-
-  networking.hostName = hostname;
 
   system.stateVersion = "25.11";
 }

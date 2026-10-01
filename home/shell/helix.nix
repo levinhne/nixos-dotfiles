@@ -1,7 +1,6 @@
 { lib, pkgs, config, fonts, ... }:
 
 let
-  p = config.lib.stylix.colors;
   c = config.lib.stylix.colors.withHashtag;
   helixThemeName = "base16-sync";
 in

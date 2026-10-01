@@ -23,4 +23,5 @@ in
   "fpt-api-key.age".publicKeys = allKeys;
 
   # Host-specific secrets (chỉ cho 1 máy)
+  "cloudflared-nixos-vinhlq21.age".publicKeys = allUsers ++ [ nixos-vinhlq21 ];
 }

@@ -7,7 +7,7 @@ HOST    ?= $(shell hostname)
 .DEFAULT_GOAL := help
 
 .PHONY: help switch boot test build host-switch host-boot host-build \
-        check update update-input gc gc-boot repl edit-secrets vm \
+        check fmt lint update update-input gc gc-boot repl edit-secrets vm \
         gopass-init cloudflared-add
 
 help: ## Hiện danh sách lệnh
@@ -40,6 +40,13 @@ vm: ## Build và chạy thử trong VM (nixos-rebuild build-vm)
 
 check: ## Kiểm tra flake có lỗi cú pháp/eval không
 	nix flake check $(FLAKE)
+
+fmt: ## Format toàn bộ file .nix (nix fmt -> nixpkgs-fmt)
+	cd $(FLAKE) && nix fmt .
+
+lint: ## Tìm anti-pattern (statix) + code chết (deadnix)
+	nix run nixpkgs#statix -- check $(FLAKE)
+	nix run nixpkgs#deadnix -- --fail $(FLAKE)
 
 update: ## Update toàn bộ flake inputs
 	nix flake update --flake $(FLAKE)

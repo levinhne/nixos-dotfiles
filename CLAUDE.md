@@ -18,6 +18,10 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-levinhne
 # Check flake for syntax errors (before applying)
 nix flake check
 
+# Format / lint
+make fmt    # nix fmt (nixpkgs-fmt)
+make lint   # statix + deadnix
+
 # Update flake inputs
 nix flake update
 
@@ -35,7 +39,7 @@ sudo nix-collect-garbage -d   # or: clean
 3. **Home-manager** pointed at `home/default.nix`, which imports `home/profiles/desktop.nix`
 
 Two special package sets flow through `specialArgs`/`extraSpecialArgs`:
-- `pkgs` — stable nixpkgs (nixos-25.11)
+- `pkgs` — stable nixpkgs (nixos-26.05)
 - `pkgs-unstable` — nixos-unstable, for packages that need newer versions
 
 ### Host Configuration Layer
@@ -46,10 +50,12 @@ hosts/
     base.nix      # system modules: boot, nix, networking, user, secrets, ssh, docker
     desktop.nix   # desktop modules: audio, bluetooth, display-manager, fonts, niri, sway, fcitx5
   nixos-levinhne/ # personal laptop
-  nixos-vinhlq21/ # work laptop
+  nixos-vinhlq21/ # work laptop (+ office.nix: proxy + corporate CA)
 ```
 
-Each host `default.nix` imports `common/base.nix` + `common/desktop.nix` + host-specific overrides.
+Each host `default.nix` imports `common/base.nix` + `common/desktop.nix` + host-specific overrides (e.g. `cloudflared.nix`). `networking.hostName` is set by `mkHost`.
+
+`nixos-vinhlq21` references `/etc/ssl/certs/office-ca.pem` outside the flake, so evaluating it needs `--impure`.
 
 ### Home-manager Layer
 
@@ -59,11 +65,11 @@ home/
   core/                  # base packages, GTK, xdg
   shell/                 # fish, bash, zsh, neovim, helix, tmux
   terminal/              # kitty, foot
-  wm/                    # sway, niri, waybar, mako, kanshi, wpaperd
-  dev/                   # git, tools, claude-code, crush, k9s, opencode
+  wm/                    # sway (+ sway-variants: swayfx/scroll), niri, waybar, mako, kanshi, wpaperd, rofi, scripts
+  dev/                   # git, gopass, tools (crush config, llm-agents CLIs), claude-code, engram, k9s, zed
 ```
 
-`home/shell/common.nix` is the single source of truth for shell aliases and rebuild functions — fish, bash, and zsh all import from it.
+`home/shell/common.nix` is the single source of truth for shell aliases and rebuild functions — fish, bash, and zsh all import from it. `home/wm/common.nix` plays the same role for terminal/launcher/app commands and startup programs shared by sway and niri.
 
 ### Theme System
 
@@ -75,16 +81,16 @@ Fonts are defined as a local `fonts` attrset in `desktop.nix` and passed via `_m
 
 Secrets are encrypted `.age` files in `secrets/`. Declared in `modules/system/secrets.nix` and decrypted at boot to `/run/agenix/<name>`.
 
-Shell init (`home/shell/common.nix`) reads from `/run/agenix/` and exports as env vars (e.g. `ANTHROPIC_AUTH_TOKEN`, `FPT_API_KEY`).
+Shell init (`home/shell/common.nix`) reads from `/run/agenix/` and exports as env vars (currently `FPT_API_KEY`).
 
 To add a new secret:
 1. Add public keys to `secrets/secrets.nix`, then `agenix -e secrets/my-secret.age`
-2. Declare in `modules/system/secrets.nix`
+2. Declare in `modules/system/secrets.nix` (shared) or in the host's own file for host-only secrets (e.g. `hosts/nixos-vinhlq21/cloudflared.nix`)
 3. Export in `home/shell/common.nix` → `secretFiles` list if it needs to be an env var
 
 ### Raw Config Files
 
-`config/` contains raw config files (nvim, kitty, sway, waybar, etc.) managed via `home.file` or `xdg.configFile` in the corresponding home-manager modules. Neovim uses lazy.nvim.
+`config/` holds apps that write their own config at runtime (qutebrowser, fcitx5): `home/core/default.nix` symlinks them out-of-store into `~/.config`, so edits land back in the repo. Everything else is generated from Nix (`xdg.configFile`/`programs.*`). Neovim Lua config lives in `home/shell/nvim/` (NvChad + lazy.nvim).
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
@@ -320,3 +326,10 @@ rtk init --global       # Add RTK to ~/.claude/CLAUDE.md
 
 Overall average: **60-90% token reduction** on common development operations.
 <!-- /rtk-instructions -->
+
+<!-- entire-graph:begin -->
+This repo has the entire-graph code graph installed. Before exploring code with
+grep/find/whole-file reads, read .entire/graph-agent.md — resolution-first guidance
+for using graph retrieval, focused source inspection, and verification.
+@.entire/graph-agent.md
+<!-- entire-graph:end -->

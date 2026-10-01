@@ -1,7 +1,5 @@
 # Common configuration for window managers (Sway and Niri)
 # Contains shared settings like rofi config and startup programs
-{ pkgs, fonts, palette, paletteWithHash }:
-
 {
   # Common applications
   terminal = "kitty";

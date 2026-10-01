@@ -2,15 +2,11 @@
 
 {
   # Cloudflare Tunnel configuration
-  # TODO: Move credentials to agenix secrets for better security
-  # Example:
-  #   1. Encrypt: agenix -e secrets/cloudflared-levinhne.age
-  #   2. Declare in modules/system/secrets.nix:
-  #      age.secrets.cloudflared-levinhne = {
-  #        file = ../secrets/cloudflared-levinhne.age;
-  #        owner = config.mySystem.userName;
-  #      };
-  #   3. Use: credentialsFile = config.age.secrets.cloudflared-levinhne.path;
+  # TODO: chuyển credentials sang agenix giống nixos-vinhlq21/cloudflared.nix:
+  #   1. secrets/secrets.nix: "cloudflared-nixos-levinhne.age".publicKeys = allUsers ++ [ nixos-levinhne ];
+  #   2. cd secrets && agenix -e cloudflared-nixos-levinhne.age < ~/.cloudflared/<tunnel-id>.json
+  #   3. age.secrets.cloudflared-nixos-levinhne.file = ../../secrets/cloudflared-nixos-levinhne.age;
+  #      credentialsFile = config.age.secrets.cloudflared-nixos-levinhne.path;
 
   services.cloudflared = {
     enable = true;

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   # Đảm bảo kanshi start sau khi Wayland compositor đã sẵn sàng

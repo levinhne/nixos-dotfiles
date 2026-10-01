@@ -27,10 +27,9 @@ in
     google-chrome
     firefox
     wpaperd
-vscode
+    vscode
     git-extras
     pkgs-unstable.codex
-    k9s
     kubectl
     podman-tui
     nixpkgs-fmt

@@ -27,7 +27,10 @@ nixpkgs.lib.nixosSystem {
     agenix.nixosModules.default
     ./../hosts/${hostname}/disko.nix
     ./../hosts/${hostname}/default.nix
-    { mySystem.userName = username; }
+    {
+      networking.hostName = hostname;
+      mySystem.userName = username;
+    }
     home-manager.nixosModules.home-manager
     {
       home-manager = {
