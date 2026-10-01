@@ -53,6 +53,7 @@ in
     llmPkgs.crush
     llmPkgs.antigravity-cli
     llmPkgs.rtk
+    llmPkgs.entire
   ];
 
   xdg.configFile."crush/crush.json".text = builtins.toJSON crushConfig;
