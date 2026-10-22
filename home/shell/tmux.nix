@@ -92,6 +92,10 @@
 
       set -g renumber-windows on
 
+      # Name windows after the active pane's directory (follows cd)
+      set -g automatic-rename on
+      set -g automatic-rename-format "#{b:pane_current_path}"
+
       # --- Alt (no prefix) ---
       bind -n M-n new-window -c "#{pane_current_path}"
       bind -n M-H previous-window
