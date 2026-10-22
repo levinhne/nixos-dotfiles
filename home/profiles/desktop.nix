@@ -30,6 +30,7 @@ in
     ../wm/sway.nix
     ../wm/sway-variants.nix
     ../wm/scripts.nix
+    ../wm/vpn.nix
     ../wm/niri.nix
     ../wm/waybar.nix
     ../wm/mako.nix
@@ -37,6 +38,7 @@ in
     ../wm/rofi.nix
     ../dev/git.nix
     ../dev/gopass.nix
+    ../dev/vscode-tunnel.nix
   ];
 
   stylix = {

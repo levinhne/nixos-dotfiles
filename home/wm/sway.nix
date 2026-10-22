@@ -150,6 +150,8 @@ in
           # Utilities
           "${modifier}+v" = "exec ${clipboard}";
           "${modifier}+Shift+p" = "exec ${common.apps.password}";
+          "${modifier}+Shift+o" = "exec ${common.apps.vpn}";
+          "${modifier}+Shift+b" = "exec ${common.apps.bluetooth}";
           "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
 
           # Window Management

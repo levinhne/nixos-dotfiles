@@ -55,10 +55,16 @@
     python3
     go
     gotools
+    cargo
+    rustc
+    rustfmt
+    clippy
+    lldb
 
     lua-language-server
     gopls
     golangci-lint-langserver
+    rust-analyzer
     pyright
     typescript
     typescript-language-server

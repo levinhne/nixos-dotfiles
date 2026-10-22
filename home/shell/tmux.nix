@@ -1,4 +1,20 @@
 # Tmux configuration with Dracula theme
+#
+# Keys are chosen to not clash with nvim (NvChad), kitty and fish:
+#   - Super      → window manager (niri/sway)
+#   - Ctrl+Shift → kitty
+#   - Alt        → tmux (no prefix), except NvChad's A-h/A-v/A-i terminals
+#   - Ctrl+hjkl  → seamless pane/split navigation shared with nvim
+#                  (vim-tmux-navigator on both sides)
+#
+# Alt (no prefix):
+#   M-n new window      M-1..9 go to window   M-H/M-L prev/next window
+#   M-Tab last window   M-\ split right       M-- split down
+#   M-z zoom pane       M-x kill pane         M-y copy mode
+#   M-w session/window tree
+#
+# Prefix (M-a) for rarer actions: H/J/K/L resize, r reload, C-l clear screen,
+# d detach, , rename window, $ rename session, F tmux-fzf
 { pkgs, ... }:
 
 {
@@ -7,9 +23,12 @@
     shell = "${pkgs.fish}/bin/fish";
     terminal = "tmux-256color";
     mouse = true;
-    prefix = "C-a";
+    prefix = "M-a";
     baseIndex = 1;
     keyMode = "vi";
+    escapeTime = 10;
+    focusEvents = true;
+    historyLimit = 50000;
 
     plugins = with pkgs.tmuxPlugins; [
       sensible
@@ -61,41 +80,31 @@
     ];
 
     extraConfig = ''
-      set -ga terminal-overrides ",*:RGB"
+      # Truecolor + undercurl (nvim diagnostics) for kitty/foot
+      set -as terminal-features ",*:RGB:usstyle"
       set -g set-clipboard on
+      set -g allow-passthrough on
 
-      # Vim like pane selection
-      bind h select-pane -L
-      bind j select-pane -D
-      bind k select-pane -U
-      bind l select-pane -R
+      # Forward modified keys (C-CR, C-, ...) so nvim/fish see them inside tmux
+      set -as terminal-features ",xterm-kitty:extkeys,foot:extkeys"
+      set -g extended-keys on
+      set -g extended-keys-format csi-u
 
-      unbind %
-      bind | split-window -h -c "#{pane_current_path}"
+      set -g renumber-windows on
 
-      unbind '"'
-      bind - split-window -v -c "#{pane_current_path}"
+      # --- Alt (no prefix) ---
+      bind -n M-n new-window -c "#{pane_current_path}"
+      bind -n M-H previous-window
+      bind -n M-L next-window
+      bind -n M-Tab last-window
 
-      unbind r
-      bind r source-file $HOME/.config/tmux/tmux.conf
+      bind -n 'M-\' split-window -h -c "#{pane_current_path}"
+      bind -n M-- split-window -v -c "#{pane_current_path}"
+      bind -n M-z resize-pane -Z
+      bind -n M-x confirm-before -p "kill-pane #P? (y/n)" kill-pane
+      bind -n M-y copy-mode
+      bind -n M-w choose-tree -Zw
 
-      # Pane base index
-      # set -g pane-base-index 1
-      # set-window-option -g pane-base-index 1
-
-      # Vim-like copy/paste
-      bind-key -T copy-mode-vi v send-keys -X begin-selection
-      bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
-      bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
-      unbind -T copy-mode-vi MouseDragEnd1Pane
-
-      # Alt+hjkl to switch panes (vim-style)
-      bind -n M-h select-pane -L
-      bind -n M-j select-pane -D
-      bind -n M-k select-pane -U
-      bind -n M-l select-pane -R
-
-      # Alt+number to select window
       bind -n M-1 select-window -t 1
       bind -n M-2 select-window -t 2
       bind -n M-3 select-window -t 3
@@ -105,6 +114,36 @@
       bind -n M-7 select-window -t 7
       bind -n M-8 select-window -t 8
       bind -n M-9 select-window -t 9
+
+      # --- Prefix ---
+      bind c new-window -c "#{pane_current_path}"
+
+      unbind %
+      bind | split-window -h -c "#{pane_current_path}"
+      unbind '"'
+      bind - split-window -v -c "#{pane_current_path}"
+
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
+
+      bind -r H resize-pane -L 5
+      bind -r J resize-pane -D 5
+      bind -r K resize-pane -U 5
+      bind -r L resize-pane -R 5
+
+      # C-l is taken by vim-tmux-navigator
+      bind C-l send-keys C-l
+
+      unbind r
+      bind r source-file $HOME/.config/tmux/tmux.conf \; display "tmux.conf reloaded"
+
+      # Vim-like copy/paste
+      bind-key -T copy-mode-vi v send-keys -X begin-selection
+      bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
+      bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
+      unbind -T copy-mode-vi MouseDragEnd1Pane
     '';
   };
 }

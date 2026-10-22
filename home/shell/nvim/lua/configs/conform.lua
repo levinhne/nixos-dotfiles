@@ -4,6 +4,7 @@ local options = {
     css = { "prettier" },
     html = { "prettier" },
     go = { "goimports", "gofmt" },
+    rust = { "rustfmt" },
     python = { "isort", "black" },
     sql = { "sql-formatter" },
   },
