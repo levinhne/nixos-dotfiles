@@ -17,4 +17,6 @@ final: prev: {
   webdiff = final.callPackage ../packages/webdiff.nix { };
   lazy-tmux = final.callPackage ../packages/lazy-tmux.nix { };
   scroll = final.callPackage ../packages/scroll.nix { };
+  freerdp-fci = final.callPackage ../packages/freerdp-fci.nix { };
+  fcdclient = final.callPackage ../packages/fcdclient.nix { };
 }

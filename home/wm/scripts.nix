@@ -3,6 +3,9 @@
 
 {
   home.packages = [
+    # Mod+Shift+B: Bluetooth menu via rofi (power, scan, pair/trust/connect devices)
+    pkgs.rofi-bluetooth
+
     # Mod+BackSpace: pick a tmux session via rofi and attach it in kitty
     (pkgs.writeShellScriptBin "tmux-pick" ''
       sessions=$(tmux list-sessions -F "#{session_name}: #{session_windows} windows [#{session_attached} attached]" 2>/dev/null)

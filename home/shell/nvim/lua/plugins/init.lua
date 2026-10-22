@@ -63,6 +63,7 @@ return {
 
   -- lang
   { import = "plugins.lang.go" },
+  { import = "plugins.lang.rust" },
 
   -- ai 
   { import = "plugins.ai.copilot"},
@@ -73,5 +74,6 @@ return {
 
   -- tools 
   { import = "plugins.tools.fzf" }, 
-  { import = "plugins.tools.zoxide" }
+  { import = "plugins.tools.zoxide" },
+  { import = "plugins.tools.tmux-navigator" }
 }

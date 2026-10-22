@@ -30,6 +30,7 @@ in
     ga = "git add";
     gc = "git commit";
     gp = "git push";
+    claude = "claude-switch work";
   };
 
   # Extra aliases for posix shells (bash, zsh) — call the shell functions defined via *InteractiveInit

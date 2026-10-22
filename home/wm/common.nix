@@ -32,6 +32,8 @@
     screenshot = "grimblast copy area";
     screenshotFull = "grimblast copy output";
     password = "gopass-rofi";
+    vpn = "vpn-rofi";
+    bluetooth = "rofi-bluetooth";
     clipboard = "cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy";
   };
 }

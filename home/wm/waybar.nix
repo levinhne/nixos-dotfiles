@@ -1,7 +1,8 @@
-{ config, pkgs, ... }:
+{ config, lib, osConfig, pkgs, ... }:
 
 let
   p = config.lib.stylix.colors.withHashtag;
+  vpnEnabled = osConfig.programs.openvpn3.enable or false;
   waybarForCurrentWm = pkgs.writeShellScript "waybar-current-wm" ''
     if [ -n "''${SWAYSOCK:-}" ]; then
       exec ${pkgs.waybar}/bin/waybar -c "$HOME/.config/waybar/config-sway.jsonc" -s "$HOME/.config/waybar/style.css"
@@ -106,9 +107,18 @@ let
       path = "/";
       on-click = "kitty -e gdu /";
     };
+
+    # Scripts từ home/wm/vpn.nix; vpn-rofi gửi SIGRTMIN+8 để cập nhật ngay
+    "custom/vpn" = {
+      exec = "vpn-status";
+      return-type = "json";
+      interval = 5;
+      signal = 8;
+      on-click = "vpn-rofi";
+    };
   };
 
-  commonModulesRight = [
+  commonModulesRight = lib.optional vpnEnabled "custom/vpn" ++ [
     "pulseaudio"
     "network"
     "cpu"
@@ -138,7 +148,7 @@ in
 
       #custom-arch, #mode, #clock, #cpu,
       #memory, #temperature, #battery, #network, #pulseaudio,
-      #backlight, #disk, #custom-uptime,
+      #backlight, #disk, #custom-uptime, #custom-vpn,
       #idle_inhibitor, #tray {
           padding: 0 10px;
           margin: 0 2px;
@@ -263,6 +273,20 @@ in
       #custom-uptime {
           color: ${base0B};
           border-bottom-color: ${base0B};
+      }
+
+      #custom-vpn {
+          color: ${base03};
+      }
+
+      #custom-vpn.connected {
+          color: ${base0B};
+          border-bottom-color: ${base0B};
+      }
+
+      #custom-vpn.connecting, #custom-vpn.auth {
+          color: ${base0A};
+          border-bottom-color: ${base0A};
       }
 
       #idle_inhibitor {

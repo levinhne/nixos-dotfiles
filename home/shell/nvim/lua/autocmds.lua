@@ -16,3 +16,11 @@ for _, language in ipairs(languages) do
   })
 end
 
+
+-- Neovim >= 0.11 default TermOpen sets signcolumn=no, which removes NvTerm's left padding
+-- (NvChad/ui#7a8e9db). Runs after the default nvim.terminal autocmd, so it wins.
+autocmd("TermOpen", {
+  callback = function()
+    vim.wo[0][0].signcolumn = "yes"
+  end,
+})
