@@ -50,12 +50,10 @@ hosts/
     base.nix      # system modules: boot, nix, networking, user, secrets, ssh, docker
     desktop.nix   # desktop modules: audio, bluetooth, display-manager, fonts, niri, sway, fcitx5
   nixos-levinhne/ # personal laptop
-  nixos-vinhlq21/ # work laptop (+ office.nix: proxy + corporate CA)
+  nixos-vinhlq21/ # work laptop (+ cloudflared, openvpn3, fcdclient)
 ```
 
 Each host `default.nix` imports `common/base.nix` + `common/desktop.nix` + host-specific overrides (e.g. `cloudflared.nix`). `networking.hostName` is set by `mkHost`.
-
-`nixos-vinhlq21` references `/etc/ssl/certs/office-ca.pem` outside the flake, so evaluating it needs `--impure`.
 
 ### Home-manager Layer
 

@@ -6,7 +6,6 @@
     ../common/base.nix
     ../common/desktop.nix
     ./cloudflared.nix
-    ./office.nix
     ./fcdclient.nix
     ./openvpn3.nix
   ];
