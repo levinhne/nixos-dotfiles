@@ -149,7 +149,7 @@ in
       #custom-arch, #mode, #clock, #cpu,
       #memory, #temperature, #battery, #network, #pulseaudio,
       #backlight, #disk, #custom-uptime, #custom-vpn,
-      #idle_inhibitor, #tray {
+      #scratchpad, #idle_inhibitor, #tray {
           padding: 0 10px;
           margin: 0 2px;
           border-bottom: 2px solid transparent;
@@ -289,6 +289,11 @@ in
           border-bottom-color: ${base0A};
       }
 
+      #scratchpad {
+          color: ${base0A};
+          border-bottom-color: ${base0A};
+      }
+
       #idle_inhibitor {
           color: ${base05};
           border-bottom-color: transparent;
@@ -360,7 +365,7 @@ in
         "sway/window"
       ];
 
-      modules-right = [ "sway/mode" ] ++ commonModulesRight;
+      modules-right = [ "sway/mode" "sway/scratchpad" ] ++ commonModulesRight;
 
       "sway/workspaces" = {
         disable-scroll = true;
@@ -384,6 +389,14 @@ in
 
       "sway/mode" = {
         format = "<span style=\"italic\">{}</span>";
+      };
+
+      # Hidden (scratchpad) window count; hidden when empty, click to cycle.
+      "sway/scratchpad" = {
+        format = "󰈉 {count}";
+        show-empty = false;
+        tooltip-format = "{app}: {title}";
+        on-click = "swaymsg scratchpad show";
       };
     })
   ];

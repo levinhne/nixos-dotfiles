@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../modules/desktop/aic8800.nix
     ../../modules/desktop/audio.nix
     ../../modules/desktop/bluetooth.nix
     ../../modules/desktop/display-manager.nix

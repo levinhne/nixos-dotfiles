@@ -11,6 +11,7 @@
     ../../modules/system/user.nix
     ../../modules/system/secrets.nix
     ../../modules/services/ssh.nix
+    ../../modules/services/tailscale.nix
     ../../modules/dev/docker.nix
     ../../modules/dev/packages.nix
   ];

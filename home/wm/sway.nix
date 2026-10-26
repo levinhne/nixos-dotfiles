@@ -58,6 +58,12 @@ let
       ${pkgs.sway}/bin/swaymsg 'output * power on' && exit 0
     fi
   '';
+  # Toggle the dropdown terminal; swaymsg exits non-zero ("No matching node")
+  # when it isn't running yet, so launch it then.
+  dropdownToggle = pkgs.writeShellScript "sway-dropdown-toggle" ''
+    ${pkgs.sway}/bin/swaymsg -q '[app_id="^dropdown$"] scratchpad show' \
+      || exec ${terminal} --class dropdown
+  '';
 in
 {
   # Sway-related packages
@@ -133,8 +139,18 @@ in
           criteria = { app_id = "^(mpv)$"; };
         }
         {
+          # Chrome PiP opens with the browser's app_id, so match by title instead.
+          command = "floating enable, sticky enable";
+          criteria = { title = "(?i)^picture[- ]in[- ]picture$"; };
+        }
+        {
+          # Dropdown terminal lives in the scratchpad, toggled by Mod+grave.
+          command = "floating enable, resize set 80 ppt 60 ppt, move scratchpad, scratchpad show, move position center";
+          criteria = { app_id = "^dropdown$"; };
+        }
+        {
           command = "exec fcitx5-remote -c";
-          criteria = { app_id = "^(kitty|foot)$"; };
+          criteria = { app_id = "^(kitty|foot|dropdown)$"; };
         }
       ];
 
@@ -157,7 +173,7 @@ in
           # Window Management
           "${modifier}+Shift+w" = "exec rofi -show window";
           "${modifier}+w" = "kill";
-          "${modifier}+a" = "exec sticky enable";
+          "${modifier}+a" = "sticky toggle";
           "${modifier}+t" = "floating toggle";
           "${modifier}+f" = "fullscreen";
           # "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
@@ -197,6 +213,7 @@ in
           # Scratchpad
           "${modifier}+Shift+minus" = "move scratchpad";
           "${modifier}+minus" = "scratchpad show";
+          "${modifier}+grave" = "exec ${dropdownToggle}";
 
           # Resize mode
           "${modifier}+r" = "mode resize";
