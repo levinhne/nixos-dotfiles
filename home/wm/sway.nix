@@ -133,6 +133,11 @@ in
           criteria = { app_id = "^(mpv)$"; };
         }
         {
+          # Chrome PiP opens with the browser's app_id, so match by title instead.
+          command = "floating enable, sticky enable";
+          criteria = { title = "(?i)^picture[- ]in[- ]picture$"; };
+        }
+        {
           command = "exec fcitx5-remote -c";
           criteria = { app_id = "^(kitty|foot)$"; };
         }
@@ -157,7 +162,7 @@ in
           # Window Management
           "${modifier}+Shift+w" = "exec rofi -show window";
           "${modifier}+w" = "kill";
-          "${modifier}+a" = "exec sticky enable";
+          "${modifier}+a" = "sticky toggle";
           "${modifier}+t" = "floating toggle";
           "${modifier}+f" = "fullscreen";
           # "${modifier}+u" = "exec ~/.config/sway/scripts/tiling.sh";
