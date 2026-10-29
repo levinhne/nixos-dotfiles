@@ -4,27 +4,28 @@
   fetchurl,
   autoPatchelfHook,
   stdenv,
+  zlib,
 }:
 
 let
-  version = "0.11.0";
+  version = "0.12.1";
 
   srcs = {
     x86_64-linux = {
       arch = "linux-amd64";
-      sha256 = "032b33c1833919a2d1de67ff6367fa6ea46aee8689c86ef223c88fae3b6e4536";
+      sha256 = "8453015145f072c1b9b019cbdd02cea8cc6f18cc5e116036dd20992631c638c7";
     };
     aarch64-linux = {
       arch = "linux-arm64";
-      sha256 = "c0e46c87cf37e35f1ac0bd9cc7e1d8b0ca4ef40034e1008805d709fa52a4e38a";
+      sha256 = "8575f126092660b93b170bdc2e06f3ef2dd28d3cc49ad6d0895dc3e4767219cd";
     };
     aarch64-darwin = {
       arch = "darwin-arm64";
-      sha256 = "4dee7f38b63740e6751d7a7ed7eb10291c1f2a3ea2415f599dc68370ca0a2d18";
+      sha256 = "9bfcbe38414b47969a3e1d1c1999f5357409387c86fa3d24221b5458267660d2";
     };
     x86_64-darwin = {
       arch = "darwin-amd64";
-      sha256 = "dbf1c73bfcbde64e7dde4cd1320da7afc02e2c972ee1789ae039521411f5132e";
+      sha256 = "ca6e64397a8ae80cec898a8205a6aa16750ac798acc05a0c3ed983837944a581";
     };
   };
 
@@ -46,13 +47,14 @@ stdenvNoCC.mkDerivation {
   # Upstream ships an ad-hoc signed macOS binary; stripping invalidates the signature.
   dontStrip = stdenvNoCC.hostPlatform.isDarwin;
 
-  # Linux release is a dynamically linked ELF (libc/libstdc++/libgcc_s/libm) built
+  # Linux release is a dynamically linked ELF (libc/libstdc++/libgcc_s/libm/libz) built
   # against a glibc that doesn't match the Nix store layout — patch it to work.
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
   ];
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     stdenv.cc.cc.lib
+    zlib
   ];
 
   installPhase = ''

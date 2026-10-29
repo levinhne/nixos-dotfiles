@@ -8,11 +8,12 @@
   menu = "rofi -show drun";
 
   # Common startup programs (for Sway format)
+  # Run once, not exec_always: a reload would otherwise spawn another copy of each.
+  # wpaperd runs as a systemd user service (wpaperd.nix), so it isn't started here.
   startupPrograms = [
-    { command = "wpaperd -d"; always = true; }
-    { command = "mako"; always = true; }
+    { command = "mako"; }
     { command = "fcitx5 -d"; }
-    { command = "wl-paste --type text --watch cliphist store"; always = true; }
+    { command = "wl-paste --type text --watch cliphist store"; }
     { command = "blueman-applet"; }
   ];
 

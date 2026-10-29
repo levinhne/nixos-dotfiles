@@ -64,6 +64,12 @@ let
     ${pkgs.sway}/bin/swaymsg -q '[app_id="^dropdown$"] scratchpad show' \
       || exec ${terminal} --class dropdown
   '';
+  # Capture only the focused output; plain `grim -` would stitch both monitors together.
+  screenshotOutput = pkgs.writeShellScript "sway-screenshot-output" ''
+    output=$(${pkgs.sway}/bin/swaymsg -t get_outputs | ${pkgs.jq}/bin/jq -r '.[] | select(.focused) | .name')
+    grim -o "$output" - | tee ~/Pictures/screenshots/shot_$(date +"%Y-%m-%d-%H-%M-%S").png | wl-copy \
+      && notify-send 'Screenshot saved' "Output $output captured"
+  '';
 in
 {
   # Sway-related packages
@@ -121,7 +127,27 @@ in
         "Return" = "mode default";
       };
 
+      # Plain borders, no title bars, for tiled and floating windows alike
+      # (tabbed/stacked containers still show their tabs).
+      window.titlebar = false;
+      floating.titlebar = false;
+
+      # 1-3 on the left monitor (HDMI-A-1), 4-6 on the right (DP-1), mirroring the
+      # number row; with a single monitor (kanshi home-single) all fall back to it.
+      # Keep in sync with sway/workspaces persistent-workspaces in waybar.nix.
+      workspaceOutputAssign = map
+        (i: {
+          workspace = i;
+          output = if lib.toInt i <= 3 then [ "HDMI-A-1" "DP-1" ] else [ "DP-1" "HDMI-A-1" ];
+        })
+        wsKeys;
+
       window.commands = [
+        {
+          # Keep swayidle from locking/blanking while anything is fullscreen (videos, slides).
+          command = "inhibit_idle fullscreen";
+          criteria = { shell = ".*"; };
+        }
         {
           command = "floating enable";
           criteria = { app_id = "yad"; };
@@ -169,6 +195,7 @@ in
           "${modifier}+Shift+o" = "exec ${common.apps.vpn}";
           "${modifier}+Shift+b" = "exec ${common.apps.bluetooth}";
           "${modifier}+s" = "exec grim -g \"$(slurp)\" - | tee ~/Pictures/screenshots/shot_$(date +\"%Y-%m-%d-%H-%M-%S\").png | wl-copy && notify-send 'Screenshot saved' 'Region captured'";
+          "Print" = "exec ${screenshotOutput}";
 
           # Window Management
           "${modifier}+Shift+w" = "exec rofi -show window";
@@ -197,6 +224,12 @@ in
           "${modifier}+Shift+j" = "move down";
           "${modifier}+Shift+k" = "move up";
           "${modifier}+Shift+l" = "move right";
+
+          # Move the whole workspace to the other monitor
+          "${modifier}+Ctrl+Left" = "move workspace to output left";
+          "${modifier}+Ctrl+Right" = "move workspace to output right";
+          "${modifier}+Ctrl+h" = "move workspace to output left";
+          "${modifier}+Ctrl+l" = "move workspace to output right";
 
           # Split
           "${modifier}+semicolon" = "splith";
@@ -256,12 +289,27 @@ in
           indicator = c.base0C;
           childBorder = c.base0D;
         };
+        # Focused window on the other monitor / inside an unfocused container.
+        focusedInactive = {
+          border = c.base02;
+          background = c.base01;
+          text = c.base04;
+          indicator = c.base02;
+          childBorder = c.base02;
+        };
         unfocused = {
           border = c.base00;
           background = c.base01;
           text = c.base03;
           indicator = c.base00;
           childBorder = c.base01;
+        };
+        urgent = {
+          border = c.base08;
+          background = c.base08;
+          text = c.base00;
+          indicator = c.base08;
+          childBorder = c.base08;
         };
       };
 
@@ -271,13 +319,11 @@ in
         { command = "autotiling -l 2"; always = true; }
         { command = "sh -c 'pkill -x swayrd; exec swayrd'"; always = true; }
         # Import Wayland env vars vào systemd user session, sau đó restart kanshi
-        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart kanshi.service swayidle.service waybar.service'"; always = false; }
+        { command = "sh -c 'dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK XDG_SESSION_TYPE && systemctl --user restart wpaperd.service kanshi.service swayidle.service waybar.service'"; always = false; }
       ] ++ common.startupPrograms;
     };
 
     extraConfig = ''
-      default_border pixel 2
-
       # --no-repeat: giữ phím không dội hàng loạt lệnh khi held
       bindsym --no-repeat ${modifier}+Tab exec swayr next-window all-workspaces
       bindsym --no-repeat ${modifier}+Shift+Tab exec swayr prev-window all-workspaces

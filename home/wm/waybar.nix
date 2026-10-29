@@ -33,8 +33,9 @@ let
     };
 
     clock = {
-      format = "󰥔 {:%a, %b %d - %H:%M}";
-      tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+      format = "󰥔 {:%H:%M}";
+      format-alt = "󰥔 {:%a, %b %d - %H:%M}";
+      tooltip-format = "<big>{:%A, %d %B %Y}</big>\n<tt><small>{calendar}</small></tt>";
       calendar = {
         mode = "month";
         mode-mon-col = 3;
@@ -371,13 +372,15 @@ in
         disable-scroll = true;
         all-outputs = false;
         format = "{name}";
+        # Each bar only shows its own monitor's workspaces
+        # (matches workspaceOutputAssign in sway.nix).
         persistent-workspaces = {
-          "1" = [ ];
-          "2" = [ ];
-          "3" = [ ];
-          "4" = [ ];
-          "5" = [ ];
-          "6" = [ ];
+          "1" = [ "HDMI-A-1" ];
+          "2" = [ "HDMI-A-1" ];
+          "3" = [ "HDMI-A-1" ];
+          "4" = [ "DP-1" ];
+          "5" = [ "DP-1" ];
+          "6" = [ "DP-1" ];
         };
       };
 
